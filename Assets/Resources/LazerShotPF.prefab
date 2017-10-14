@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4690171261951698}
   - component: {fileID: 212428419148894344}
   - component: {fileID: 50340630623069202}
-  - component: {fileID: 114545317114596070}
   - component: {fileID: 60799778759432056}
+  - component: {fileID: 114884098244931334}
   m_Layer: 0
   m_Name: LazerShotPF
   m_TagString: Untagged
@@ -92,7 +92,7 @@ PolygonCollider2D:
       - {x: -0.88167775, y: -1.2135255}
       - {x: 0.88167804, y: -1.2135254}
       - {x: 1.4265847, y: 0.46352568}
---- !u!114 &114545317114596070
+--- !u!114 &114884098244931334
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -100,9 +100,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1389948384819676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de2cbd0956394fe4289a12d5e2b4779a, type: 3}
+  m_Script: {fileID: 11500000, guid: 286da2966c3439046bcdfe7d6db023ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 10
+  initialSpeed: 15
   damage: 10
   timeAlive: 0
 --- !u!212 &212428419148894344
@@ -137,7 +139,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7148e14334855174cb18754e0764886c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 602e67b3a6f7ca44b8d5090be7ae29ae, type: 3}
   m_Color: {r: 1, g: 0.014705896, b: 0.014705896, a: 1}
   m_FlipX: 0
   m_FlipY: 0
