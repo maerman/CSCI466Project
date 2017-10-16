@@ -177,10 +177,10 @@ public abstract class Level : MonoBehaviour
     
     void Start()
     {
-        while (GameStates.gameState == GameStates.GameState.LoggedIn)
-        {
-            initilize(1, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
-        }
+		//while (gameState == GameState.LoggedIn)
+		//{
+		initilize(1, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
+		//}
     }
 
     public abstract void initilizeLevel();

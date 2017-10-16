@@ -47,20 +47,20 @@ using static GameStates;
 public class Level1 : Level
 {
 
-    private void Start()
-    {
-        gameState = GameState.NotLoggedIn;
-        GetUser.queryUser("JimSmith", "smith11"); //this would be getting the data from the username and password textboxes and run when the user hits the login button
-    }
+    //private void Start()
+    // {
+        //gameState = GameState.NotLoggedIn;
+		//crud.GetUser.queryUser("JimSmith", "smith11"); //this would be getting the data from the username and password textboxes and run when the user hits the login button
+    //}
 
     public override void initilizeLevel()
     {
-        while (gameState == GameState.LoggedIn)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
-            }
-        }
+		//while (gameState == Gamestate.LoggedIn)
+		//{
+			for(int i = 0; i < 5; i++)
+			{
+				Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+			}
+		//}
     }
 }
