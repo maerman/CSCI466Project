@@ -10,35 +10,15 @@ We used SourceTree, a visual git that allowed us to update our github repository
 
 + ### Prerequisites
 
-To play this game you will need to download the latest version of Unity
+To play this game you will need to download and install the latest version of Unity
 
 ```
 https://unity3d.com/get-unity/download
 ```
 
-+ ### Installing
-
-Coming soon
-
-```
-example
-```
-
-And repeat
-
-```
-example
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-+ ## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 + ## Built With
 
-place holder
+Once the project is pulled to your local repository open the file test.unity in the assets folder. Once Unity opens go to file then play to play the current version of the game.
 
 + ## Authors
 
