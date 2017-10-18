@@ -1,12 +1,5 @@
 fileFormatVersion: 2
-<<<<<<< HEAD
 guid: 38e2ceb4e910716428c36f7e2d833162
-timeCreated: 1506150411
-licenseType: Free
-=======
-guid: 6e38ac6b1c3556b4c888ca8552375e1e
-timeCreated: 18446744011573954816
->>>>>>> master
 PluginImporter:
   serializedVersion: 2
   iconMap: {}
@@ -20,7 +13,6 @@ PluginImporter:
       second:
         enabled: 1
         settings: {}
-<<<<<<< HEAD
     data:
       first:
         Editor: Editor
@@ -35,8 +27,6 @@ PluginImporter:
         enabled: 0
         settings:
           CPU: AnyCPU
-=======
->>>>>>> master
   userData: 
   assetBundleName: 
   assetBundleVariant: 

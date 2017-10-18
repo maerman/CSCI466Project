@@ -157,7 +157,7 @@ public abstract class Level : MonoBehaviour
             canvas = FindObjectOfType<Canvas>();
         }
         GameObject obj = Instantiate(Resources.Load("TextPF"), Vector2.zero, Quaternion.identity) as GameObject;
-        obj.transform.SetParent(canvas.transform);
+        //obj.transform.SetParent(canvas.transform);
         Text text = obj.GetComponent<Text>();
         text.text = textToAdd;
         text.transform.position = position;
@@ -203,7 +203,7 @@ public abstract class Level : MonoBehaviour
     
     public void Start()
     {
-        initilize(1, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
+        initilize(2, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
 
         timeText = addTextToCanvas("time", Vector2.zero);
     }
@@ -212,7 +212,6 @@ public abstract class Level : MonoBehaviour
 
     public void initilize(int numPlayers, int difficulty, int randomSeed)
     {
-       
         theCurrentLevel = this;
 
         theStartTime = DateTime.Now;
@@ -232,9 +231,10 @@ public abstract class Level : MonoBehaviour
             Player current = obj.GetComponent<Player>();
             if(current != null)
             {
-            current.playerNum = i;
-            players.Add(current);
-            }else
+                current.playerNum = i;
+                players.Add(current);
+            }
+            else
             {
                 Debug.Log("There is a null reference for the current object!!");
             }
@@ -289,6 +289,6 @@ public abstract class Level : MonoBehaviour
             //nextLevel
         }
 
-        timeText.text = duration.Hours.ToString() + ":" + duration.Minutes.ToString() + ":" + duration.Seconds.ToString();
+        //timeText.text = duration.Hours.ToString() + ":" + duration.Minutes.ToString() + ":" + duration.Seconds.ToString();
     }
 }

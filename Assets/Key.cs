@@ -31,8 +31,6 @@ public class Key
             {
                 value = START_AXIS + controller * NUM_AXIS + axis * 2 + 1;
             }
-
-            Debug.Log(value);
         }
         else
         {

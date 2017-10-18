@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 212502499608731378}
   - component: {fileID: 50544024577484308}
   - component: {fileID: 60343413831922366}
-  - component: {fileID: 114707273009774166}
+  - component: {fileID: 114869602761910620}
   m_Layer: 0
   m_Name: PlayerPF
   m_TagString: Untagged
@@ -204,7 +204,7 @@ PolygonCollider2D:
       - {x: -1.31, y: -2.3799999}
       - {x: -1.24, y: -2.33}
       - {x: -1.12, y: -2.1299999}
---- !u!114 &114707273009774166
+--- !u!114 &114869602761910620
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1174544039362310}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9a078f693eba8e4789a7779e897ecee, type: 3}
+  m_Script: {fileID: 11500000, guid: b9951768990738342a0c25167f7464ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 10
@@ -220,7 +220,7 @@ MonoBehaviour:
   maxHealth: 1000
   health: 100
   armor: 1
-  enemy: 0
+  enemy: 1
   playerNum: 0
   acceleration: 0.4
   turnSpeed: 100
@@ -257,7 +257,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: fe85259a10a553b4cb2ee8cfc7e81fbe, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9b90c851f51da33499590659ab87864f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
