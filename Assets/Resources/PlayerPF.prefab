@@ -216,8 +216,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 10
+  inPlay: 1
   maxHealth: 1000
   health: 100
+  armor: 1
+  enemy: 0
   playerNum: 0
   acceleration: 0.4
   turnSpeed: 35

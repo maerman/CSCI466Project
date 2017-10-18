@@ -5,10 +5,8 @@ public abstract class IndestructableObject : InteractiveObject
 {
     private void OnDestroy()
     {
-        if (this.GetType() != typeof(Player))
-        {
-            level.indestructables.Remove(this);
-        }
+        level.indestructables.Remove(this);
+        inPlay = false;
     }
 
     protected abstract void startIndestructableObject();
@@ -16,7 +14,7 @@ public abstract class IndestructableObject : InteractiveObject
     protected override void startInteractiveObject()
     {
         startIndestructableObject();
-        level.indestructables.Add(this);
+        level.indestructables.AddLast(this);
     }
 
     protected abstract void updateIndestructableObject();
@@ -26,11 +24,11 @@ public abstract class IndestructableObject : InteractiveObject
         updateIndestructableObject();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         SpaceObject spaceObject = collision.gameObject.GetComponent<SpaceObject>();
 
-        if (spaceObject.GetType().IsSubclassOf(typeof(Player)))
+        if (spaceObject.GetType() == (typeof(Player)))
         {
             playerCollision((Player)spaceObject, collision);
         }

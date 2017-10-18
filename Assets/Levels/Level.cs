@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 
@@ -7,6 +8,9 @@ public abstract class Level : MonoBehaviour
     public static Vector2 GAME_SIZE = new Vector2(26.6666f, 20);
     public const int UPDATES_PER_SEC = 60;
     public const float PRECISION = 1024;
+
+    private Canvas canvas;
+    private Text timeText;
 
     private bool isReplay = false;
     private System.IO.StreamReader updateFile;
@@ -26,6 +30,14 @@ public abstract class Level : MonoBehaviour
         get
         {
             return theStartTime;
+        }
+    }
+
+    public TimeSpan duration
+    {
+        get
+        {
+            return System.DateTime.Now - startTime;
         }
     }
 
@@ -137,9 +149,23 @@ public abstract class Level : MonoBehaviour
         return current;
     }
 
+    protected Text addTextToCanvas(string textToAdd, Vector2 position)
+    {
+        if (canvas == null)
+        {
+            canvas = FindObjectOfType<Canvas>();
+        }
+        GameObject obj = Instantiate(Resources.Load("TextPF"), Vector2.zero, Quaternion.identity) as GameObject;
+        obj.transform.SetParent(canvas.transform);
+        Text text = obj.GetComponent<Text>();
+        text.text = textToAdd;
+        text.transform.position = position;
+        return text;
+    }
 
-    private List<DestructableObject> theDestructables = new List<DestructableObject> (128);
-	public List<DestructableObject> destructables
+
+    private LinkedList<DestructableObject> theDestructables = new LinkedList<DestructableObject>();
+	public LinkedList<DestructableObject> destructables
 	{
 		get 
 		{
@@ -147,8 +173,8 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
-	private List<IndestructableObject> theIndestructables = new List<IndestructableObject> (128);
-	public List<IndestructableObject> indestructables
+    private LinkedList<IndestructableObject> theIndestructables = new LinkedList<IndestructableObject>();
+	public LinkedList<IndestructableObject> indestructables
 	{
 		get 
 		{
@@ -156,8 +182,8 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
-	private List<NonInteractiveObject> theNonInteractives = new List<NonInteractiveObject> (128);
-	public List<NonInteractiveObject> nonInteractives
+	private LinkedList<NonInteractiveObject> theNonInteractives = new LinkedList<NonInteractiveObject>();
+	public LinkedList<NonInteractiveObject> nonInteractives
 	{
 		get 
 		{
@@ -174,12 +200,14 @@ public abstract class Level : MonoBehaviour
 		}
 	}
     
-    void Start()
+    public void Start()
     {
         initilize(1, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
+
+        timeText = addTextToCanvas("time", Vector2.zero);
     }
 
-    public abstract void initilizeLevel();
+    protected abstract void initilizeLevel();
 
     public void initilize(int numPlayers, int difficulty, int randomSeed)
     {
@@ -188,15 +216,23 @@ public abstract class Level : MonoBehaviour
         theStartTime = DateTime.Now;
         theRandom = new System.Random(randomSeed);
 
-        thePlayers = new List<Player>(Controls.MAX_PLAYERS);
+        thePlayers = new List<Player>(numPlayers);
+
         for (int i = 0; i < numPlayers; i++)
         {
+            if (i >= Controls.MAX_PLAYERS)
+            {
+                break;
+            }
+
             UnityEngine.GameObject obj = Instantiate(Resources.Load("PlayerPF"), 
                 new Vector2(GAME_SIZE.x / 2 - (numPlayers - 1) * 2 + i * 4, GAME_SIZE.y / 2) , Quaternion.identity) as GameObject;
             Player current = obj.GetComponent<Player>();
             current.playerNum = i;
             players.Add(current);
         }
+
+        isReplay = false;
 
         initilizeLevel();
     }
@@ -226,21 +262,25 @@ public abstract class Level : MonoBehaviour
         isReplay = true;
         return true;
     }
+
+    protected abstract void updateLevel();
     
-    void FixedUpdate()
+    public void FixedUpdate()
     {
         if (isReplay)
         {
-            Controls.updateFromFile(updateFile);
+            Controls.get().updateFromFile(updateFile);
         }
         else
         {
-            Controls.updateFromInput();
+            Controls.get().updateFromInput();
         }
 
         if (destructables.Count <= 0)
         {
             //nextLevel
         }
+
+        timeText.text = duration.Hours.ToString() + ":" + duration.Minutes.ToString() + ":" + duration.Seconds.ToString();
     }
 }

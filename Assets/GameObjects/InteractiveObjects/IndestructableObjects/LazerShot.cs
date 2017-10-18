@@ -33,14 +33,9 @@ public class LazerShot : IndestructableObject
         destroyThis();
     }
 
-    protected override void itemCollision(Item other)
-    {
-        throw new System.NotImplementedException();
-    }
-
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     protected override void playerCollision(Player other, Collision2D collision)

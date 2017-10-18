@@ -1,32 +1,75 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class PlayerInputInstance
+public class PlayerInput
 {
     public const int NUM_ITEMS = 10;
 
-    public bool forward;
-    public bool backward;
-    public bool straifL;
-    public bool straifR;
-    public bool turnL;
-    public bool turnR;
+    public float forward;
+    public float backward;
+    public float straifL;
+    public float straifR;
+    public float turnL;
+    public float turnR;
     public bool[] items = new bool[NUM_ITEMS];
     public bool dropItem;
     public bool shoot;
     public bool pause;
 
-    public override string ToString()
+    public bool relativeMovement;
+
+    public PlayerInput() { }
+
+    public PlayerInput(string inputInfo)
     {
-        //convert to string
-        return "";
+        char[] seperators = new char[1];
+        seperators[0] = ' ';
+
+        string[] parts = inputInfo.Split(seperators);
+
+        if (parts.Length == 20)
+        {
+            forward = System.Convert.ToSingle(parts[0]);
+            backward = System.Convert.ToSingle(parts[1]);
+            straifL = System.Convert.ToSingle(parts[2]);
+            straifR = System.Convert.ToSingle(parts[3]);
+            turnL = System.Convert.ToSingle(parts[4]);
+            turnR = System.Convert.ToSingle(parts[5]);
+
+            for (int i = 0; i < NUM_ITEMS; i++)
+            {
+                items[i] = System.Convert.ToBoolean(parts[i + 6]);
+            }
+
+            dropItem = System.Convert.ToBoolean(parts[16]);
+            shoot = System.Convert.ToBoolean(parts[17]);
+            pause = System.Convert.ToBoolean(parts[18]);
+            relativeMovement = System.Convert.ToBoolean(parts[19]);
+        }
+        else
+        {
+            throw new System.Exception(parts.Length.ToString() + " is the wrong number of parts needed to make a PlayerInput: " + inputInfo);
+        }
     }
 
-    public static PlayerInputInstance fromString(string inputInfo)
+    public override string ToString()
     {
-        PlayerInputInstance toReturn = new PlayerInputInstance();
+        string toReturn = "";
 
-        //convert from string
+        toReturn += forward.ToString() + " ";
+        toReturn += backward.ToString() + " ";
+        toReturn += straifL.ToString() + " ";
+        toReturn += straifR.ToString() + " ";
+        toReturn += turnL.ToString() + " ";
+        toReturn += turnR.ToString() + " ";
+        for (int i = 0; i < NUM_ITEMS; i++)
+        {
+            toReturn += items[i].ToString() + " ";
+        }
+        toReturn += dropItem.ToString() + " ";
+        toReturn += shoot.ToString() + " ";
+        toReturn += pause.ToString() + " ";
+        toReturn += relativeMovement.ToString() + " ";
 
         return toReturn;
     }
@@ -35,63 +78,78 @@ public class PlayerInputInstance
 public class PlayerControls
 {
     //100,000 ~ 1 hour at 30fps
-    private const int initalInputsSize = 100000;
+    private const int INITIAL_INPUT_SIZE = 100000;
 
-    public KeyCode forwardKey;
-    public KeyCode backwardKey;
-    public KeyCode straifLKey;
-    public KeyCode straifRKey;
-    public KeyCode turnLKey;
-    public KeyCode turnRKey;
-    public KeyCode[] itemKeys = new KeyCode[PlayerInputInstance.NUM_ITEMS];
-    public KeyCode dropItemKey;
-    public KeyCode shootKey;
-    public KeyCode pauseKey;
+    public Key forwardKey;
+    public Key backwardKey;
+    public Key straifLKey;
+    public Key straifRKey;
+    public Key turnLKey;
+    public Key turnRKey;
+    public Key[] itemKeys = new Key[PlayerInput.NUM_ITEMS];
+    public Key dropItemKey;
+    public Key shootKey;
+    public Key pauseKey;
+
+    private bool theRelativeMovement = false;
+    public bool relativeMovement
+    {
+        get
+        {
+            return current.relativeMovement;
+        }
+        set
+        {
+            relativeMovement = value;
+        }
+    }
 
     #region Key Accessors
-    //if the key is pressed at all
-    public bool forward
+    //returns the value itself
+    public float forward
     {
         get
         {
             return current.forward;
         }
     }
-    public bool backward
+    public float backward
     {
         get
         {
             return current.backward;
         }
     }
-    public bool straifL
+    public float straifL
     {
         get
         {
             return current.straifL;
         }
     }
-    public bool straifR
+    public float straifR
     {
         get
         {
             return current.straifR;
         }
     }
-    public bool turnL
+    public float turnL
     {
         get
         {
             return current.turnL;
         }
     }
-    public bool turnR
+    public float turnR
     {
         get
         {
             return current.turnR;
         }
     }
+
+    //if the key is pressed at all
     public bool items(int index)
     {
         return current.items[index];
@@ -118,49 +176,51 @@ public class PlayerControls
         }
     }
 
+    //returns the change in value
+    public float Forward
+    {
+        get
+        {
+            return current.forward - previous.forward;
+        }
+    }
+    public float Backward
+    {
+        get
+        {
+            return current.backward - previous.backward;
+        }
+    }
+    public float StraifL
+    {
+        get
+        {
+            return current.straifL - previous.straifL;
+        }
+    }
+    public float StraifR
+    {
+        get
+        {
+            return current.straifR - previous.straifR;
+        }
+    }
+    public float TurnL
+    {
+        get
+        {
+            return current.turnL - previous.turnL;
+        }
+    }
+    public float TurnR
+    {
+        get
+        {
+            return current.turnR - previous.turnR;
+        }
+    }
+
     //if the key was just pressed (not held down)
-    public bool Forward
-    {
-        get
-        {
-            return current.forward && !previous.forward;
-        }
-    }
-    public bool Backward
-    {
-        get
-        {
-            return current.backward && !previous.backward;
-        }
-    }
-    public bool StraifL
-    {
-        get
-        {
-            return current.straifL && !previous.straifL;
-        }
-    }
-    public bool StraifR
-    {
-        get
-        {
-            return current.straifR && !previous.straifR;
-        }
-    }
-    public bool TurnL
-    {
-        get
-        {
-            return current.turnL && !previous.turnL;
-        }
-    }
-    public bool TurnR
-    {
-        get
-        {
-            return current.turnR && !previous.turnR;
-        }
-    }
     public bool Items(int index)
     {
         return current.items[index] && !previous.items[index];
@@ -188,11 +248,11 @@ public class PlayerControls
     }
     #endregion
 
-    private PlayerInputInstance current = new PlayerInputInstance(), previous = new PlayerInputInstance();
+    private PlayerInput current = new PlayerInput(), previous = new PlayerInput();
 
-    private List<PlayerInputInstance> theInputs = new List<PlayerInputInstance>(initalInputsSize);
+    private List<PlayerInput> theInputs = new List<PlayerInput>(INITIAL_INPUT_SIZE);
 
-    public List<PlayerInputInstance> inputs
+    public List<PlayerInput> inputs
     {
         get
         {
@@ -203,21 +263,23 @@ public class PlayerControls
     public void updateFromInput()
     {
         previous = current;
-        current = new PlayerInputInstance();
+        current = new PlayerInput();
+        current.forward = forwardKey.getAxis();
+        current.backward = backwardKey.getAxis();
+        current.straifL = straifLKey.getAxis();
+        current.straifR = straifRKey.getAxis();
+        current.turnL = turnLKey.getAxis();
+        current.turnR = turnRKey.getAxis();
 
-        current.forward = Input.GetKey(forwardKey);
-        current.backward = Input.GetKey(backwardKey);
-        current.straifL = Input.GetKey(straifLKey);
-        current.straifR = Input.GetKey(straifRKey);
-        current.turnL = Input.GetKey(turnLKey);
-        current.turnR = Input.GetKey(turnRKey);
-        for (int i = 0; i < PlayerInputInstance.NUM_ITEMS; i++)
+        for (int i = 0; i < PlayerInput.NUM_ITEMS; i++)
         {
-            current.items[i] = Input.GetKey(itemKeys[i]);
+            current.items[i] = itemKeys[i].isPressed();
         }
-        current.dropItem = Input.GetKey(dropItemKey);
-        current.shoot = Input.GetKey(shootKey);
-        current.pause = Input.GetKey(pauseKey);
+        current.dropItem = dropItemKey.isPressed();
+        current.shoot = shootKey.isPressed();
+        current.pause = pauseKey.isPressed();
+
+        current.relativeMovement = theRelativeMovement;
 
         inputs.Add(current);
     }
@@ -225,26 +287,81 @@ public class PlayerControls
     public void updateFromString(string updateInfo)
     {
         previous = current;
-        current = PlayerInputInstance.fromString(updateInfo);
+        current = new PlayerInput(updateInfo);
 
         inputs.Add(current);
     }
 
     public void clearInputs()
     {
-        theInputs = new List<PlayerInputInstance>(initalInputsSize);
-        previous = new PlayerInputInstance();
-        current = new PlayerInputInstance();
+        theInputs = new List<PlayerInput>(INITIAL_INPUT_SIZE);
+        previous = new PlayerInput();
+        current = new PlayerInput();
+    }
+
+    public void setFromString(string settings)
+    {
+        char[] seperators = new char[1];
+        seperators[0] = ' ';
+
+        string[] parts = settings.Split(seperators);
+
+        if (parts.Length == 20)
+        {
+            forwardKey = new Key(System.Convert.ToInt32(parts[0]));
+            backwardKey = new Key(System.Convert.ToInt32(parts[1]));
+            straifLKey = new Key(System.Convert.ToInt32(parts[2]));
+            straifRKey = new Key(System.Convert.ToInt32(parts[3]));
+            turnLKey = new Key(System.Convert.ToInt32(parts[4]));
+            turnRKey = new Key(System.Convert.ToInt32(parts[5]));
+
+            for (int i = 0; i < PlayerInput.NUM_ITEMS; i++)
+            {
+                itemKeys[i] = new Key(System.Convert.ToInt32(parts[i + 6]));
+            }
+
+            dropItemKey = new Key(System.Convert.ToInt32(parts[16]));
+            shootKey = new Key(System.Convert.ToInt32(parts[17]));
+            pauseKey = new Key(System.Convert.ToInt32(parts[18]));
+            theRelativeMovement = System.Convert.ToBoolean(parts[19]);
+        }
+        else
+        {
+            throw new System.Exception(parts.Length.ToString() + " is the wrong number of parts needed to set PlayerControls: " + settings);
+        }
+    }
+
+    public override string ToString()
+    {
+        string toReturn = "";
+
+        toReturn += forwardKey.getValue() + " ";
+        toReturn += backwardKey.getValue() + " ";
+        toReturn += straifLKey.getValue() + " ";
+        toReturn += straifRKey.getValue() + " ";
+        toReturn += turnLKey.getValue() + " ";
+        toReturn += turnRKey.getValue() + " ";
+        for (int i = 0; i < PlayerInput.NUM_ITEMS; i++)
+        {
+            toReturn += itemKeys[i].getValue() + " ";
+        }
+        toReturn += dropItemKey.getValue() + " ";
+        toReturn += shootKey.getValue() + " ";
+        toReturn += pauseKey.getValue() + " ";
+        toReturn += relativeMovement.ToString() + " ";
+
+        return toReturn;
     }
 }
 
-public static class Controls
+public class Controls
 {
     public const int MAX_PLAYERS = 2;
+    public const string CONTROLS_FILE = "\\Controls.options";
 
-    private static PlayerControls[] thePlayers = new PlayerControls[MAX_PLAYERS];
+    private PlayerControls[] thePlayers = new PlayerControls[MAX_PLAYERS];
 
-    public static PlayerControls[] players
+    public PlayerControls[] players
     {
         get
         {
@@ -252,59 +369,71 @@ public static class Controls
         }
     }
 
-    public static void setDefaultControls()
+    private Controls()
     {
         for (int i = 0; i < MAX_PLAYERS; i++)
         {
             thePlayers[i] = new PlayerControls();
         }
 
-        players[0].forwardKey = KeyCode.W;
-        players[0].backwardKey = KeyCode.S;
-        players[0].straifLKey = KeyCode.LeftArrow;
-        players[0].straifRKey = KeyCode.RightArrow;
-        players[0].turnLKey = KeyCode.A;
-        players[0].turnRKey = KeyCode.D;
-        players[0].itemKeys[0] = KeyCode.Keypad0;
-        players[0].itemKeys[1] = KeyCode.Keypad1;
-        players[0].itemKeys[2] = KeyCode.Keypad2;
-        players[0].itemKeys[3] = KeyCode.Keypad3;
-        players[0].itemKeys[4] = KeyCode.Keypad4;
-        players[0].itemKeys[5] = KeyCode.Keypad5;
-        players[0].itemKeys[6] = KeyCode.Keypad6;
-        players[0].itemKeys[7] = KeyCode.Keypad7;
-        players[0].itemKeys[8] = KeyCode.Keypad8;
-        players[0].itemKeys[9] = KeyCode.Keypad9;
-        players[0].dropItemKey = KeyCode.LeftAlt;
-        players[0].shootKey = KeyCode.Space;
-        players[0].pauseKey = KeyCode.Escape;
-
-        if (MAX_PLAYERS > 1)
+        try
         {
-            //need to figureout what to do with controller axises
-            players[1].forwardKey = KeyCode.None;
-            players[1].backwardKey = KeyCode.None;
-            players[1].straifLKey = KeyCode.None;
-            players[1].straifRKey = KeyCode.None;
-            players[1].turnLKey = KeyCode.None;
-            players[1].turnRKey = KeyCode.None;
-            players[1].itemKeys[0] = KeyCode.Joystick1Button0;
-            players[1].itemKeys[1] = KeyCode.Joystick1Button1;
-            players[1].itemKeys[2] = KeyCode.Joystick1Button2;
-            players[1].itemKeys[3] = KeyCode.Joystick1Button3;
-            players[1].itemKeys[4] = KeyCode.None;
-            players[1].itemKeys[5] = KeyCode.None;
-            players[1].itemKeys[6] = KeyCode.None;
-            players[1].itemKeys[7] = KeyCode.None;
-            players[1].itemKeys[8] = KeyCode.None;
-            players[1].itemKeys[9] = KeyCode.None;
-            players[1].dropItemKey = KeyCode.Joystick1Button5;
-            players[1].shootKey = KeyCode.Joystick1Button4;
-            players[1].pauseKey = KeyCode.Joystick1Button7;
+            setControlsFromFile();
+        }
+        catch
+        {
+
+            setDefaultControls();
         }
     }
 
-    public static void updateFromInput()
+    public void setDefaultControls()
+    {     
+        players[0].forwardKey = new Key(1, 2, false);
+        players[0].backwardKey = new Key(1, 2, true);
+        players[0].straifLKey = new Key(1, 1, false);
+        players[0].straifRKey = new Key(1, 1, true);
+        players[0].turnLKey = new Key(1, 4, false);
+        players[0].turnRKey = new Key(1, 4, true);
+        players[0].itemKeys[0] = new Key(KeyCode.Keypad0);
+        players[0].itemKeys[1] = new Key(KeyCode.Keypad1);
+        players[0].itemKeys[2] = new Key(KeyCode.Keypad2);
+        players[0].itemKeys[3] = new Key(KeyCode.Keypad3);
+        players[0].itemKeys[4] = new Key(KeyCode.Keypad4);
+        players[0].itemKeys[5] = new Key(KeyCode.Keypad5);
+        players[0].itemKeys[6] = new Key(KeyCode.Keypad6);
+        players[0].itemKeys[7] = new Key(KeyCode.Keypad7);
+        players[0].itemKeys[8] = new Key(KeyCode.Keypad8);
+        players[0].itemKeys[9] = new Key(KeyCode.Keypad9);
+        players[0].dropItemKey = new Key(KeyCode.LeftAlt);
+        players[0].shootKey = new Key(1, 3, true);
+        players[0].pauseKey = new Key(KeyCode.Escape);
+
+        if (MAX_PLAYERS > 1)
+        {
+            players[1].forwardKey = new Key(KeyCode.None);
+            players[1].backwardKey = new Key(KeyCode.None);
+            players[1].straifLKey = new Key(KeyCode.None);
+            players[1].straifRKey = new Key(KeyCode.None);
+            players[1].turnLKey = new Key(KeyCode.None);
+            players[1].turnRKey = new Key(KeyCode.None);
+            players[1].itemKeys[0] = new Key(KeyCode.Joystick1Button0);
+            players[1].itemKeys[1] = new Key(KeyCode.Joystick1Button1);
+            players[1].itemKeys[2] = new Key(KeyCode.Joystick1Button2);
+            players[1].itemKeys[3] = new Key(KeyCode.Joystick1Button3);
+            players[1].itemKeys[4] = new Key(KeyCode.None);
+            players[1].itemKeys[5] = new Key(KeyCode.None);
+            players[1].itemKeys[6] = new Key(KeyCode.None);
+            players[1].itemKeys[7] = new Key(KeyCode.None);
+            players[1].itemKeys[8] = new Key(KeyCode.None);
+            players[1].itemKeys[9] = new Key(KeyCode.None);
+            players[1].dropItemKey = new Key(KeyCode.Joystick1Button5);
+            players[1].shootKey = new Key(KeyCode.Joystick1Button4);
+            players[1].pauseKey = new Key(KeyCode.Joystick1Button7);
+        }
+    }
+
+    public void updateFromInput()
     {
         foreach (PlayerControls item in players)
         {
@@ -315,32 +444,16 @@ public static class Controls
         }
     }
 
-    public static void updateFromFile(System.IO.StreamReader file)
+    public void updateFromFile(System.IO.StreamReader file)
     {
-        if (file == null)
-        {
-            //throw exception
-            return;
-        }
-
-        string current;
-
         foreach (PlayerControls item in players)
         {
-            current = file.ReadLine();
-            //read next line from file into 'current'
-            item.updateFromString(current);
+            item.updateFromString(file.ReadLine());
         }
     }
 
-    public static void saveInputsToFile(System.IO.StreamWriter file)
+    public void saveInputsToFile(System.IO.StreamWriter file)
     {
-        if (file == null)
-        {
-            //throw exception
-            return;
-        }
-
         for (int i = 0; i < players[0].inputs.Count; i++)
         {
             for (int j = 0; j < MAX_PLAYERS; j++)
@@ -350,17 +463,49 @@ public static class Controls
         }
     }
 
-    public static void setControlsFromFile(System.IO.StreamReader file)
+    public void setControlsFromFile()
     {
-        for (int i = 0; i < MAX_PLAYERS; i++)
-        {
-            thePlayers[i] = new PlayerControls();
-        }
-        //set controls from file
+        setControlsFromFile(CONTROLS_FILE);
     }
 
-    public static void saveControlsToFile(System.IO.StreamWriter file)
+    public void setControlsFromFile(string fileName)
     {
-        //save controls to file
+        System.IO.StreamReader file = new System.IO.StreamReader(fileName);
+
+        foreach (PlayerControls item in thePlayers)
+        {
+            item.setFromString(file.ReadLine());
+        }
+
+        file.Close();
+    }
+
+    public void saveControlsToFile()
+    {
+        saveControlsToFile(CONTROLS_FILE);
+    }
+
+    public void saveControlsToFile(string fileName)
+    {
+        System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, false);
+
+        foreach (PlayerControls item in thePlayers)
+        {
+            file.WriteLine(item.ToString());
+        }
+
+        file.Close();
+    }
+
+    private static Controls singleton;
+
+    public static Controls get()
+    {
+        if (singleton == null)
+        {
+            singleton = new Controls();
+        }
+
+        return singleton;
     }
 }

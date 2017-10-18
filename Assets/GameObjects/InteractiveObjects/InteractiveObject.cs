@@ -73,7 +73,7 @@ public abstract class InteractiveObject : SpaceObject
         }
         set
         {
-            value = GetComponent<Rigidbody2D>().mass;
+            GetComponent<Rigidbody2D>().mass = value;
         }
     }
 
@@ -92,18 +92,13 @@ public abstract class InteractiveObject : SpaceObject
         updateInteractiveObject();
     }
 
-    protected abstract void itemCollision(Item other);
     protected abstract void nonInteractiveObjectCollision(NonInteractiveObject other);
 
     public void OnTriggerEnter(Collider other)
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();
 
-        if (spaceObject.GetType().IsSubclassOf(typeof(Item)))
-        {
-            itemCollision((Item)spaceObject);
-        }
-        else if (spaceObject.GetType().IsSubclassOf(typeof(NonInteractiveObject)))
+        if (spaceObject.GetType().IsSubclassOf(typeof(NonInteractiveObject)))
         {
             nonInteractiveObjectCollision((NonInteractiveObject)spaceObject);
         }

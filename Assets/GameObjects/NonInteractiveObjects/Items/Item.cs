@@ -3,7 +3,6 @@ using System.Collections;
 
 public abstract class Item : NonInteractiveObject
 {
-
     protected override void startNonInteractiveObject()
     {
 
@@ -13,4 +12,6 @@ public abstract class Item : NonInteractiveObject
     {
 
     }
+
+    public abstract void updateItem(bool used, Player player);
 }
