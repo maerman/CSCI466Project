@@ -98,10 +98,11 @@ public class PlayerControls
         {
             return current.relativeMovement;
         }
-        set
-        {
-            relativeMovement = value;
-        }
+    }
+
+    public void setRelativeMovement(bool setTo)
+    {
+        theRelativeMovement = setTo;
     }
 
     #region Key Accessors
@@ -389,12 +390,12 @@ public class Controls
 
     public void setDefaultControls()
     {     
-        players[0].forwardKey = new Key(1, 2, false);
-        players[0].backwardKey = new Key(1, 2, true);
-        players[0].straifLKey = new Key(1, 1, false);
-        players[0].straifRKey = new Key(1, 1, true);
-        players[0].turnLKey = new Key(1, 4, false);
-        players[0].turnRKey = new Key(1, 4, true);
+        players[0].forwardKey = new Key(KeyCode.W);
+        players[0].backwardKey = new Key(KeyCode.S);
+        players[0].straifLKey = new Key(KeyCode.LeftArrow);
+        players[0].straifRKey = new Key(KeyCode.RightArrow);
+        players[0].turnLKey = new Key(KeyCode.A);
+        players[0].turnRKey = new Key(KeyCode.D);
         players[0].itemKeys[0] = new Key(KeyCode.Keypad0);
         players[0].itemKeys[1] = new Key(KeyCode.Keypad1);
         players[0].itemKeys[2] = new Key(KeyCode.Keypad2);
@@ -406,31 +407,35 @@ public class Controls
         players[0].itemKeys[8] = new Key(KeyCode.Keypad8);
         players[0].itemKeys[9] = new Key(KeyCode.Keypad9);
         players[0].dropItemKey = new Key(KeyCode.LeftAlt);
-        players[0].shootKey = new Key(1, 3, true);
+        players[0].shootKey = new Key(KeyCode.Space);
         players[0].pauseKey = new Key(KeyCode.Escape);
+        players[0].setRelativeMovement(true);
 
         if (MAX_PLAYERS > 1)
         {
-            players[1].forwardKey = new Key(KeyCode.None);
-            players[1].backwardKey = new Key(KeyCode.None);
-            players[1].straifLKey = new Key(KeyCode.None);
-            players[1].straifRKey = new Key(KeyCode.None);
-            players[1].turnLKey = new Key(KeyCode.None);
-            players[1].turnRKey = new Key(KeyCode.None);
+            players[1].forwardKey = new Key(1, 2, false);
+            players[1].backwardKey = new Key(1, 2, true);
+            players[1].straifLKey = new Key(1, 1, false);
+            players[1].straifRKey = new Key(1, 1, true);
+            players[1].turnLKey = new Key(1, 4, false);
+            players[1].turnRKey = new Key(1, 4, true);
             players[1].itemKeys[0] = new Key(KeyCode.Joystick1Button0);
             players[1].itemKeys[1] = new Key(KeyCode.Joystick1Button1);
             players[1].itemKeys[2] = new Key(KeyCode.Joystick1Button2);
             players[1].itemKeys[3] = new Key(KeyCode.Joystick1Button3);
-            players[1].itemKeys[4] = new Key(KeyCode.None);
-            players[1].itemKeys[5] = new Key(KeyCode.None);
-            players[1].itemKeys[6] = new Key(KeyCode.None);
-            players[1].itemKeys[7] = new Key(KeyCode.None);
-            players[1].itemKeys[8] = new Key(KeyCode.None);
-            players[1].itemKeys[9] = new Key(KeyCode.None);
-            players[1].dropItemKey = new Key(KeyCode.Joystick1Button5);
-            players[1].shootKey = new Key(KeyCode.Joystick1Button4);
+            players[1].itemKeys[4] = new Key(KeyCode.Joystick1Button4);
+            players[1].itemKeys[5] = new Key(KeyCode.Joystick1Button5);
+            players[1].itemKeys[6] = new Key(1, 6, false);
+            players[1].itemKeys[7] = new Key(1, 6, true);
+            players[1].itemKeys[8] = new Key(1, 7, false);
+            players[1].itemKeys[9] = new Key(1, 7, true);
+            players[1].dropItemKey = new Key(1, 3, false);
+            players[1].shootKey = new Key(1, 3, true);
             players[1].pauseKey = new Key(KeyCode.Joystick1Button7);
+            players[1].setRelativeMovement(false);
         }
+
+        //add default controls for players 3 and 4
     }
 
     public void updateFromInput()
