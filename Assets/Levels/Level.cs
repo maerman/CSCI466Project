@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using static User;
 
 public abstract class Level : MonoBehaviour
 {
@@ -211,6 +212,7 @@ public abstract class Level : MonoBehaviour
 
     public void initilize(int numPlayers, int difficulty, int randomSeed)
     {
+       
         theCurrentLevel = this;
 
         theStartTime = DateTime.Now;
@@ -228,8 +230,14 @@ public abstract class Level : MonoBehaviour
             UnityEngine.GameObject obj = Instantiate(Resources.Load("PlayerPF"), 
                 new Vector2(GAME_SIZE.x / 2 - (numPlayers - 1) * 2 + i * 4, GAME_SIZE.y / 2) , Quaternion.identity) as GameObject;
             Player current = obj.GetComponent<Player>();
+            if(current != null)
+            {
             current.playerNum = i;
             players.Add(current);
+            }else
+            {
+                Debug.Log("There is a null reference for the current object!!");
+            }
         }
 
         isReplay = false;
