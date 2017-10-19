@@ -4,7 +4,7 @@ using System.Collections;
 public class Key
 {
     public const float ACTIVATION_THRESHOLD = 0.5f;
-    public const float DEAD_ZONE = 0.25f;
+    public const float DEAD_ZONE = 0.1f;
     public const int START_AXIS = 1024;
     public const int NUM_AXIS = 20;
     public const int NUM_CONTROLLERS = 4;

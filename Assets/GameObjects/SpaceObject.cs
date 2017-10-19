@@ -22,6 +22,67 @@ public static class extendVector
 
         return new Vector2((float)(cos * toRotate.x - sin * toRotate.y), (float)(sin * toRotate.x + cos * toRotate.y));
     }
+
+    public static double getAngle(this Vector2 angleFrom)
+    {
+        if (angleFrom.x == 0f)
+        {
+            //straight up
+            if (angleFrom.y > 0f)
+            {
+                return 0;
+            }
+            //straight down
+            else if (angleFrom.y < 0f)
+            {
+                return 180.0;
+            }
+            //at origin, no input
+            else
+            {
+                return double.NaN;
+            }
+        }
+        else if (angleFrom.y == 0f)
+        {
+            //straight right
+            if (angleFrom.x > 0f)
+            {
+                return 90.0;
+            }
+            //straight left
+            else //angleFrom.x < 0
+            {
+                return 270.0;
+            }
+        }
+        else if (angleFrom.y > 0f)
+        {
+            //quadrent 1
+            if (angleFrom.x > 0f) 
+            {
+                return Math.Atan((double)angleFrom.x / (double)angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+            //quadrent 4
+            else //angleFrom.x < 0
+            {
+                return 360.0 - Math.Atan((double)-angleFrom.x / (double)angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+        }
+        else //angleFrom.y < 0
+        {
+            //quadrent 2
+            if (angleFrom.x > 0f)
+            {
+                return 180.0 - Math.Atan((double)angleFrom.x / (double)-angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+            //quadrent 3
+            else //angleFrom.x < 0
+            {
+                return 180.0 + Math.Atan((double)-angleFrom.x / (double)-angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+        }
+    }
 }
 
 public abstract class SpaceObject : MonoBehaviour {

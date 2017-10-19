@@ -23,8 +23,6 @@ public class Player : DestructableObject
 
     protected override void startDestructableObject()
     {
-        Controls.get().setDefaultControls();
-
         switch (playerNum)
         {
             case 0:
@@ -47,17 +45,19 @@ public class Player : DestructableObject
 
     protected override void updateDestructableObject()
     {
+        PlayerControls input = Controls.get().players[playerNum];
+
         Vector2 move = new Vector2();
 
-        move.y += Controls.get().players[playerNum].forward;
-        move.y -= Controls.get().players[playerNum].backward;
-        move.x -= Controls.get().players[playerNum].straifL;
-        move.x += Controls.get().players[playerNum].straifR;
+        move.y += input.forward;
+        move.y -= input.backward;
+        move.x -= input.straifL;
+        move.x += input.straifR;
 
         move.Normalize();
         move *= acceleration;
 
-        if (Controls.get().players[playerNum].relativeMovement)
+        if (input.relativeMovement)
         {
             modifyVelocityRelative(move);
         }
@@ -66,11 +66,23 @@ public class Player : DestructableObject
             modifyVelocityAbsolute(move);
         }
 
-        angularVelocity += turnSpeed * Controls.get().players[playerNum].turnL;
-        angularVelocity -= turnSpeed * Controls.get().players[playerNum].turnR;
+        if (input.turns)
+        {
+            angularVelocity += turnSpeed * input.turnL;
+            angularVelocity -= turnSpeed * input.turnR;
+        }
+        else
+        {
+            double toTurn = new Vector2(input.turnL - input.turnR, input.turnUp - input.turnDown).getAngle();
+
+            if (!double.IsNaN(toTurn))
+            {
+                angle = (float)toTurn;
+            }
+        }
 
         sinceLastShot++;
-        if (Controls.get().players[playerNum].shoot && sinceLastShot >= shootTime)
+        if (input.shoot && sinceLastShot >= shootTime)
         {
             sinceLastShot = 0;
             GameObject newShot = Instantiate(Resources.Load("LazerShotPF"), new Vector2(0, 2).rotate(angle) + position, 

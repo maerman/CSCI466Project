@@ -43,33 +43,42 @@ public class Asteroid :DestructableObject
             {
                 destroyThis();
             }
-            else if (scale.x < minSize)
+            else if (scale.x <= minSize)
             {
                 base.damageThis(damage);
             }
             else
             {
-                int pieces = (int)(damage * 8 / health);
+                int pieces = (int)(damage * 8 / health) + 1;
 
                 base.damageThis(damage);
 
-                float area = (float)(scale.x * scale.x / 4 * System.Math.PI);
-                area /= pieces;
-                float theScale = (float)(System.Math.Sqrt(area / System.Math.PI * 4));
-
-                for (int i = 0; i < pieces; i++)
+                float area;
+                float theScale;
+                do
                 {
-                    float theAngle = i * 360.0f / pieces + angle;
-                    Asteroid current = (Asteroid)level.createObject("AsteroidPF", position + new Vector2(1, 0).rotate(theAngle), angle,
-                        velocity + new Vector2(pieces, 0).rotate(theAngle), angularVelocity + pieces, theScale);
+                    pieces -= 1;
+                    area = (float)(scale.x * scale.x / 4 * System.Math.PI);
+                    area /= pieces;
+                    theScale = (float)(System.Math.Sqrt(area / System.Math.PI * 4));
+                } while (theScale < minSize);
 
-                    current.mass = mass / pieces;
-                    current.health = health / pieces;
-                }
-
-                if (pieces > 0)
+                if (pieces > 1)
                 {
-                    destroyThis();
+                    for (int i = 0; i < pieces; i++)
+                    {
+                        float theAngle = i * 360.0f / pieces + angle;
+                        Asteroid current = (Asteroid)level.createObject("AsteroidPF", position + new Vector2(1, 0).rotate(theAngle), angle,
+                            velocity + new Vector2(pieces, 0).rotate(theAngle), angularVelocity + pieces, theScale);
+
+                        current.mass = mass / pieces;
+                        current.health = health / pieces;
+                    }
+
+                    if (pieces > 0)
+                    {
+                        destroyThis();
+                    }
                 }
             }
         }

@@ -9,6 +9,8 @@ public class PlayerInput
     public float backward;
     public float straifL;
     public float straifR;
+    public float turnUp;
+    public float turnDown;
     public float turnL;
     public float turnR;
     public bool[] items = new bool[NUM_ITEMS];
@@ -17,6 +19,7 @@ public class PlayerInput
     public bool pause;
 
     public bool relativeMovement;
+    public bool turns;
 
     public PlayerInput() { }
 
@@ -27,24 +30,27 @@ public class PlayerInput
 
         string[] parts = inputInfo.Split(seperators);
 
-        if (parts.Length == 20)
+        if (parts.Length == 23)
         {
             forward = System.Convert.ToSingle(parts[0]);
             backward = System.Convert.ToSingle(parts[1]);
             straifL = System.Convert.ToSingle(parts[2]);
             straifR = System.Convert.ToSingle(parts[3]);
-            turnL = System.Convert.ToSingle(parts[4]);
-            turnR = System.Convert.ToSingle(parts[5]);
+            turnUp = System.Convert.ToSingle(parts[4]);
+            turnDown = System.Convert.ToSingle(parts[5]);
+            turnL = System.Convert.ToSingle(parts[6]);
+            turnR = System.Convert.ToSingle(parts[7]);
 
             for (int i = 0; i < NUM_ITEMS; i++)
             {
-                items[i] = System.Convert.ToBoolean(parts[i + 6]);
+                items[i] = System.Convert.ToBoolean(parts[i + 8]);
             }
 
-            dropItem = System.Convert.ToBoolean(parts[16]);
-            shoot = System.Convert.ToBoolean(parts[17]);
-            pause = System.Convert.ToBoolean(parts[18]);
-            relativeMovement = System.Convert.ToBoolean(parts[19]);
+            dropItem = System.Convert.ToBoolean(parts[18]);
+            shoot = System.Convert.ToBoolean(parts[19]);
+            pause = System.Convert.ToBoolean(parts[20]);
+            relativeMovement = System.Convert.ToBoolean(parts[21]);
+            turns = System.Convert.ToBoolean(parts[22]);
         }
         else
         {
@@ -60,6 +66,8 @@ public class PlayerInput
         toReturn += backward.ToString() + " ";
         toReturn += straifL.ToString() + " ";
         toReturn += straifR.ToString() + " ";
+        toReturn += turnUp.ToString() + " ";
+        toReturn += turnDown.ToString() + " ";
         toReturn += turnL.ToString() + " ";
         toReturn += turnR.ToString() + " ";
         for (int i = 0; i < NUM_ITEMS; i++)
@@ -70,6 +78,7 @@ public class PlayerInput
         toReturn += shoot.ToString() + " ";
         toReturn += pause.ToString() + " ";
         toReturn += relativeMovement.ToString() + " ";
+        toReturn += turns.ToString() + " ";
 
         return toReturn;
     }
@@ -84,6 +93,8 @@ public class PlayerControls
     public Key backwardKey;
     public Key straifLKey;
     public Key straifRKey;
+    public Key turnUpKey;
+    public Key turnDownKey;
     public Key turnLKey;
     public Key turnRKey;
     public Key[] itemKeys = new Key[PlayerInput.NUM_ITEMS];
@@ -99,10 +110,22 @@ public class PlayerControls
             return current.relativeMovement;
         }
     }
-
     public void setRelativeMovement(bool setTo)
     {
         theRelativeMovement = setTo;
+    }
+
+    private bool theTurns = false;
+    public bool turns
+    {
+        get
+        {
+            return current.turns;
+        }
+    }
+    public void setTurns(bool setTo)
+    {
+        theTurns = setTo;
     }
 
     #region Key Accessors
@@ -133,6 +156,20 @@ public class PlayerControls
         get
         {
             return current.straifR;
+        }
+    }
+    public float turnUp
+    {
+        get
+        {
+            return current.turnUp;
+        }
+    }
+    public float turnDown
+    {
+        get
+        {
+            return current.turnDown;
         }
     }
     public float turnL
@@ -206,6 +243,20 @@ public class PlayerControls
             return current.straifR - previous.straifR;
         }
     }
+    public float TurnUp
+    {
+        get
+        {
+            return current.turnUp - previous.turnUp;
+        }
+    }
+    public float TurnDown
+    {
+        get
+        {
+            return current.turnDown - previous.turnDown;
+        }
+    }
     public float TurnL
     {
         get
@@ -269,6 +320,8 @@ public class PlayerControls
         current.backward = backwardKey.getAxis();
         current.straifL = straifLKey.getAxis();
         current.straifR = straifRKey.getAxis();
+        current.turnUp = turnUpKey.getAxis();
+        current.turnDown = turnDownKey.getAxis();
         current.turnL = turnLKey.getAxis();
         current.turnR = turnRKey.getAxis();
 
@@ -281,6 +334,7 @@ public class PlayerControls
         current.pause = pauseKey.isPressed();
 
         current.relativeMovement = theRelativeMovement;
+        current.turns = theTurns;
 
         inputs.Add(current);
     }
@@ -307,24 +361,27 @@ public class PlayerControls
 
         string[] parts = settings.Split(seperators);
 
-        if (parts.Length == 20)
+        if (parts.Length == 23)
         {
             forwardKey = new Key(System.Convert.ToInt32(parts[0]));
             backwardKey = new Key(System.Convert.ToInt32(parts[1]));
             straifLKey = new Key(System.Convert.ToInt32(parts[2]));
             straifRKey = new Key(System.Convert.ToInt32(parts[3]));
-            turnLKey = new Key(System.Convert.ToInt32(parts[4]));
-            turnRKey = new Key(System.Convert.ToInt32(parts[5]));
+            turnUpKey = new Key(System.Convert.ToInt32(parts[4]));
+            turnDownKey = new Key(System.Convert.ToInt32(parts[5]));
+            turnLKey = new Key(System.Convert.ToInt32(parts[6]));
+            turnRKey = new Key(System.Convert.ToInt32(parts[7]));
 
             for (int i = 0; i < PlayerInput.NUM_ITEMS; i++)
             {
-                itemKeys[i] = new Key(System.Convert.ToInt32(parts[i + 6]));
+                itemKeys[i] = new Key(System.Convert.ToInt32(parts[i + 8]));
             }
 
-            dropItemKey = new Key(System.Convert.ToInt32(parts[16]));
-            shootKey = new Key(System.Convert.ToInt32(parts[17]));
-            pauseKey = new Key(System.Convert.ToInt32(parts[18]));
-            theRelativeMovement = System.Convert.ToBoolean(parts[19]);
+            dropItemKey = new Key(System.Convert.ToInt32(parts[18]));
+            shootKey = new Key(System.Convert.ToInt32(parts[19]));
+            pauseKey = new Key(System.Convert.ToInt32(parts[20]));
+            theRelativeMovement = System.Convert.ToBoolean(parts[21]);
+            theTurns = System.Convert.ToBoolean(parts[22]);
         }
         else
         {
@@ -340,6 +397,8 @@ public class PlayerControls
         toReturn += backwardKey.getValue() + " ";
         toReturn += straifLKey.getValue() + " ";
         toReturn += straifRKey.getValue() + " ";
+        toReturn += turnUpKey.getValue() + " ";
+        toReturn += turnDownKey.getValue() + " ";
         toReturn += turnLKey.getValue() + " ";
         toReturn += turnRKey.getValue() + " ";
         for (int i = 0; i < PlayerInput.NUM_ITEMS; i++)
@@ -349,7 +408,8 @@ public class PlayerControls
         toReturn += dropItemKey.getValue() + " ";
         toReturn += shootKey.getValue() + " ";
         toReturn += pauseKey.getValue() + " ";
-        toReturn += relativeMovement.ToString() + " ";
+        toReturn += theRelativeMovement.ToString() + " ";
+        toReturn += theTurns.ToString() + " ";
 
         return toReturn;
     }
@@ -394,6 +454,8 @@ public class Controls
         players[0].backwardKey = new Key(KeyCode.S);
         players[0].straifLKey = new Key(KeyCode.LeftArrow);
         players[0].straifRKey = new Key(KeyCode.RightArrow);
+        players[0].turnUpKey = new Key(KeyCode.UpArrow);
+        players[0].turnDownKey = new Key(KeyCode.DownArrow);
         players[0].turnLKey = new Key(KeyCode.A);
         players[0].turnRKey = new Key(KeyCode.D);
         players[0].itemKeys[0] = new Key(KeyCode.Keypad0);
@@ -410,6 +472,7 @@ public class Controls
         players[0].shootKey = new Key(KeyCode.Space);
         players[0].pauseKey = new Key(KeyCode.Escape);
         players[0].setRelativeMovement(true);
+        players[0].setTurns(true);
 
         if (MAX_PLAYERS > 1)
         {
@@ -417,6 +480,8 @@ public class Controls
             players[1].backwardKey = new Key(1, 2, true);
             players[1].straifLKey = new Key(1, 1, false);
             players[1].straifRKey = new Key(1, 1, true);
+            players[1].turnUpKey = new Key(1, 5, false);
+            players[1].turnDownKey = new Key(1, 5, true);
             players[1].turnLKey = new Key(1, 4, false);
             players[1].turnRKey = new Key(1, 4, true);
             players[1].itemKeys[0] = new Key(KeyCode.Joystick1Button0);
@@ -433,9 +498,60 @@ public class Controls
             players[1].shootKey = new Key(1, 3, true);
             players[1].pauseKey = new Key(KeyCode.Joystick1Button7);
             players[1].setRelativeMovement(false);
+            players[1].setTurns(false);
         }
-
-        //add default controls for players 3 and 4
+        if (MAX_PLAYERS > 2)
+        {
+            players[2].forwardKey = new Key(2, 2, false);
+            players[2].backwardKey = new Key(2, 2, true);
+            players[2].straifLKey = new Key(2, 1, false);
+            players[2].straifRKey = new Key(2, 1, true);
+            players[2].turnUpKey = new Key(2, 5, false);
+            players[2].turnDownKey = new Key(2, 5, true);
+            players[2].turnLKey = new Key(2, 4, false);
+            players[2].turnRKey = new Key(2, 4, true);
+            players[2].itemKeys[0] = new Key(KeyCode.Joystick2Button0);
+            players[2].itemKeys[1] = new Key(KeyCode.Joystick2Button1);
+            players[2].itemKeys[2] = new Key(KeyCode.Joystick2Button2);
+            players[2].itemKeys[3] = new Key(KeyCode.Joystick2Button3);
+            players[2].itemKeys[4] = new Key(KeyCode.Joystick2Button4);
+            players[2].itemKeys[5] = new Key(KeyCode.Joystick2Button5);
+            players[2].itemKeys[6] = new Key(2, 6, false);
+            players[2].itemKeys[7] = new Key(2, 6, true);
+            players[2].itemKeys[8] = new Key(2, 7, false);
+            players[2].itemKeys[9] = new Key(2, 7, true);
+            players[2].dropItemKey = new Key(2, 3, false);
+            players[2].shootKey = new Key(2, 3, true);
+            players[2].pauseKey = new Key(KeyCode.Joystick2Button7);
+            players[2].setRelativeMovement(false);
+            players[2].setTurns(false);
+        }
+        if (MAX_PLAYERS > 3)
+        {
+            players[3].forwardKey = new Key(3, 2, false);
+            players[3].backwardKey = new Key(3, 2, true);
+            players[3].straifLKey = new Key(3, 1, false);
+            players[3].straifRKey = new Key(3, 1, true);
+            players[3].turnUpKey = new Key(3, 5, false);
+            players[3].turnDownKey = new Key(3, 5, true);
+            players[3].turnLKey = new Key(3, 4, false);
+            players[3].turnRKey = new Key(3, 4, true);
+            players[3].itemKeys[0] = new Key(KeyCode.Joystick3Button0);
+            players[3].itemKeys[1] = new Key(KeyCode.Joystick3Button1);
+            players[3].itemKeys[2] = new Key(KeyCode.Joystick3Button2);
+            players[3].itemKeys[3] = new Key(KeyCode.Joystick3Button3);
+            players[3].itemKeys[4] = new Key(KeyCode.Joystick3Button4);
+            players[3].itemKeys[5] = new Key(KeyCode.Joystick3Button5);
+            players[3].itemKeys[6] = new Key(3, 6, false);
+            players[3].itemKeys[7] = new Key(3, 6, true);
+            players[3].itemKeys[8] = new Key(3, 7, false);
+            players[3].itemKeys[9] = new Key(3, 7, true);
+            players[3].dropItemKey = new Key(3, 3, false);
+            players[3].shootKey = new Key(3, 3, true);
+            players[3].pauseKey = new Key(KeyCode.Joystick3Button7);
+            players[3].setRelativeMovement(false);
+            players[3].setTurns(false);
+        }
     }
 
     public void updateFromInput()
