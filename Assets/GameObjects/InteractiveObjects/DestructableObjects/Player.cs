@@ -24,6 +24,25 @@ public class Player : DestructableObject
     protected override void startDestructableObject()
     {
         Controls.get().setDefaultControls();
+
+        switch (playerNum)
+        {
+            case 0:
+                color = Color.white;
+                break;
+            case 1:
+                color = Color.cyan;
+                break;
+            case 2:
+                color = Color.yellow;
+                break;
+            case 3:
+                color = Color.magenta;
+                break;
+            default:
+                color = Color.grey;
+                break;
+        }
     }
 
     protected override void updateDestructableObject()

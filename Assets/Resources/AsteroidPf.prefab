@@ -135,9 +135,10 @@ MonoBehaviour:
   maxSpeed: 10
   inPlay: 1
   maxHealth: 1000
-  health: 100
+  health: 50
   armor: 1
   enemy: 1
+  minSize: 0.1
 --- !u!212 &212176013517283160
 SpriteRenderer:
   m_ObjectHideFlags: 1
