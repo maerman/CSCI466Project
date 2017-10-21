@@ -35,3 +35,8 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+#Nebual Wars Save Files
+*.nebula
+*.NEBULA
+*.replay

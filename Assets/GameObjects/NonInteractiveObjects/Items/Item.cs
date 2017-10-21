@@ -14,4 +14,14 @@ public abstract class Item : NonInteractiveObject
     }
 
     public abstract void updateItem(bool used, Player player);
+
+    public virtual void loadValues(string values)
+    {
+
+    }
+
+    public virtual string getValues()
+    {
+        return "";
+    }
 }

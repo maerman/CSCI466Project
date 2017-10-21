@@ -11,6 +11,15 @@ public class Player : DestructableObject
     private int sinceLastShot = 0;
     public int shootTime = 30;
 
+    private Item[] theItems = new Item[PlayerInput.NUM_ITEMS];
+    public Item[] items
+    {
+        get
+        {
+            return theItems;
+        }
+    }
+
     /*
     public virtual void damageThis(float damage)
     {
@@ -90,11 +99,19 @@ public class Player : DestructableObject
             LazerShot current = newShot.GetComponent<LazerShot>();
             current.velocity += this.velocity;
         }
+
+        for (int i = 0; i < theItems.Length; i++)
+        {
+            if (theItems[i] != null)
+            {
+                theItems[i].updateItem(input.items(i), this);
+            }
+        }
     }
 
     public override void destroyThis()
     {
-        //end level
+        
     }
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
@@ -115,5 +132,10 @@ public class Player : DestructableObject
     protected override void playerCollision(Player other, Collision2D collision)
     {
         
+    }
+
+    public Player clone()
+    {
+        return (Player)this.MemberwiseClone();
     }
 }
