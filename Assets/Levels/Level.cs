@@ -220,7 +220,7 @@ public abstract class Level : MonoBehaviour
 
     protected abstract void initilizeLevel();
 
-    private void initilize(int numPlayers, int difficulty, int randomSeed)
+    public void initilize(int numPlayers, int difficulty, int randomSeed)
     {
         theCurrentLevel = this;
 
