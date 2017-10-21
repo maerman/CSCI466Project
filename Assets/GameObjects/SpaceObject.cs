@@ -139,6 +139,15 @@ public abstract class SpaceObject : MonoBehaviour {
         }
     }
 
+    public Vector2 dimentions
+    {
+        get
+        {
+            Vector3 temp = GetComponent<SpriteRenderer>().bounds.size;
+            return new Vector2(temp.x, temp.y);
+        }
+    }
+
     public void modifyVelocityAbsolute(float changeX, float changeY)
     {
         modifyVelocityAbsolute(new Vector2(changeX, changeY));
@@ -147,7 +156,6 @@ public abstract class SpaceObject : MonoBehaviour {
     public void modifyVelocityAbsolute(Vector2 change)
     {
         GetComponent<Rigidbody2D>().velocity += change;
-
     }
 
     public void modifyVelocityRelative(float changeX, float changeY)

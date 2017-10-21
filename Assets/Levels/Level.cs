@@ -9,12 +9,18 @@ public abstract class Level : MonoBehaviour
     public static Vector2 GAME_SIZE = new Vector2(26.6666f, 20);
     public const int UPDATES_PER_SEC = 60;
     public const float PRECISION = 1024;
+    public const string SAVE_PATH = "saves/";
+    public const string AUTO_SAVE_EXTENTION = ".NEBULA";
+    public const string SAVE_EXTENTION = ".nebula";
+    public const string REPLAY_EXTENTION = ".replay";
+    public const int MAX_AUTOSAVES = 20;
 
     private Canvas canvas;
-    private Text timeText;
 
     private bool isReplay = false;
     private System.IO.StreamReader updateFile;
+
+    public abstract int levelNumber{ get; }
 
     private static Level theCurrentLevel;
 
@@ -54,6 +60,7 @@ public abstract class Level : MonoBehaviour
         }
     }
 
+    private int randomSeed;
     private System.Random theRandom;
     public System.Random random
     {
@@ -105,7 +112,7 @@ public abstract class Level : MonoBehaviour
         return current;
     }
 
-        public SpaceObject createObject(string namePF, Vector2 position, float angle)
+    public SpaceObject createObject(string namePF, Vector2 position, float angle)
     {
         UnityEngine.GameObject obj = Instantiate(Resources.Load(namePF), position, Quaternion.Euler(0, 0, angle)) as GameObject;
         return obj.GetComponent<SpaceObject>();
@@ -194,7 +201,8 @@ public abstract class Level : MonoBehaviour
 			return theNonInteractives;
 		}
 	}
-		
+
+    private List<Player> initialPlayers;
     private List<Player> thePlayers = new List<Player>(Controls.MAX_PLAYERS);
 	public List<Player> players
 	{
@@ -206,9 +214,11 @@ public abstract class Level : MonoBehaviour
     
     public void Start()
     {
-        initilize(2, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
-
-        timeText = addTextToCanvas("time", Vector2.zero);
+        //need to be removed later, in now for testing
+        if (levelNumber == 1)
+        {
+            initilize(2, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
+        }
     }
 
     protected abstract void initilizeLevel();
@@ -217,7 +227,7 @@ public abstract class Level : MonoBehaviour
     {
         theCurrentLevel = this;
 
-        theStartTime = DateTime.Now;
+        this.randomSeed = randomSeed;
         theRandom = new System.Random(randomSeed);
 
         thePlayers = new List<Player>(numPlayers);
@@ -243,35 +253,16 @@ public abstract class Level : MonoBehaviour
             }
         }
 
+        foreach (PlayerControls item in Controls.get().players)
+        {
+            item.clearInputs();
+        }
+
         isReplay = false;
 
         initilizeLevel();
-    }
 
-    public bool initilize(System.IO.StreamReader save)
-    {
-        int players = Convert.ToInt32(save.ReadLine());
-        int difficulty = Convert.ToInt32(save.ReadLine());
-        int randomSeed = Convert.ToInt32(save.ReadLine());
-        initilize(players, difficulty, randomSeed);
-
-        //load player items
-
-        return true;
-    }
-
-    public bool initilizeReplay(System.IO.StreamReader replay)
-    {
-        int players = Convert.ToInt32(replay.ReadLine());
-        int difficulty = Convert.ToInt32(replay.ReadLine());
-        int randomSeed = Convert.ToInt32(replay.ReadLine());
-        initilize(players, difficulty, randomSeed);
-
-        //load player items
-
-        updateFile = replay;
-        isReplay = true;
-        return true;
+        theStartTime = DateTime.Now;
     }
 
     protected abstract void updateLevel();
@@ -287,11 +278,338 @@ public abstract class Level : MonoBehaviour
             Controls.get().updateFromInput();
         }
 
-        if (destructables.Count <= 0)
+        if (!isReplay && duration.TotalSeconds > 1 && destructables.Count <= 0)
         {
-            //nextLevel
+            nextLevel();
         }
 
-        //timeText.text = duration.Hours.ToString() + ":" + duration.Minutes.ToString() + ":" + duration.Seconds.ToString();
+        for (int i = 0; i < players.Count; i++)
+        {
+            if (players[i] == null || !players[i].inPlay || players[i].health < 0)
+            {
+                //game over
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        clearLevel();
+    }
+
+    private void clearLevel()
+    {
+        foreach (Player item in thePlayers)
+        {
+            Destroy(item.gameObject);
+        }
+        thePlayers.Clear();
+
+        foreach (DestructableObject item in theDestructables)
+        {
+            Destroy(item.gameObject);
+        }
+        theDestructables.Clear();
+
+        foreach (IndestructableObject item in theIndestructables)
+        {
+            Destroy(item.gameObject);
+        }
+        theIndestructables.Clear();
+
+        foreach (NonInteractiveObject item in theNonInteractives)
+        {
+            if (!item.GetType().IsSubclassOf(typeof(Item)))
+            {
+                Destroy(item.gameObject);
+            }
+        }
+        theNonInteractives.Clear();
+    }
+
+    private void saveItems(System.IO.StreamWriter save)
+    {
+        saveItems(save, thePlayers);
+    }
+
+    private void saveItems(System.IO.StreamWriter save, List<Player> players)
+    {
+        foreach (Player player in players)
+        {
+            foreach (Item item in player.items)
+            {
+                if (item == null)
+                {
+                    save.WriteLine("");
+                    save.WriteLine("");
+                }
+                else
+                {
+                    string name = item.ToString();
+
+                    name = name.Substring(0, name.IndexOf('(') + 1);
+                    save.WriteLine(name);
+                    save.WriteLine(item.getValues());
+                }
+            }
+        }
+    }
+
+    private void loadItems(System.IO.StreamReader load)
+    {
+        foreach (Player player in players)
+        {
+            for (int i = 0; i < player.items.Length; i++)
+            {
+                string name = load.ReadLine();
+                string values = load.ReadLine();
+
+                if (name == "")
+                {
+                    player.items[i] = null;
+                }
+                else
+                {
+                    Item item = (Item)createObject(name, Vector2.zero, 0);
+                    item.loadValues(values);
+                    player.items[i] = item;
+                    //set item position
+                }
+            }
+        }
+    }
+
+    public void restartLevel()
+    {
+        int numPlayers = thePlayers.Count;
+
+        clearLevel();
+
+        initilize(numPlayers, theDifficulty, randomSeed);
+
+        for (int i = 0; i < initialPlayers.Count; i++)
+        {
+            for (int j = 0; j < thePlayers[i].items.Length; j++)
+            {
+                thePlayers[i].items[j] = initialPlayers[i].items[j];
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Makes an autosave for the next Level
+    /// Creates the next Level and destroys the current one
+    /// Should only be called when the current Level is completed
+    /// </summary>
+    /// <returns>The next Level</returns>
+    public Level nextLevel()
+    {
+        Level lvl = getLevel(levelNumber + 1);
+
+        if (lvl == null)
+        {
+            //show victory screen, the game has been beat
+            restartLevel();
+        }
+        else
+        {
+            save();
+
+            lvl.initilize(thePlayers.Count, theDifficulty, theRandom.Next());
+
+            lvl.initialPlayers = new List<Player>(lvl.players.Count);
+
+            for (int i = 0; i < thePlayers.Count; i++)
+            {
+                for (int j = 0; j < thePlayers[i].items.Length; j++)
+                {
+                    lvl.thePlayers[i].items[j] = thePlayers[i].items[j];
+                }
+                lvl.initialPlayers.Add(lvl.thePlayers[i].clone());
+            }
+
+            Destroy(this.gameObject);
+        }
+
+        return lvl;
+    }
+
+    private bool save()
+    {
+        string[] filePaths = System.IO.Directory.GetFiles(SAVE_PATH, "*" + AUTO_SAVE_EXTENTION);
+
+        Array.Sort(filePaths);
+
+        for (int i = 0; i < filePaths.Length - MAX_AUTOSAVES - 1; i++)
+        {
+            System.IO.File.Delete(filePaths[i]);
+        }
+
+        return save(DateTime.Now.ToLocalTime().ToString("yy-MM-dd-HH-mm-ss"), true);
+    }
+
+    private bool save(string fileName, bool autoSave)
+    {
+        System.IO.Directory.CreateDirectory(SAVE_PATH);
+        System.IO.StreamWriter file;
+
+        if (autoSave)
+        {
+            file = new System.IO.StreamWriter(SAVE_PATH + fileName + AUTO_SAVE_EXTENTION, false);
+        }
+        else
+        {
+            file = new System.IO.StreamWriter(SAVE_PATH + fileName + SAVE_EXTENTION, false);
+        }
+
+        file.WriteLine(Convert.ToString(levelNumber + 1));
+        file.WriteLine(Convert.ToString(thePlayers.Count));
+        file.WriteLine(Convert.ToString(theDifficulty));
+        file.WriteLine(Convert.ToString(random.Next()));
+
+        saveItems(file);
+
+        file.Close();
+
+        return true;
+    }
+
+    /// <summary>
+    /// Makes a save for the next Level with the given filename
+    /// Should only be called when the current level is completed
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <returns>True if successful</returns>
+    public bool save(string fileName)
+    {
+        return save(fileName, false);
+    }
+
+    public bool saveReplay(string fileName)
+    {
+        System.IO.Directory.CreateDirectory(SAVE_PATH);
+        System.IO.StreamWriter save = new System.IO.StreamWriter(SAVE_PATH + fileName + REPLAY_EXTENTION, false);
+
+        save.WriteLine(Convert.ToString(levelNumber));
+        save.WriteLine(Convert.ToString(thePlayers.Count));
+        save.WriteLine(Convert.ToString(theDifficulty));
+        save.WriteLine(Convert.ToString(randomSeed));
+
+        saveItems(save, initialPlayers);
+
+        Controls.get().saveInputsToFile(save);
+
+        save.Close();
+
+        return true;
+    }
+
+    public static Level getLevel(int levelNum)
+    {
+        UnityEngine.GameObject obj;
+
+        try
+        {
+            switch (levelNum)
+            {
+                case 1:
+                    obj = Instantiate(Resources.Load("Level1PF")) as GameObject;
+                    break;
+                case 2:
+                    obj = Instantiate(Resources.Load("Level2PF")) as GameObject;
+                    break;
+                case 3:
+                    obj = Instantiate(Resources.Load("Level3PF")) as GameObject;
+                    break;
+                case 4:
+                    obj = Instantiate(Resources.Load("Level4PF")) as GameObject;
+                    break;
+                case 5:
+                    obj = Instantiate(Resources.Load("Level5PF")) as GameObject;
+                    break;
+                case 6:
+                    obj = Instantiate(Resources.Load("Level6PF")) as GameObject;
+                    break;
+                case 7:
+                    obj = Instantiate(Resources.Load("Level7PF")) as GameObject;
+                    break;
+                case 8:
+                    obj = Instantiate(Resources.Load("Level8PF")) as GameObject;
+                    break;
+                case 9:
+                    obj = Instantiate(Resources.Load("Level9PF")) as GameObject;
+                    break;
+                default:
+                    try
+                    {
+                        obj = Instantiate(Resources.Load("Level" + levelNum.ToString() + "PF")) as GameObject;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                    break;
+            }
+
+            return obj.GetComponent<Level>();
+        }
+        catch
+        {
+            throw new Exception("Error loading level " + levelNum.ToString());
+        }
+    }
+
+    public static Level loadLevel(string fileName)
+    {
+        System.IO.StreamReader save = new System.IO.StreamReader(fileName);
+
+        Level lvl = getLevel(Convert.ToInt32(save.ReadLine()));
+
+        int players = Convert.ToInt32(save.ReadLine());
+        int difficulty = Convert.ToInt32(save.ReadLine());
+        int randomSeed = Convert.ToInt32(save.ReadLine());
+
+        lvl.initilize(players, difficulty, randomSeed);
+
+        lvl.loadItems(save);
+
+        lvl.initialPlayers = new List<Player>(lvl.players.Count);
+        for (int i = 0; i < lvl.thePlayers.Count; i++)
+        {
+            lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
+        }
+
+        save.Close();
+
+        return lvl;
+    }
+
+
+    public static Level loadReplay(string fileName)
+    {
+        System.IO.StreamReader replay = new System.IO.StreamReader(fileName);
+
+        Level lvl = getLevel(Convert.ToInt32(replay.ReadLine()));
+
+        int players = Convert.ToInt32(replay.ReadLine());
+        int difficulty = Convert.ToInt32(replay.ReadLine());
+        int randomSeed = Convert.ToInt32(replay.ReadLine());
+        lvl.initilize(players, difficulty, randomSeed);
+
+        lvl.loadItems(replay);
+
+        lvl.initialPlayers = new List<Player>(lvl.players.Count);
+        for (int i = 0; i < lvl.thePlayers.Count; i++)
+        {
+            lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
+        }
+        
+
+        lvl.updateFile = replay;
+        lvl.isReplay = true;
+
+        replay.Close();
+
+        return lvl;
     }
 }
