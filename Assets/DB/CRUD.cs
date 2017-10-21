@@ -10,6 +10,7 @@ using static GameStates;
 public class CRUD : MonoBehaviour {
 
     public static CRUD crud;
+
     string baseUrl = "http://nebulawars.heliohost.org/phpDBScripts/";
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
@@ -41,10 +42,10 @@ public class CRUD : MonoBehaviour {
                 user.id = int.Parse(myObj[0]); //convert to an int
                 user.username = myObj[1];
                 user.password = myObj[2];
-                user.isTrial = int.Parse(myObj[3]); //convert to an int
-                user.email = myObj[4];
-
-                gameState = GameState.LoggedIn; //change the game state to LoggedIn
+                user.email = myObj[3];
+                user.isTrial = int.Parse(myObj[4]); //convert to an int
+                
+                playerState = PlayerState.LoggedIn; //change the game state to LoggedIn
                 Debug.Log("Successfully Logged In as " + user.username);
             }
             catch(Exception e)

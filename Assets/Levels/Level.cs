@@ -17,6 +17,9 @@ public abstract class Level : MonoBehaviour
     private System.IO.StreamReader updateFile;
 
     private static Level theCurrentLevel;
+
+    public virtual int levelNumber {get;set;}
+
     public static Level currentLevel
     {
         get
