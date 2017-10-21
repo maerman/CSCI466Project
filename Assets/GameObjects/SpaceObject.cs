@@ -22,15 +22,80 @@ public static class extendVector
 
         return new Vector2((float)(cos * toRotate.x - sin * toRotate.y), (float)(sin * toRotate.x + cos * toRotate.y));
     }
+
+    public static double getAngle(this Vector2 angleFrom)
+    {
+        if (angleFrom.x == 0f)
+        {
+            //straight up
+            if (angleFrom.y > 0f)
+            {
+                return 0;
+            }
+            //straight down
+            else if (angleFrom.y < 0f)
+            {
+                return 180.0;
+            }
+            //at origin, no input
+            else
+            {
+                return double.NaN;
+            }
+        }
+        else if (angleFrom.y == 0f)
+        {
+            //straight right
+            if (angleFrom.x > 0f)
+            {
+                return 90.0;
+            }
+            //straight left
+            else //angleFrom.x < 0
+            {
+                return 270.0;
+            }
+        }
+        else if (angleFrom.y > 0f)
+        {
+            //quadrent 1
+            if (angleFrom.x > 0f) 
+            {
+                return Math.Atan((double)angleFrom.x / (double)angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+            //quadrent 4
+            else //angleFrom.x < 0
+            {
+                return 360.0 - Math.Atan((double)-angleFrom.x / (double)angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+        }
+        else //angleFrom.y < 0
+        {
+            //quadrent 2
+            if (angleFrom.x > 0f)
+            {
+                return 180.0 - Math.Atan((double)angleFrom.x / (double)-angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+            //quadrent 3
+            else //angleFrom.x < 0
+            {
+                return 180.0 + Math.Atan((double)-angleFrom.x / (double)-angleFrom.y) * (double)Mathf.Rad2Deg;
+            }
+        }
+    }
 }
 
 public abstract class SpaceObject : MonoBehaviour {
     //probably need to change this and put it somewhere else
     public float maxSpeed = 10;
 
+    public bool inPlay = true;
+
     public abstract Vector2 position { get; set; }
 
     public abstract Vector2 velocity { get; set; }
+
+    public abstract float angle { get; set; }
 
     public abstract float angularVelocity { get; set; }
 
@@ -117,6 +182,7 @@ public abstract class SpaceObject : MonoBehaviour {
             {
                 velocity = new Vector2(value, 0);
             }
+            else
             {
                 velocity = new Vector2(velocity.x / speed * value, velocity.y / speed * value);
             }
@@ -128,48 +194,125 @@ public abstract class SpaceObject : MonoBehaviour {
         velocity = new Vector2(velocity.x / speed * change, velocity.y / speed * change);
     }
 
-    public abstract float angle { get; set; }
-
-    public float distanceFrom(Vector2 from)
+    public float distanceFromScreenPosition(Vector2 from)
     {
         return (float)System.Math.Sqrt((position.y - from.y) * (position.y - from.y) +
             (position.x - from.x) * (position.x - from.x));
     }
 
+    public Vector2 closestMirrorOfPosition(Vector2 position)
+    {
+        Vector2 closestPosition = position;
+        float shortestDistance = distanceFromScreenPosition(position);
+
+        Vector2 tempPosition = new Vector2(position.x + Level.GAME_SIZE.x, position.y);
+        float tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        tempPosition = new Vector2(position.x - Level.GAME_SIZE.x, position.y);
+        tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        tempPosition = new Vector2(position.x, position.y + Level.GAME_SIZE.y);
+        tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        tempPosition = new Vector2(position.x, position.y - Level.GAME_SIZE.y);
+        tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        tempPosition = new Vector2(position.x + Level.GAME_SIZE.x, position.y + Level.GAME_SIZE.y);
+        tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        tempPosition = new Vector2(position.x + Level.GAME_SIZE.x, position.y - Level.GAME_SIZE.y);
+        tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        tempPosition = new Vector2(position.x - Level.GAME_SIZE.x, position.y + Level.GAME_SIZE.y);
+        tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        tempPosition = new Vector2(position.x - Level.GAME_SIZE.x, position.y - Level.GAME_SIZE.y);
+        tempDistance = distanceFromScreenPosition(tempPosition);
+        if (tempDistance < shortestDistance)
+        {
+            closestPosition = tempPosition;
+            shortestDistance = tempDistance;
+        }
+
+        return closestPosition;
+    }
+
+    public float distanceFrom(Vector2 from)
+    {
+        return distanceFromScreenPosition(closestMirrorOfPosition(from));
+    }
+
     public float distanceFrom(SpaceObject from)
     {
-        return (float)System.Math.Sqrt((position.y - from.position.y) * (position.y - from.position.y) +
-            (position.x - from.position.x) * (position.x - from.position.x));
+        return distanceFrom(from.position);
     }
 
     public void moveTowards(Vector2 moveTo, float speed)
     {
+        moveTo = closestMirrorOfPosition(moveTo);
         modifyVelocityAbsolute((moveTo - position) / distanceFrom(moveTo) * speed);
     }
 
     public void moveTowards(SpaceObject moveTo, float speed)
     {
-        modifyVelocityAbsolute((moveTo.position - position) / distanceFrom(moveTo) * speed);
+        moveTowards(moveTo.position, speed);
     }
 
     public void turnTowards(Vector2 turnTo)
     {
+        turnTo = closestMirrorOfPosition(turnTo);
         angle = (float)Math.Atan2(position.y - turnTo.y, position.x - turnTo.x) + (float)Math.PI;
     }
 
     public void turnTowards(SpaceObject turnTo)
     {
-        angle = (float)Math.Atan2(position.y - turnTo.position.y, position.x - turnTo.position.x) + (float)Math.PI;
+        turnTowards(turnTo.position);
     }
 
     public void turnAway(Vector2 awayFrom)
     {
+        awayFrom = closestMirrorOfPosition(awayFrom);
         angle = (float)Math.Atan2(position.y - awayFrom.y, position.x - awayFrom.x);
     }
 
     public void turnAway(SpaceObject awayFrom)
     {
-        angle = (float)Math.Atan2(position.y - awayFrom.position.y, position.x - awayFrom.position.x);
+        turnAway(awayFrom.position);
     }
 
     public void moveForward(float speed)
@@ -185,6 +328,7 @@ public abstract class SpaceObject : MonoBehaviour {
     //Not sure if works, needs tested
     public void rotateTowards(Vector2 rotateTo, float amount)
     {
+        rotateTo = closestMirrorOfPosition(rotateTo);
         float angleTo = (float)Math.Atan2(position.y - rotateTo.y, position.x - rotateTo.x) + (float)Math.PI;
         float angleDiff = angleTo - angle;
         angleDiff %= (float)(2 * Math.PI);
@@ -220,6 +364,7 @@ public abstract class SpaceObject : MonoBehaviour {
 
     public virtual void destroyThis()
     {
+        inPlay = false;
         Destroy(gameObject);
     }
 
@@ -240,7 +385,7 @@ public abstract class SpaceObject : MonoBehaviour {
 
     protected abstract void updateObject();
 	// Update is called once per frame
-	void Update ()
+	public void FixedUpdate ()
     {
         updateObject();
 

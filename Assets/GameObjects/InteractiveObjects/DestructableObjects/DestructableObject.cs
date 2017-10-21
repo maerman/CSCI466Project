@@ -5,22 +5,8 @@ public abstract class DestructableObject : InteractiveObject
 {
     public float maxHealth = 1000;
     public float health = 100;
-    private float theArmor = 1;
-
-    public float armor
-    {
-        get
-        {
-            return theArmor;
-        }
-        set
-        {
-            if (armor >= 0)
-            { 
-                theArmor = armor;
-            }
-        }
-    }
+    public float armor = 1;
+    public bool enemy = true;
 
     public virtual void damageThis(float damage)
     {
@@ -32,7 +18,7 @@ public abstract class DestructableObject : InteractiveObject
 
     protected virtual void kineticDamage(Collision2D collision)
     {
-        damageThis(collision.relativeVelocity.magnitude * mass / 1000f);
+        damageThis(collision.relativeVelocity.magnitude * collision.rigidbody.mass / mass / 100f);
     }
 
     private void OnDestroy()
@@ -41,6 +27,7 @@ public abstract class DestructableObject : InteractiveObject
         {
             level.destructables.Remove(this);
         }
+        inPlay = false;
     }
 
     protected abstract void startDestructableObject();
@@ -50,7 +37,7 @@ public abstract class DestructableObject : InteractiveObject
         startDestructableObject();
         if (this.GetType() != typeof(Player))
         {
-            level.destructables.Add(this);
+            level.destructables.AddLast(this);
         }
     }
 
@@ -70,9 +57,12 @@ public abstract class DestructableObject : InteractiveObject
     {
         SpaceObject spaceObject = collision.gameObject.GetComponent<SpaceObject>();
 
-        kineticDamage(collision);
+        if (collision.relativeVelocity.magnitude > 10)
+        {
+            kineticDamage(collision);
+        }
 
-        if (spaceObject.GetType().IsSubclassOf(typeof(Player)))
+        if (spaceObject.GetType() == (typeof(Player)))
         {
             playerCollision((Player)spaceObject, collision);
         }

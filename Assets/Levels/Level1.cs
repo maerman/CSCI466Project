@@ -47,20 +47,32 @@ using static GameStates;
 public class Level1 : Level
 {
 
-    private void Start()
+    //private void Start()
+    // {
+        //gameState = GameState.NotLoggedIn;
+		//crud.GetUser.queryUser("JimSmith", "smith11"); //this would be getting the data from the username and password textboxes and run when the user hits the login button
+    //}
+
+    protected override void initilizeLevel()
     {
-        gameState = GameState.NotLoggedIn;
-        GetUser.queryUser("JimSmith", "smith11"); //this would be getting the data from the username and password textboxes and run when the user hits the login button
+        for (int i = 0; i < 1; i++)
+        {
+              Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+             HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+             Blob current = (Blob)createObject("BlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+        }
     }
 
-    public override void initilizeLevel()
+    protected override void updateLevel()
     {
-        while (gameState == GameState.LoggedIn)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
-            }
-        }
+        
     }
 }

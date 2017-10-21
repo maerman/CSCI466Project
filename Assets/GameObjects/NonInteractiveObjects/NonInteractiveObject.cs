@@ -84,10 +84,8 @@ public abstract class NonInteractiveObject : SpaceObject
 
     private void OnDestroy()
     {
-        if (this.GetType() != typeof(Player))
-        {
-            level.nonInteractives.Remove(this);
-        }
+        level.nonInteractives.Remove(this);
+        inPlay = false;
     }
 
     protected abstract void startNonInteractiveObject();
@@ -95,7 +93,7 @@ public abstract class NonInteractiveObject : SpaceObject
     protected override void startObject()
     {
         startNonInteractiveObject();
-        level.nonInteractives.Add(this);
+        level.nonInteractives.AddLast(this);
     }
 
     protected abstract void updateNonInteractiveObject();
@@ -117,7 +115,7 @@ public abstract class NonInteractiveObject : SpaceObject
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();
 
-        if (spaceObject.GetType().IsSubclassOf(typeof(Player)))
+        if (spaceObject.GetType() == (typeof(Player)))
         {
             playerCollision((Player) spaceObject);
         }

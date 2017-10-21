@@ -21,8 +21,8 @@ GameObject:
   - component: {fileID: 4560865699422538}
   - component: {fileID: 212176013517283160}
   - component: {fileID: 50122984887895450}
-  - component: {fileID: 60625450186326194}
-  - component: {fileID: 114037517525457524}
+  - component: {fileID: 114656503788072824}
+  - component: {fileID: 60091126950138518}
   m_Layer: 0
   m_Name: AsteroidPf
   m_TagString: Untagged
@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1322634837065812}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.89, y: 11.64, z: 0}
+  m_LocalPosition: {x: 20.651, y: 9.664, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -63,7 +63,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!60 &60625450186326194
+--- !u!60 &60091126950138518
 PolygonCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -80,48 +80,23 @@ PolygonCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 2.56, y: 2.56}
-    newSize: {x: 2.56, y: 2.56}
+    newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.66999996, y: -0.41}
-      - {x: 0.82, y: -0.19}
-      - {x: 0.84, y: 0.04}
-      - {x: 0.84, y: 0.14999999}
-      - {x: 0.82, y: 0.17999999}
-      - {x: 0.79999995, y: 0.22}
-      - {x: 0.71999997, y: 0.32999998}
-      - {x: 0.71999997, y: 0.42}
-      - {x: 0.59, y: 0.63}
-      - {x: 0.57, y: 0.72999996}
-      - {x: 0.53, y: 0.75}
-      - {x: 0.42, y: 0.77}
-      - {x: 0.17, y: 0.77}
-      - {x: -0.07, y: 0.71999997}
-      - {x: -0.22999999, y: 0.77}
-      - {x: -0.31, y: 0.77}
-      - {x: -0.42999998, y: 0.75}
-      - {x: -0.55, y: 0.59}
-      - {x: -0.7, y: 0.37}
-      - {x: -0.84999996, y: 0.07}
-      - {x: -0.85999995, y: 0.02}
-      - {x: -0.85999995, y: -0.11}
-      - {x: -0.75, y: -0.31}
-      - {x: -0.72999996, y: -0.41}
-      - {x: -0.66999996, y: -0.51}
-      - {x: -0.57, y: -0.59999996}
-      - {x: -0.5, y: -0.64}
-      - {x: -0.22, y: -0.72999996}
-      - {x: -0.049999997, y: -0.78}
-      - {x: 0.02, y: -0.78}
-      - {x: 0.21, y: -0.77}
-      - {x: 0.32999998, y: -0.74}
-      - {x: 0.38, y: -0.71999997}
-      - {x: 0.52, y: -0.59999996}
---- !u!114 &114037517525457524
+    - - {x: -0.010387421, y: -0.7652769}
+      - {x: 0.35746956, y: -0.70950794}
+      - {x: 0.7293949, y: -0.2918148}
+      - {x: 0.8265915, y: 0.11313057}
+      - {x: 0.53923416, y: 0.7311659}
+      - {x: -0.2940483, y: 0.760478}
+      - {x: -0.45796013, y: 0.68222237}
+      - {x: -0.8657112, y: -0.019330978}
+      - {x: -0.614336, y: -0.56900406}
+--- !u!114 &114656503788072824
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -129,12 +104,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1322634837065812}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d79db32082293a4ebdb2245c88c3294, type: 3}
+  m_Script: {fileID: 11500000, guid: 6601ebb6411efd747882d9b931fff889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 10
+  inPlay: 1
   maxHealth: 1000
-  health: 100
+  health: 50
+  armor: 1
+  enemy: 1
+  minSize: 0.1
 --- !u!212 &212176013517283160
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -167,12 +146,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8876643e09c3c2241ab9bc6a6d252373, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d58a035dbf05e7c48870f1f2ab50ef7a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2.56, y: 2.56}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
