@@ -24,8 +24,6 @@ public abstract class Level : MonoBehaviour
 
     private static Level theCurrentLevel;
 
-    public virtual int levelNumber {get;set;}
-
     public static Level currentLevel
     {
         get
@@ -214,11 +212,7 @@ public abstract class Level : MonoBehaviour
     
     public void Start()
     {
-        //need to be removed later, in now for testing
-        if (levelNumber == 1)
-        {
-            initilize(2, 1, System.DateTime.Now.Millisecond * System.DateTime.Now.Minute);
-        }
+        
     }
 
     protected abstract void initilizeLevel();
@@ -278,7 +272,7 @@ public abstract class Level : MonoBehaviour
             Controls.get().updateFromInput();
         }
 
-        if (!isReplay && duration.TotalSeconds > 1 && destructables.Count <= 0)
+        if (!isReplay && duration.TotalSeconds > 2 && destructables.Count <= 0 && theCurrentLevel == this)
         {
             nextLevel();
         }
@@ -295,6 +289,11 @@ public abstract class Level : MonoBehaviour
     private void OnDestroy()
     {
         clearLevel();
+
+        if (theCurrentLevel == this)
+        {
+            theCurrentLevel = null;
+        }
     }
 
     private void clearLevel()
@@ -436,6 +435,7 @@ public abstract class Level : MonoBehaviour
 
     private bool save()
     {
+        System.IO.Directory.CreateDirectory(SAVE_PATH);
         string[] filePaths = System.IO.Directory.GetFiles(SAVE_PATH, "*" + AUTO_SAVE_EXTENTION);
 
         Array.Sort(filePaths);

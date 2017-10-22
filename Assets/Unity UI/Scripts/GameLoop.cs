@@ -7,8 +7,8 @@ using System;
 
 public class GameLoop : MonoBehaviour {
     private GameLoop gameLoop;
-    public GameObject Level1;
-    public Canvas Menu;
+    //public GameObject Level1;     //you can get the current Level from Level.currentLevel but it might be null if the game is not currently being played
+    public Canvas Menu; //initilzed in editor
     bool inGame = true; 
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
@@ -29,10 +29,11 @@ public class GameLoop : MonoBehaviour {
        
         StartCoroutine("StateMachine"); //Start the GameLoop
     }
+
     IEnumerator StateMachine()
     {
         gameState = GameState.Loading; //initial game state
-        Level1.SetActive(false); //disable Level1 Menu
+        //Level1.SetActive(false); //disable Level1 Menu
         Menu.enabled = true; //enable the main menu
 
         playerState = PlayerState.NotLoggedIn; //initial player state
@@ -47,11 +48,11 @@ public class GameLoop : MonoBehaviour {
                         break;
                     case (GameState.PlayingDemo):
                         Menu.enabled = false;
-                        Level1.SetActive(true);
+                        //Level.SetActive(true);
                         break;
                     case GameState.PlayingFull:
                         Menu.enabled = false;
-                        Level1.SetActive(true);
+                        //Level1.SetActive(true);
                         break;
                     case GameState.Paused:
                         break;

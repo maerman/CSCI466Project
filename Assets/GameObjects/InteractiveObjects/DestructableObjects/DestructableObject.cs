@@ -25,7 +25,10 @@ public abstract class DestructableObject : InteractiveObject
     {
         if (this.GetType() != typeof(Player))
         {
-            level.destructables.Remove(this);
+            if (level != null && level.destructables != null)
+            {
+                level.destructables.Remove(this);
+            }
         }
         inPlay = false;
     }

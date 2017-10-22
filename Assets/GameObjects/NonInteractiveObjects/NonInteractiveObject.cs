@@ -84,7 +84,10 @@ public abstract class NonInteractiveObject : SpaceObject
 
     private void OnDestroy()
     {
-        level.nonInteractives.Remove(this);
+        if (level != null && level.nonInteractives != null)
+        {
+            level.nonInteractives.Remove(this);
+        }
         inPlay = false;
     }
 

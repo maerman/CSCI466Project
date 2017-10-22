@@ -5,7 +5,10 @@ public abstract class IndestructableObject : InteractiveObject
 {
     private void OnDestroy()
     {
-        level.indestructables.Remove(this);
+        if (level != null && level.indestructables != null)
+        {
+            level.indestructables.Remove(this);
+        }
         inPlay = false;
     }
 

@@ -16,7 +16,6 @@ public class PlayerInput
     public bool[] items = new bool[NUM_ITEMS];
     public bool dropItem;
     public bool shoot;
-    public bool pause;
 
     public bool relativeMovement;
     public bool turns;
@@ -48,7 +47,6 @@ public class PlayerInput
 
             dropItem = System.Convert.ToBoolean(parts[18]);
             shoot = System.Convert.ToBoolean(parts[19]);
-            pause = System.Convert.ToBoolean(parts[20]);
             relativeMovement = System.Convert.ToBoolean(parts[21]);
             turns = System.Convert.ToBoolean(parts[22]);
         }
@@ -76,7 +74,6 @@ public class PlayerInput
         }
         toReturn += dropItem.ToString() + " ";
         toReturn += shoot.ToString() + " ";
-        toReturn += pause.ToString() + " ";
         toReturn += relativeMovement.ToString() + " ";
         toReturn += turns.ToString() + " ";
 
@@ -101,6 +98,8 @@ public class PlayerControls
     public Key dropItemKey;
     public Key shootKey;
     public Key pauseKey;
+
+    private bool previousPause;
 
     private bool theRelativeMovement = false;
     public bool relativeMovement
@@ -210,7 +209,8 @@ public class PlayerControls
     {
         get
         {
-            return current.pause;
+            previousPause = pauseKey.isPressed();
+            return pauseKey.isPressed();
         }
     }
 
@@ -295,7 +295,8 @@ public class PlayerControls
     {
         get
         {
-            return current.pause && !previous.pause;
+            previousPause = pauseKey.isPressed();
+            return pauseKey.isPressed() && !previousPause;
         }
     }
     #endregion
@@ -331,7 +332,6 @@ public class PlayerControls
         }
         current.dropItem = dropItemKey.isPressed();
         current.shoot = shootKey.isPressed();
-        current.pause = pauseKey.isPressed();
 
         current.relativeMovement = theRelativeMovement;
         current.turns = theTurns;
