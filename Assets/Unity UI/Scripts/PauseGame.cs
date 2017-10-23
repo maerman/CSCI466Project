@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PauseGame : MonoBehaviour {
-	public GameObject canvas;
+	public GameObject pauseMenu;
 	public bool paused = false;
-    public Canvas pauseMenu; //initilized in editor
 
     void Start ()
     {
-		canvas.SetActive(false);
+		pauseMenu.SetActive(false);
 	}
 
 	void Update()
@@ -28,14 +27,12 @@ public class PauseGame : MonoBehaviour {
         }
 		if (paused)
         {
-            pauseMenu.enabled = true;
-			canvas.SetActive(true);
+			pauseMenu.SetActive(true);
 			Time.timeScale = 0;
 		}
-		if (!paused)
+		else
         {
-            pauseMenu.enabled = false;
-			canvas.SetActive(false);
+			pauseMenu.SetActive(false);
 			Time.timeScale = 1;
 		}
 	}
@@ -43,7 +40,7 @@ public class PauseGame : MonoBehaviour {
 	public void Unpause()
     {
 		Time.timeScale = 1;
-		canvas.SetActive(false);
+		pauseMenu.SetActive(false);
 		paused = false;
 	}
 
