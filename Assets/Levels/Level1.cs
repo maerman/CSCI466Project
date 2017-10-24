@@ -64,7 +64,7 @@ public class Level1 : Level
     {
         for (int i = 0; i < 3; i++)
         {
-              Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+              //Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
         for (int i = 0; i < 1; i++)
@@ -79,7 +79,17 @@ public class Level1 : Level
 
         for (int i = 0; i < 1; i++)
         {
-            GravityWell current = (GravityWell)createObject("GravityWellPF", getRandomPosition(), getRandomAngle());
+            //GravityWell current = (GravityWell)createObject("GravityWellPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            //Rammer current = (Rammer)createObject("RammerPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            SlowTurner current = (SlowTurner)createObject("SlowTurnerPF", getRandomPosition(), getRandomAngle());
         }
     }
 

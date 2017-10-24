@@ -6,7 +6,7 @@ public class LazerShot : IndestructableObject
     public float initialSpeed = 15;
     public float damage = 10;
     private int timeAlive = 0;
-    public int timeToLive = Level.UPDATES_PER_SEC;
+    public int timeToLive = 50;
 
     protected override void startIndestructableObject()
     {

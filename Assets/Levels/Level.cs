@@ -7,7 +7,6 @@ using static User;
 public abstract class Level : MonoBehaviour
 {
     public static Rect gameBounds = new Rect(Vector2.zero, new Vector2(40, 30));
-    public const int UPDATES_PER_SEC = 60;
     public const float PRECISION = 1024;
     public const string SAVE_PATH = "saves/";
     public const string AUTO_SAVE_EXTENTION = ".NEBULA";
@@ -50,6 +49,22 @@ public abstract class Level : MonoBehaviour
         get
         {
             return System.DateTime.Now - startTime;
+        }
+    }
+
+    public float updatesPerSec
+    {
+        get
+        {
+            return 1.0f / Time.fixedDeltaTime;
+        }
+    }
+
+    public float secsPerUpdate
+    {
+        get
+        {
+            return Time.fixedDeltaTime;
         }
     }
 

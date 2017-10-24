@@ -105,8 +105,8 @@ public abstract class NonInteractiveObject : SpaceObject
     protected override void updateObject()
     {
         updateNonInteractiveObject();
-        position += velocity;
-        angle += angularVelocity;
+        position += velocity * level.secsPerUpdate;
+        angle += angularVelocity * level.secsPerUpdate;
     }
 
 
