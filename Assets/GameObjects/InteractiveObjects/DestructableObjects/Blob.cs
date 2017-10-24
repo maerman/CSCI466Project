@@ -65,11 +65,6 @@ public class Blob : DestructableObject
         
     }
 
-    protected override void kineticDamage(Collision2D collision)
-    {
-        //causes errors if kinetic damage is dealt
-    }
-
     public override void damageThis(float damage)
     {
         damage -= armor;

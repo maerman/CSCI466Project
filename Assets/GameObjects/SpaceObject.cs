@@ -87,7 +87,7 @@ public static class extendVector
 
 public abstract class SpaceObject : MonoBehaviour {
     //probably need to change this and put it somewhere else
-    public float maxSpeed = 10;
+    public float maxSpeed = 15;
 
     public bool inPlay = true;
 
@@ -213,7 +213,7 @@ public abstract class SpaceObject : MonoBehaviour {
         Vector2 closestPosition = position;
         float shortestDistance = distanceFromScreenPosition(position);
 
-        Vector2 tempPosition = new Vector2(position.x + Level.GAME_SIZE.x, position.y);
+        Vector2 tempPosition = new Vector2(position.x + Level.gameBounds.x, position.y);
         float tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -221,7 +221,7 @@ public abstract class SpaceObject : MonoBehaviour {
             shortestDistance = tempDistance;
         }
 
-        tempPosition = new Vector2(position.x - Level.GAME_SIZE.x, position.y);
+        tempPosition = new Vector2(position.x - Level.gameBounds.x, position.y);
         tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -229,7 +229,7 @@ public abstract class SpaceObject : MonoBehaviour {
             shortestDistance = tempDistance;
         }
 
-        tempPosition = new Vector2(position.x, position.y + Level.GAME_SIZE.y);
+        tempPosition = new Vector2(position.x, position.y + Level.gameBounds.y);
         tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -237,7 +237,7 @@ public abstract class SpaceObject : MonoBehaviour {
             shortestDistance = tempDistance;
         }
 
-        tempPosition = new Vector2(position.x, position.y - Level.GAME_SIZE.y);
+        tempPosition = new Vector2(position.x, position.y - Level.gameBounds.y);
         tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -245,7 +245,7 @@ public abstract class SpaceObject : MonoBehaviour {
             shortestDistance = tempDistance;
         }
 
-        tempPosition = new Vector2(position.x + Level.GAME_SIZE.x, position.y + Level.GAME_SIZE.y);
+        tempPosition = new Vector2(position.x + Level.gameBounds.x, position.y + Level.gameBounds.y);
         tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -253,7 +253,7 @@ public abstract class SpaceObject : MonoBehaviour {
             shortestDistance = tempDistance;
         }
 
-        tempPosition = new Vector2(position.x + Level.GAME_SIZE.x, position.y - Level.GAME_SIZE.y);
+        tempPosition = new Vector2(position.x + Level.gameBounds.x, position.y - Level.gameBounds.y);
         tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -261,7 +261,7 @@ public abstract class SpaceObject : MonoBehaviour {
             shortestDistance = tempDistance;
         }
 
-        tempPosition = new Vector2(position.x - Level.GAME_SIZE.x, position.y + Level.GAME_SIZE.y);
+        tempPosition = new Vector2(position.x - Level.gameBounds.x, position.y + Level.gameBounds.y);
         tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -269,7 +269,7 @@ public abstract class SpaceObject : MonoBehaviour {
             shortestDistance = tempDistance;
         }
 
-        tempPosition = new Vector2(position.x - Level.GAME_SIZE.x, position.y - Level.GAME_SIZE.y);
+        tempPosition = new Vector2(position.x - Level.gameBounds.x, position.y - Level.gameBounds.y);
         tempDistance = distanceFromScreenPosition(tempPosition);
         if (tempDistance < shortestDistance)
         {
@@ -288,6 +288,16 @@ public abstract class SpaceObject : MonoBehaviour {
     public float distanceFrom(SpaceObject from)
     {
         return distanceFrom(from.position);
+    }
+
+    public Vector2 vector2From(Vector2 from)
+    {
+        return closestMirrorOfPosition(from) - position;
+    }
+
+    public Vector2 vector2From(SpaceObject from)
+    {
+        return vector2From(from.position);
     }
 
     public void moveTowards(Vector2 moveTo, float speed)
@@ -401,21 +411,28 @@ public abstract class SpaceObject : MonoBehaviour {
         {
             speed = maxSpeed;
         }
-        if (position.y > Level.GAME_SIZE.y || position.x > Level.GAME_SIZE.x || position.y < 0 || position.x < 0)
+
+        Vector2 pos = position;
+        if (pos.x > Level.gameBounds.xMax)
         {
-            Vector2 newPos = position.mod(Level.GAME_SIZE);
+            pos.x -= Level.gameBounds.width;
+        }
+        else if (pos.x < Level.gameBounds.xMin)
+        {
+            pos.x += Level.gameBounds.width;
+        }
+        if (pos.y > Level.gameBounds.yMax)
+        {
+            pos.y -= Level.gameBounds.height;
+        }
+        else if (pos.y < Level.gameBounds.yMin)
+        {
+            pos.y += Level.gameBounds.height;
+        }
 
-            if (newPos.x < 0)
-            {
-                newPos.x += Level.GAME_SIZE.x;
-            }
-
-            if (newPos.y < 0)
-            {
-                newPos.y += Level.GAME_SIZE.y;
-            }
-
-            position = newPos;
+        if (position != pos)
+        {
+            position = pos;
         }
 	}
 }

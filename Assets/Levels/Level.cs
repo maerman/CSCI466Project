@@ -6,7 +6,7 @@ using static User;
 
 public abstract class Level : MonoBehaviour
 {
-    public static Vector2 GAME_SIZE = new Vector2(26.6666f, 20);
+    public static Rect gameBounds = new Rect(Vector2.zero, new Vector2(40, 30));
     public const int UPDATES_PER_SEC = 60;
     public const float PRECISION = 1024;
     public const string SAVE_PATH = "saves/";
@@ -15,10 +15,14 @@ public abstract class Level : MonoBehaviour
     public const string REPLAY_EXTENTION = ".replay";
     public const int MAX_AUTOSAVES = 20;
 
-    private Canvas canvas;
+
 
     private bool isReplay = false;
     private System.IO.StreamReader updateFile;
+
+    private Camera camera;
+    private Transform cameraTrans;
+    private Canvas canvas;
 
     public abstract int levelNumber{ get; }
 
@@ -87,8 +91,8 @@ public abstract class Level : MonoBehaviour
 
     public Vector2 getRandomPosition()
     {
-        return new Vector2(random.Next((int)(GAME_SIZE.x * PRECISION)) / PRECISION,
-            random.Next((int)(GAME_SIZE.y * PRECISION)) / PRECISION);
+        return new Vector2(random.Next((int)(gameBounds.width * PRECISION)) / PRECISION,
+            random.Next((int)(gameBounds.height * PRECISION)) / PRECISION) + gameBounds.min;
     }
 
     public Vector2 getRandomVelocity(float maxSpeed)
@@ -212,7 +216,9 @@ public abstract class Level : MonoBehaviour
     
     public void Start()
     {
-        
+        GameObject temp = GameObject.Find("Main Camera");
+        camera = temp.GetComponent<Camera>();
+        cameraTrans = temp.GetComponent<Transform>();
     }
 
     protected abstract void initilizeLevel();
@@ -234,7 +240,7 @@ public abstract class Level : MonoBehaviour
             }
 
             UnityEngine.GameObject obj = Instantiate(Resources.Load("PlayerPF"), 
-                new Vector2(GAME_SIZE.x / 2 - (numPlayers - 1) * 2 + i * 4, GAME_SIZE.y / 2) , Quaternion.identity) as GameObject;
+                new Vector2(gameBounds.center.x - (numPlayers - 1) * 2 + i * 4, gameBounds.center.y) , Quaternion.identity) as GameObject;
             Player current = obj.GetComponent<Player>();
             if(current != null)
             {

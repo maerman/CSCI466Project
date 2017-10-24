@@ -16,14 +16,16 @@ public abstract class DestructableObject : InteractiveObject
         }
     }
 
-    protected virtual void kineticDamage(Collision2D collision)
-    {
-        damageThis(collision.relativeVelocity.magnitude * collision.rigidbody.mass / mass / 100f);
-    }
-
     private void OnDestroy()
     {
-        if (this.GetType() != typeof(Player))
+        if (this.GetType() == typeof(Player))
+        {
+            if (level != null && level.players != null)
+            {
+                level.players.Remove((Player)this);
+            }
+        }
+        else
         {
             if (level != null && level.destructables != null)
             {
@@ -59,11 +61,6 @@ public abstract class DestructableObject : InteractiveObject
     void OnCollisionEnter2D(Collision2D collision)
     {
         SpaceObject spaceObject = collision.gameObject.GetComponent<SpaceObject>();
-
-        if (collision.relativeVelocity.magnitude > 10)
-        {
-            kineticDamage(collision);
-        }
 
         if (spaceObject.GetType() == (typeof(Player)))
         {
