@@ -38,7 +38,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6706ff506976b6469a9be2a554301a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
+  pauseMenu: {fileID: 1567755843940814, guid: bb7b4efd2005f294bb285b95c5029b79, type: 2}
   paused: 0
 --- !u!224 &224969286963025308
 RectTransform:

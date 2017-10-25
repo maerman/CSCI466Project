@@ -142,7 +142,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 386.5, y: -46665250}
+  m_AnchoredPosition: {x: 489.75, y: -46665250}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: -1555500}
 --- !u!114 &16019121
@@ -222,7 +222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 386.5, y: -573.05}
+  m_AnchoredPosition: {x: 489.75, y: -642.64996}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &181382857
@@ -275,7 +275,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &181382858
@@ -401,7 +401,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 386.5, y: -821.2166}
+  m_AnchoredPosition: {x: 489.75, y: -937.2166}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &322563640
@@ -678,7 +678,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 408, y: 229.5}
+  m_AnchoredPosition: {x: -85, y: -97}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &590351559 stripped
@@ -811,14 +811,13 @@ GameObject:
   - component: {fileID: 1176483535}
   - component: {fileID: 1176483534}
   - component: {fileID: 1176483533}
-  - component: {fileID: 1176483532}
   m_Layer: 5
   m_Name: Pause_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1176483531
 RectTransform:
   m_ObjectHideFlags: 0
@@ -839,20 +838,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1176483532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114712792812128334, guid: bb7b4efd2005f294bb285b95c5029b79,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1176483530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6706ff506976b6469a9be2a554301a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseMenu: {fileID: 0}
-  paused: 0
 --- !u!114 &1176483533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1218,7 +1203,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 386.5, y: -697.1333}
+  m_AnchoredPosition: {x: 489.75, y: -789.9333}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1730629938
@@ -1418,7 +1403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1980074097
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1626,22 +1611,22 @@ Prefab:
     - target: {fileID: 224591671424080660, guid: e246f1fcb9d20624b843dfcde9881594,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: -55.2
+      value: -58
       objectReference: {fileID: 0}
     - target: {fileID: 224591671424080660, guid: e246f1fcb9d20624b843dfcde9881594,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -39
+      value: -38
       objectReference: {fileID: 0}
     - target: {fileID: 224591671424080660, guid: e246f1fcb9d20624b843dfcde9881594,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: 554
+      value: 409.7
       objectReference: {fileID: 0}
     - target: {fileID: 224591671424080660, guid: e246f1fcb9d20624b843dfcde9881594,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 537.1
+      value: 402.2
       objectReference: {fileID: 0}
     - target: {fileID: 224736113445788796, guid: e246f1fcb9d20624b843dfcde9881594,
         type: 2}
@@ -1783,6 +1768,36 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2061058621}
+    - target: {fileID: 114687795529938628, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: userName
+      value: 
+      objectReference: {fileID: 1024704197}
+    - target: {fileID: 114687795529938628, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: password
+      value: 
+      objectReference: {fileID: 1786366039}
+    - target: {fileID: 114687795529938628, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: loginBtn
+      value: 
+      objectReference: {fileID: 1736404528}
+    - target: {fileID: 223747805603658826, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: m_RenderMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114901182198022002, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114901182198022002, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: m_UiScaleMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e246f1fcb9d20624b843dfcde9881594, type: 2}
   m_IsPrefabParent: 0
@@ -1820,7 +1835,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 386.5, y: -336.9833}
+  m_AnchoredPosition: {x: 489.75, y: -360.18332}
   m_SizeDelta: {x: 156.79999, y: 25.800003}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2000314139
@@ -2001,7 +2016,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 386.5, y: -448.96664}
+  m_AnchoredPosition: {x: 489.75, y: -495.36664}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2088340082
@@ -2054,7 +2069,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2088340083

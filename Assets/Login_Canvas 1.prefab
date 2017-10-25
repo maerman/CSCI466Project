@@ -109,13 +109,14 @@ GameObject:
   - component: {fileID: 223747805603658826}
   - component: {fileID: 114901182198022002}
   - component: {fileID: 114675338486200408}
+  - component: {fileID: 114687795529938628}
   m_Layer: 5
   m_Name: Login_Canvas 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1228136425422016
 GameObject:
   m_ObjectHideFlags: 1
@@ -992,6 +993,20 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114687795529938628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1201054074583062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b1e45f16eb04b489ab034b62734b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loginBtn: {fileID: 0}
+  userName: {fileID: 114217086037911484}
+  password: {fileID: 114182157324043578}
 --- !u!114 &114693777696078346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1031,7 +1046,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1201054074583062}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
