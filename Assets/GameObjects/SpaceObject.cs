@@ -108,6 +108,8 @@ public abstract class SpaceObject : MonoBehaviour {
 
     public abstract float mass { get; set; }
 
+    public abstract Vector2 dimentions { get; }
+
     public int sortOrder
     {
         get
@@ -141,15 +143,6 @@ public abstract class SpaceObject : MonoBehaviour {
         set
         {
             GetComponent<SpriteRenderer>().drawMode = value;
-        }
-    }
-
-    public Vector2 dimentions
-    {
-        get
-        {
-            Vector3 temp = GetComponent<SpriteRenderer>().bounds.size;
-            return new Vector2(temp.x, temp.y);
         }
     }
 
@@ -268,6 +261,30 @@ public abstract class SpaceObject : MonoBehaviour {
         return vector2From(from.position);
     }
 
+    public T closestObject<T>(IEnumerable<IEnumerable<T>> objectLists) where T : SpaceObject
+    {
+        T closest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (IEnumerable<T> item in objectLists)
+        {
+            T temp = closestObject<T>(item);
+
+            if (temp != null )
+            { 
+                float tempDistance = distanceFrom(temp);
+
+                if (tempDistance < closestDistance)
+                {
+                    closest = temp;
+
+                } closestDistance = tempDistance;
+            }
+        }
+
+        return closest;
+    }
+
     public T closestObject<T>(IEnumerable<T> objectList) where T: SpaceObject
     {
         T closest = null;
@@ -275,26 +292,7 @@ public abstract class SpaceObject : MonoBehaviour {
 
         foreach (T item in objectList)
         {
-            float distance = this.distanceFrom(item);
-
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closest = item;
-            }
-        }
-
-        return closest;
-    }
-
-    public T closestObject<T>(IEnumerable<T> objectList, bool isEnemy) where T : DestructableObject
-    {
-        T closest = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (T item in objectList)
-        {
-            if (item.enemy == isEnemy)
+            if (item.inPlay && item != this)
             {
                 float distance = this.distanceFrom(item);
 
@@ -352,7 +350,8 @@ public abstract class SpaceObject : MonoBehaviour {
         velocity += new Vector2(-(float)Math.Sin(direction * Mathf.Deg2Rad) * speed, (float)Math.Cos(direction * Mathf.Deg2Rad) * speed);
     }
 
-    //Not sure if works, needs tested
+
+    //has bugs, needs fixed
     public void rotateTowards(Vector2 rotateTo, float amount)
     {
         float theAngle = angle;
@@ -403,8 +402,10 @@ public abstract class SpaceObject : MonoBehaviour {
         {
             angle = angleTo;
         }
-
-        angle = theAngle - amount * direction;
+        else
+        {
+            angle = theAngle - amount * direction;
+        }
 
     }
 

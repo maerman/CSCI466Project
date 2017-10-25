@@ -62,7 +62,7 @@ public class Level1 : Level
 
     protected override void initilizeLevel()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
               //Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
@@ -94,7 +94,22 @@ public class Level1 : Level
 
         for (int i = 0; i < 1; i++)
         {
-            LazerShooter current = (LazerShooter)createObject("LazerShooterPF", getRandomPosition(), getRandomAngle());
+            //LazerShooter current = (LazerShooter)createObject("LazerShooterPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            //RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            //MineLayer current = (MineLayer)createObject("MineLayerPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            //RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
         }
     }
 

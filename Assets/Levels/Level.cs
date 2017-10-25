@@ -192,6 +192,8 @@ public abstract class Level : MonoBehaviour
     }
 
 
+    private List<DestructableObject> removeDestructables = new List<DestructableObject>();
+    private List<DestructableObject> addDestructables = new List<DestructableObject>();
     private LinkedList<DestructableObject> theDestructables = new LinkedList<DestructableObject>();
 	public LinkedList<DestructableObject> destructables
 	{
@@ -201,6 +203,8 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
+    private List<IndestructableObject> removeIndestructables = new List<IndestructableObject>();
+    private List<IndestructableObject> addIndestructables = new List<IndestructableObject>();
     private LinkedList<IndestructableObject> theIndestructables = new LinkedList<IndestructableObject>();
 	public LinkedList<IndestructableObject> indestructables
 	{
@@ -210,7 +214,9 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
-	private LinkedList<NonInteractiveObject> theNonInteractives = new LinkedList<NonInteractiveObject>();
+    private List<NonInteractiveObject> removeNonInteractives = new List<NonInteractiveObject>();
+    private List<NonInteractiveObject> addNonInteractives = new List<NonInteractiveObject>();
+    private LinkedList<NonInteractiveObject> theNonInteractives = new LinkedList<NonInteractiveObject>();
 	public LinkedList<NonInteractiveObject> nonInteractives
 	{
 		get 
@@ -218,6 +224,36 @@ public abstract class Level : MonoBehaviour
 			return theNonInteractives;
 		}
 	}
+
+    public void removeFromGame(DestructableObject remove)
+    {
+        removeDestructables.Add(remove);
+    }
+
+    public void removeFromGame(IndestructableObject remove)
+    {
+        removeIndestructables.Add(remove);
+    }
+
+    public void removeFromGame(NonInteractiveObject remove)
+    {
+        removeNonInteractives.Add(remove);
+    }
+
+    public void addToGame(DestructableObject add)
+    {
+        addDestructables.Add(add);
+    }
+
+    public void addToGame(IndestructableObject add)
+    {
+        addIndestructables.Add(add);
+    }
+
+    public void addToGame(NonInteractiveObject add)
+    {
+        addNonInteractives.Add(add);
+    }
 
     private List<Player> initialPlayers;
     private List<Player> thePlayers = new List<Player>(Controls.MAX_PLAYERS);
@@ -305,6 +341,47 @@ public abstract class Level : MonoBehaviour
                 //game over
             }
         }
+
+        updateObjectLists();
+    }
+
+    private void updateObjectLists()
+    {
+        foreach (DestructableObject item in addDestructables)
+        {
+            theDestructables.AddLast(item);
+        }
+        addDestructables.Clear();
+
+        foreach (IndestructableObject item in addIndestructables)
+        {
+            theIndestructables.AddLast(item);
+        }
+        addIndestructables.Clear();
+
+        foreach (NonInteractiveObject item in addNonInteractives)
+        {
+            theNonInteractives.AddLast(item);
+        }
+        addNonInteractives.Clear();
+
+        foreach (DestructableObject item in removeDestructables)
+        {
+            theDestructables.Remove(item);
+        }
+        removeDestructables.Clear();
+
+        foreach (IndestructableObject item in removeIndestructables)
+        {
+            theIndestructables.Remove(item);
+        }
+        removeIndestructables.Clear();
+
+        foreach (NonInteractiveObject item in removeNonInteractives)
+        {
+            theNonInteractives.Remove(item);
+        }
+        removeNonInteractives.Clear();
     }
 
     private void OnDestroy()
@@ -319,6 +396,8 @@ public abstract class Level : MonoBehaviour
 
     private void clearLevel()
     {
+        updateObjectLists();
+
         foreach (Player item in thePlayers)
         {
             Destroy(item.gameObject);

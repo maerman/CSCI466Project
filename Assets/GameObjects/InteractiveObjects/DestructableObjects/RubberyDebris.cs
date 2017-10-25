@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class SlowTurner : DestructableObject
+public class RubberyDebris : DestructableObject
 {
-    public float turnSpeed = 0.01f;
-    public float damage = 10f;
-    public float acceleration = 0.1f;
-    private DestructableObject target;
-
+    public float damage = 5;
+    private Vector2 previousVelocity;
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
@@ -16,11 +12,13 @@ public class SlowTurner : DestructableObject
         {
             other.damageThis(damage);
         }
+
+        bounce(collision);
     }
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
     {
-        
+        bounce(collision);
     }
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
@@ -34,6 +32,8 @@ public class SlowTurner : DestructableObject
         {
             other.damageThis(damage);
         }
+
+        bounce(collision);
     }
 
     protected override void startDestructableObject()
@@ -43,19 +43,21 @@ public class SlowTurner : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (target == null || !target.inPlay)
-        {
-            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
-            targetList[0] = level.destructables;
-            targetList[1] = level.players;
+        previousVelocity = velocity;
+    }
 
-            target = closestObject<DestructableObject>(targetList, false);
-        }
-        else
-        {
-            rotateTowards(target, turnSpeed);
-        }
+    private void bounce(Collision2D collision)
+    {
+        // Normal
+        Vector2 N = collision.contacts[0].normal;
 
-        moveForward(acceleration);
+        //Direction
+        Vector2 V = previousVelocity.normalized;
+
+        // Reflection
+        Vector2 R = Vector2.Reflect(V, N).normalized;
+
+        // Assign normalized reflection with the constant speed
+        velocity = new Vector2(R.x, R.y) * previousVelocity.magnitude;
     }
 }

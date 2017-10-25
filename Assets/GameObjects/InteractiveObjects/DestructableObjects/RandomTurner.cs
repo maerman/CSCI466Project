@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class SlowTurner : DestructableObject
+public class RandomTurner : DestructableObject
 {
-    public float turnSpeed = 0.01f;
-    public float damage = 10f;
-    public float acceleration = 0.1f;
-    private DestructableObject target;
-
+    public float damage = 20f;
+    public float acceleration = 0.4f;
+    public float turnSpeed = 0.3f;
+    private int updatesToNextRand = 0;
+    public float maxSecsInADirection = 10;
+    public float minSecsInADirection = 1;
+    private bool turnLeft = false;
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
@@ -43,17 +44,22 @@ public class SlowTurner : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (target == null || !target.inPlay)
-        {
-            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
-            targetList[0] = level.destructables;
-            targetList[1] = level.players;
+        updatesToNextRand--;
 
-            target = closestObject<DestructableObject>(targetList, false);
+        if (updatesToNextRand <= 0)
+        {
+            turnLeft = !turnLeft;
+
+            updatesToNextRand = level.random.Next((int)(minSecsInADirection * level.updatesPerSec), (int)(maxSecsInADirection * level.updatesPerSec));
+        }
+
+        if (turnLeft)
+        {
+            angle = angle - turnSpeed;
         }
         else
         {
-            rotateTowards(target, turnSpeed);
+            angle = angle + turnSpeed;
         }
 
         moveForward(acceleration);
