@@ -23,7 +23,12 @@ public static class extendVector
         return new Vector2((float)(cos * toRotate.x - sin * toRotate.y), (float)(sin * toRotate.x + cos * toRotate.y));
     }
 
-    public static double getAngle(this Vector2 angleFrom)
+    public static float angleFrom(this Vector2 position, Vector2 positionTo)
+    {
+        return Mathf.Rad2Deg * (Mathf.Atan2(position.y - positionTo.y, position.x - positionTo.x) + Mathf.PI / 2);
+    }
+
+    public static float getAngle(this Vector2 angleFrom)
     {
         if (angleFrom.x == 0f)
         {
@@ -35,12 +40,12 @@ public static class extendVector
             //straight down
             else if (angleFrom.y < 0f)
             {
-                return 180.0;
+                return 180f;
             }
             //at origin, no input
             else
             {
-                return double.NaN;
+                return float.NaN;
             }
         }
         else if (angleFrom.y == 0f)
@@ -48,12 +53,12 @@ public static class extendVector
             //straight right
             if (angleFrom.x > 0f)
             {
-                return 90.0;
+                return 90f;
             }
             //straight left
             else //angleFrom.x < 0
             {
-                return 270.0;
+                return 270f;
             }
         }
         else if (angleFrom.y > 0f)
@@ -61,12 +66,12 @@ public static class extendVector
             //quadrent 1
             if (angleFrom.x > 0f) 
             {
-                return Math.Atan((double)angleFrom.x / (double)angleFrom.y) * (double)Mathf.Rad2Deg;
+                return Mathf.Atan(angleFrom.x / angleFrom.y) * Mathf.Rad2Deg;
             }
             //quadrent 4
             else //angleFrom.x < 0
             {
-                return 360.0 - Math.Atan((double)-angleFrom.x / (double)angleFrom.y) * (double)Mathf.Rad2Deg;
+                return 360f - Mathf.Atan(-angleFrom.x / angleFrom.y) * Mathf.Rad2Deg;
             }
         }
         else //angleFrom.y < 0
@@ -74,12 +79,12 @@ public static class extendVector
             //quadrent 2
             if (angleFrom.x > 0f)
             {
-                return 180.0 - Math.Atan((double)angleFrom.x / (double)-angleFrom.y) * (double)Mathf.Rad2Deg;
+                return 180f- Mathf.Atan(angleFrom.x / -angleFrom.y) * Mathf.Rad2Deg;
             }
             //quadrent 3
             else //angleFrom.x < 0
             {
-                return 180.0 + Math.Atan((double)-angleFrom.x / (double)-angleFrom.y) * (double)Mathf.Rad2Deg;
+                return 180f+ Mathf.Atan(-angleFrom.x / -angleFrom.y) * Mathf.Rad2Deg;
             }
         }
     }
@@ -208,7 +213,7 @@ public abstract class SpaceObject : MonoBehaviour {
             (position.x - from.x) * (position.x - from.x));
     }
 
-    public Vector2[] mirrorsOfPosition(Vector2 position)
+    public static Vector2[] mirrorsOfPosition(Vector2 position)
     {
         Vector2[] mirrors = new Vector2[9];
 
@@ -304,7 +309,7 @@ public abstract class SpaceObject : MonoBehaviour {
         return closest;
     }
 
-        public void moveTowards(Vector2 moveTo, float speed)
+    public void moveTowards(Vector2 moveTo, float speed)
     {
         moveTo = closestMirrorOfPosition(moveTo);
         modifyVelocityAbsolute((moveTo - position) / distanceFrom(moveTo) * speed);
@@ -416,8 +421,13 @@ public abstract class SpaceObject : MonoBehaviour {
     /// </summary>
     /// <param name="intersect">Object to intersect with</param>
     /// <param name="speed">Speed this object will travel to intersect</param>
-    /// <returns>(x, y) is the intersect position, (z) is the intersect time</returns>
+    /// <returns>(x, y) is the intersect position, (z) is the intersect time in seconds</returns>
     protected Vector3 intersectPosTime(SpaceObject intersect, float speed)
+    {
+        return intersectPosTime(intersect, speed, position);
+    }
+
+    protected static Vector3 intersectPosTime(SpaceObject intersect, float speed, Vector2 position)
     {
         float time = float.PositiveInfinity;
         Vector2 mirror = Vector2.positiveInfinity;
@@ -473,7 +483,7 @@ public abstract class SpaceObject : MonoBehaviour {
         }
         else
         {
-            return new Vector3(mirror.x, mirror.y, time * level.updatesPerSec);
+            return new Vector3(mirror.x, mirror.y, time);
         }
     }
 

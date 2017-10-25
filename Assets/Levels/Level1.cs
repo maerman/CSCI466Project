@@ -89,7 +89,12 @@ public class Level1 : Level
 
         for (int i = 0; i < 1; i++)
         {
-            SlowTurner current = (SlowTurner)createObject("SlowTurnerPF", getRandomPosition(), getRandomAngle());
+            //SlowTurner current = (SlowTurner)createObject("SlowTurnerPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            LazerShooter current = (LazerShooter)createObject("LazerShooterPF", getRandomPosition(), getRandomAngle());
         }
     }
 

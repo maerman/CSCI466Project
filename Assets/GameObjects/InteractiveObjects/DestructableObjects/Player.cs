@@ -8,8 +8,9 @@ public class Player : DestructableObject
     public float acceleration = 0.4f;
     public float turnSpeed = 100;
 
-    private int sinceLastShot = 0;
-    public int shootTime = 30;
+    private float shootNextUpdates = 0;
+    public float shootTimeSecs = 0.5f;
+    public float shotSpeed = 15f;
 
     private Item[] theItems = new Item[PlayerInput.NUM_ITEMS];
     public Item[] items
@@ -90,14 +91,12 @@ public class Player : DestructableObject
             }
         }
 
-        sinceLastShot++;
-        if (input.shoot && sinceLastShot >= shootTime)
+        shootNextUpdates--;
+        if (input.shoot && shootNextUpdates <= 0)
         {
-            sinceLastShot = 0;
-            GameObject newShot = Instantiate(Resources.Load("LazerShotPF"), new Vector2(0, 2).rotate(angle) + position, 
-                Quaternion.Euler(new Vector3(0, 0, angle))) as GameObject;
-            LazerShot current = newShot.GetComponent<LazerShot>();
-            current.velocity += this.velocity;
+            shootNextUpdates = shootTimeSecs * level.updatesPerSec;
+            SpaceObject shot = level.createObject("LazerShotPF", new Vector2(0, 2).rotate(angle) + position, angle, shotSpeed + speed);
+            shot.color = color;
         }
 
         for (int i = 0; i < theItems.Length; i++)

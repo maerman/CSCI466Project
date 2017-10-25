@@ -54,7 +54,7 @@ public class Rammer : DestructableObject
             }
             else
             {
-                ramTime = temp.z + level.updatesPerSec * overRunSecs;
+                ramTime = (temp.z + overRunSecs) * level.updatesPerSec;
                 turnTowards(temp);
                 angularVelocity = 0;
                 velocity = Vector2.zero;

@@ -3,21 +3,19 @@ using System.Collections;
 
 public class LazerShot : IndestructableObject
 {
-    public float initialSpeed = 15;
     public float damage = 10;
     private int timeAlive = 0;
-    public int timeToLive = 50;
+    public int updatesToLive = 50;
 
     protected override void startIndestructableObject()
     {
-        moveForward(initialSpeed);
-        //modifyVelocityRelative(new Vector2(0, initialSpeed));
+
     }
 
     protected override void updateIndestructableObject()
     {
         timeAlive++;
-        if (timeAlive > timeToLive)
+        if (timeAlive > updatesToLive)
         {
             destroyThis();
         }
