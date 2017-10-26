@@ -54,19 +54,6 @@ public abstract class InteractiveObject : SpaceObject
         }
     }
 
-    public override Vector2 scale
-    {
-        get
-        {
-            return transform.localScale;
-        }
-
-        set
-        {
-            transform.localScale = value;
-        }
-    }
-
     public override Vector2 dimentions
     {
         get

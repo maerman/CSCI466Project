@@ -104,11 +104,22 @@ public abstract class SpaceObject : MonoBehaviour {
 
     public abstract float angularVelocity { get; set; }
 
-    public abstract Vector2 scale { get; set; }
-
     public abstract float mass { get; set; }
 
     public abstract Vector2 dimentions { get; }
+
+    public Vector2 scale
+    {
+        get
+        {
+            return transform.localScale;
+        }
+
+        set
+        {
+            transform.localScale = new Vector3(value.x, value.y, transform.localScale.z);
+        }
+    }
 
     public float drawDepth
     {

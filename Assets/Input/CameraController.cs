@@ -69,8 +69,8 @@ public class CameraController : MonoBehaviour
             gameBounds = defaultScreenSize;
         }
 
-        if (2 * preferedSize > gameBounds.yMax)
-            preferedSize = gameBounds.yMax / 2f;
+        if (2 * preferedSize > gameBounds.height)
+            preferedSize = gameBounds.height / 2f;
         else if (preferedSize < minSize)
             preferedSize = minSize;
 

@@ -18,7 +18,7 @@ public abstract class Level : MonoBehaviour
 
     private Canvas canvas;
 
-    private Rect theGameBounds = new Rect(Vector2.zero, new Vector2(40, 30));
+    private Rect theGameBounds = new Rect(Vector2.zero, new Vector2(80, 60));
     public Rect gameBounds
     {
         get
@@ -382,6 +382,14 @@ public abstract class Level : MonoBehaviour
                 //game over
             }
         }
+
+        Vector2 adveragePos = Vector2.zero;
+        foreach (Player item in players)
+        {
+            adveragePos += item.position;
+        }
+        adveragePos /= players.Count;
+        theGameBounds.center = adveragePos;
 
         updateObjectLists();
     }

@@ -57,19 +57,6 @@ public abstract class NonInteractiveObject : SpaceObject
         }
     }
 
-    public override Vector2 scale
-    {
-        get
-        {
-            return transform.localScale;
-        }
-
-        set
-        {
-            transform.localScale = value;
-        }
-    }
-
     public override Vector2 dimentions
     {
         get
