@@ -98,8 +98,12 @@ public class PlayerControls
     public Key dropItemKey;
     public Key shootKey;
     public Key pauseKey;
+    public Key zoomInKey;
+    public Key zoomOutKey;
 
     private bool previousPause;
+    private bool previousZoomIn;
+    private bool previousZoomOut;
 
     private bool theRelativeMovement = false;
     public bool relativeMovement
@@ -213,6 +217,22 @@ public class PlayerControls
             return pauseKey.isPressed();
         }
     }
+    public bool zoomIn
+    {
+        get
+        {
+            previousZoomIn = zoomInKey.isPressed();
+            return zoomInKey.isPressed();
+        }
+    }
+    public bool zoomOut
+    {
+        get
+        {
+            previousZoomOut = zoomOutKey.isPressed();
+            return zoomOutKey.isPressed();
+        }
+    }
 
     //returns the change in value
     public float Forward
@@ -295,8 +315,27 @@ public class PlayerControls
     {
         get
         {
+            bool toReturn = pauseKey.isPressed() && !previousPause;
             previousPause = pauseKey.isPressed();
-            return pauseKey.isPressed() && !previousPause;
+            return toReturn;
+        }
+    }
+    public bool ZoomIn
+    {
+        get
+        {
+            bool toReturn = zoomInKey.isPressed() && !previousZoomIn;
+            previousZoomIn = zoomInKey.isPressed();
+            return toReturn;
+        }
+    }
+    public bool ZoomOut
+    {
+        get
+        {
+            bool toReturn = zoomOutKey.isPressed() && !previousZoomOut;
+            previousZoomOut = zoomOutKey.isPressed();
+            return toReturn;
         }
     }
     #endregion
@@ -471,6 +510,8 @@ public class Controls
         players[0].dropItemKey = new Key(KeyCode.LeftAlt);
         players[0].shootKey = new Key(KeyCode.Space);
         players[0].pauseKey = new Key(KeyCode.Escape);
+        players[0].zoomInKey = new Key(KeyCode.LeftShift);
+        players[0].zoomOutKey = new Key(KeyCode.LeftControl);
         players[0].setRelativeMovement(true);
         players[0].setTurns(true);
 
@@ -488,15 +529,17 @@ public class Controls
             players[1].itemKeys[1] = new Key(KeyCode.Joystick1Button1);
             players[1].itemKeys[2] = new Key(KeyCode.Joystick1Button2);
             players[1].itemKeys[3] = new Key(KeyCode.Joystick1Button3);
-            players[1].itemKeys[4] = new Key(KeyCode.Joystick1Button4);
-            players[1].itemKeys[5] = new Key(KeyCode.Joystick1Button5);
-            players[1].itemKeys[6] = new Key(1, 6, false);
-            players[1].itemKeys[7] = new Key(1, 6, true);
-            players[1].itemKeys[8] = new Key(1, 7, false);
-            players[1].itemKeys[9] = new Key(1, 7, true);
+            players[1].itemKeys[4] = new Key(1, 6, false);
+            players[1].itemKeys[5] = new Key(1, 6, true);
+            players[1].itemKeys[6] = new Key(1, 7, false);
+            players[1].itemKeys[7] = new Key(1, 7, true);
+            players[1].itemKeys[8] = new Key(KeyCode.Joystick1Button8);
+            players[1].itemKeys[9] = new Key(KeyCode.Joystick1Button9);
             players[1].dropItemKey = new Key(1, 3, false);
             players[1].shootKey = new Key(1, 3, true);
             players[1].pauseKey = new Key(KeyCode.Joystick1Button7);
+            players[1].zoomInKey = new Key(KeyCode.Joystick1Button4);
+            players[1].zoomOutKey = new Key(KeyCode.Joystick1Button5);
             players[1].setRelativeMovement(false);
             players[1].setTurns(false);
         }
@@ -514,15 +557,17 @@ public class Controls
             players[2].itemKeys[1] = new Key(KeyCode.Joystick2Button1);
             players[2].itemKeys[2] = new Key(KeyCode.Joystick2Button2);
             players[2].itemKeys[3] = new Key(KeyCode.Joystick2Button3);
-            players[2].itemKeys[4] = new Key(KeyCode.Joystick2Button4);
-            players[2].itemKeys[5] = new Key(KeyCode.Joystick2Button5);
-            players[2].itemKeys[6] = new Key(2, 6, false);
-            players[2].itemKeys[7] = new Key(2, 6, true);
-            players[2].itemKeys[8] = new Key(2, 7, false);
-            players[2].itemKeys[9] = new Key(2, 7, true);
+            players[2].itemKeys[4] = new Key(2, 6, false);
+            players[2].itemKeys[5] = new Key(2, 6, true);
+            players[2].itemKeys[6] = new Key(2, 7, false);
+            players[2].itemKeys[7] = new Key(2, 7, true);
+            players[2].itemKeys[8] = new Key(KeyCode.Joystick2Button8);
+            players[2].itemKeys[9] = new Key(KeyCode.Joystick2Button9);
             players[2].dropItemKey = new Key(2, 3, false);
             players[2].shootKey = new Key(2, 3, true);
             players[2].pauseKey = new Key(KeyCode.Joystick2Button7);
+            players[2].zoomInKey = new Key(KeyCode.Joystick2Button4);
+            players[2].zoomOutKey = new Key(KeyCode.Joystick2Button5);
             players[2].setRelativeMovement(false);
             players[2].setTurns(false);
         }
@@ -540,15 +585,17 @@ public class Controls
             players[3].itemKeys[1] = new Key(KeyCode.Joystick3Button1);
             players[3].itemKeys[2] = new Key(KeyCode.Joystick3Button2);
             players[3].itemKeys[3] = new Key(KeyCode.Joystick3Button3);
-            players[3].itemKeys[4] = new Key(KeyCode.Joystick3Button4);
-            players[3].itemKeys[5] = new Key(KeyCode.Joystick3Button5);
-            players[3].itemKeys[6] = new Key(3, 6, false);
-            players[3].itemKeys[7] = new Key(3, 6, true);
-            players[3].itemKeys[8] = new Key(3, 7, false);
-            players[3].itemKeys[9] = new Key(3, 7, true);
+            players[3].itemKeys[4] = new Key(3, 6, false);
+            players[3].itemKeys[5] = new Key(3, 6, true);
+            players[3].itemKeys[6] = new Key(3, 7, false);
+            players[3].itemKeys[7] = new Key(3, 7, true);
+            players[3].itemKeys[8] = new Key(KeyCode.Joystick3Button8);
+            players[3].itemKeys[9] = new Key(KeyCode.Joystick3Button9);
             players[3].dropItemKey = new Key(3, 3, false);
             players[3].shootKey = new Key(3, 3, true);
             players[3].pauseKey = new Key(KeyCode.Joystick3Button7);
+            players[3].zoomInKey = new Key(KeyCode.Joystick3Button4);
+            players[3].zoomOutKey = new Key(KeyCode.Joystick3Button5);
             players[3].setRelativeMovement(false);
             players[3].setTurns(false);
         }

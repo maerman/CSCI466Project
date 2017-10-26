@@ -6,7 +6,6 @@ using static User;
 
 public abstract class Level : MonoBehaviour
 {
-    public static Rect gameBounds = new Rect(Vector2.zero, new Vector2(40, 30));
     public const float PRECISION = 1024;
     public const string SAVE_PATH = "saves/";
     public const string AUTO_SAVE_EXTENTION = ".NEBULA";
@@ -14,14 +13,19 @@ public abstract class Level : MonoBehaviour
     public const string REPLAY_EXTENTION = ".replay";
     public const int MAX_AUTOSAVES = 20;
 
-
-
     private bool isReplay = false;
     private System.IO.StreamReader updateFile;
 
-    private Camera camera;
-    private Transform cameraTrans;
     private Canvas canvas;
+
+    private Rect theGameBounds = new Rect(Vector2.zero, new Vector2(40, 30));
+    public Rect gameBounds
+    {
+        get
+        {
+            return theGameBounds;
+        }
+    }
 
     public abstract int levelNumber{ get; }
 
@@ -32,6 +36,30 @@ public abstract class Level : MonoBehaviour
         get
         {
             return theCurrentLevel;
+        }
+    }
+
+    protected SpriteRenderer background;
+    public Vector2 backgroundPosition
+    {
+        get
+        {
+            return transform.position;
+        }
+        set
+        {
+            transform.position = new Vector3(value.x, value.y, 10);
+        }
+    }
+    public Color backgroundColor
+    {
+        get
+        {
+            return background.color;
+        }
+        set
+        {
+            background.color = value;
         }
     }
 
@@ -267,16 +295,14 @@ public abstract class Level : MonoBehaviour
     
     public void Start()
     {
-        GameObject temp = GameObject.Find("Main Camera");
-        camera = temp.GetComponent<Camera>();
-        cameraTrans = temp.GetComponent<Transform>();
+        background = GetComponent<SpriteRenderer>();
     }
 
     protected abstract void initilizeLevel();
 
     public void initilize(int numPlayers, int difficulty, int randomSeed)
     {
-        theCurrentLevel = this;
+        background = GetComponent<SpriteRenderer>();
 
         this.randomSeed = randomSeed;
         theRandom = new System.Random(randomSeed);
@@ -313,7 +339,22 @@ public abstract class Level : MonoBehaviour
 
         initilizeLevel();
 
+        backgroundPosition = gameBounds.center;
+        transform.localScale = Vector3.one;
+        if (gameBounds.width / background.bounds.size.x > gameBounds.height / background.bounds.size.y)
+        {
+            float scale = gameBounds.width / background.bounds.size.x;
+            transform.localScale = new Vector3(scale, scale, 1);
+
+        }
+        else
+        {
+            float scale = gameBounds.height / background.bounds.size.y;
+            transform.localScale = new Vector3(scale, scale, 1);
+        }
+
         theStartTime = DateTime.Now;
+        theCurrentLevel = this;
     }
 
     protected abstract void updateLevel();

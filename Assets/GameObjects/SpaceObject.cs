@@ -110,6 +110,19 @@ public abstract class SpaceObject : MonoBehaviour {
 
     public abstract Vector2 dimentions { get; }
 
+    public float drawDepth
+    {
+        get
+        {
+            return transform.position.z;
+        }
+
+        set
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, value);
+        }
+    }
+
     public int sortOrder
     {
         get
@@ -211,14 +224,14 @@ public abstract class SpaceObject : MonoBehaviour {
         Vector2[] mirrors = new Vector2[9];
 
         mirrors[0] = position;
-        mirrors[1] = new Vector2(position.x, position.y - Level.gameBounds.height);
-        mirrors[2] = new Vector2(position.x, position.y + Level.gameBounds.height);
-        mirrors[3] = new Vector2(position.x - Level.gameBounds.width, position.y);
-        mirrors[4] = new Vector2(position.x + Level.gameBounds.width, position.y);
-        mirrors[5] = new Vector2(position.x - Level.gameBounds.width, position.y - Level.gameBounds.height);
-        mirrors[6] = new Vector2(position.x + Level.gameBounds.width, position.y - Level.gameBounds.height);
-        mirrors[7] = new Vector2(position.x - Level.gameBounds.width, position.y + Level.gameBounds.height);
-        mirrors[8] = new Vector2(position.x + Level.gameBounds.width, position.y + Level.gameBounds.height);
+        mirrors[1] = new Vector2(position.x, position.y - Level.currentLevel.gameBounds.height);
+        mirrors[2] = new Vector2(position.x, position.y + Level.currentLevel.gameBounds.height);
+        mirrors[3] = new Vector2(position.x - Level.currentLevel.gameBounds.width, position.y);
+        mirrors[4] = new Vector2(position.x + Level.currentLevel.gameBounds.width, position.y);
+        mirrors[5] = new Vector2(position.x - Level.currentLevel.gameBounds.width, position.y - Level.currentLevel.gameBounds.height);
+        mirrors[6] = new Vector2(position.x + Level.currentLevel.gameBounds.width, position.y - Level.currentLevel.gameBounds.height);
+        mirrors[7] = new Vector2(position.x - Level.currentLevel.gameBounds.width, position.y + Level.currentLevel.gameBounds.height);
+        mirrors[8] = new Vector2(position.x + Level.currentLevel.gameBounds.width, position.y + Level.currentLevel.gameBounds.height);
 
         return mirrors;
     }
@@ -521,21 +534,21 @@ public abstract class SpaceObject : MonoBehaviour {
         }
 
         Vector2 pos = position;
-        if (pos.x > Level.gameBounds.xMax)
+        if (pos.x > level.gameBounds.xMax)
         {
-            pos.x -= Level.gameBounds.width;
+            pos.x -= level.gameBounds.width;
         }
-        else if (pos.x < Level.gameBounds.xMin)
+        else if (pos.x < level.gameBounds.xMin)
         {
-            pos.x += Level.gameBounds.width;
+            pos.x += level.gameBounds.width;
         }
-        if (pos.y > Level.gameBounds.yMax)
+        if (pos.y > level.gameBounds.yMax)
         {
-            pos.y -= Level.gameBounds.height;
+            pos.y -= level.gameBounds.height;
         }
-        else if (pos.y < Level.gameBounds.yMin)
+        else if (pos.y < level.gameBounds.yMin)
         {
-            pos.y += Level.gameBounds.height;
+            pos.y += level.gameBounds.height;
         }
 
         if (position != pos)

@@ -16,7 +16,10 @@ public class LazerBeam : NonInteractiveObject
 
     protected override void destructableObjectCollision(DestructableObject other)
     {
-        other.damageThis(damage);
+        if (other != attachedTo)
+        {
+            other.damageThis(damage);
+        }
     }
 
     protected override void indestructableObjectCollision(IndestructableObject other)
@@ -26,7 +29,10 @@ public class LazerBeam : NonInteractiveObject
 
     protected override void playerCollision(Player other)
     {
-        other.damageThis(damage);  
+        if (other != attachedTo)
+        {
+            other.damageThis(damage);
+        }
     }
 
     protected override void startNonInteractiveObject()

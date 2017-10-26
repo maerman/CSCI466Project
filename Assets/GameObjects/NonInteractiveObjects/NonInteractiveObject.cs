@@ -15,7 +15,7 @@ public abstract class NonInteractiveObject : SpaceObject
         }
         set
         {
-            transform.position = value;
+            transform.position = new Vector3(value.x, value.y, transform.position.z);
         }
     }
 
@@ -124,7 +124,7 @@ public abstract class NonInteractiveObject : SpaceObject
     protected abstract void destructableObjectCollision(DestructableObject other);
     protected abstract void indestructableObjectCollision(IndestructableObject other);
 
-    public void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerStay2D(Collider2D other)
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();
 

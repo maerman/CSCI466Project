@@ -13,16 +13,19 @@ public class PauseGame : MonoBehaviour {
 
 	void Update()
     {
-		if (Input.GetButtonDown("Pause"))
+        if (Input.GetButtonDown("Pause"))
         {
-			paused = !paused;
-		}
-        foreach (PlayerControls item in Controls.get().players)
+            paused = !paused;
+        }
+        else
         {
-            if (item.Pause)
+            foreach (PlayerControls item in Controls.get().players)
             {
-                paused = !paused;
-                break;
+                if (item.Pause)
+                {
+                    paused = !paused;
+                    break;
+                }
             }
         }
 		if (paused)

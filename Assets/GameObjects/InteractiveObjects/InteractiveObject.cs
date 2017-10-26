@@ -151,7 +151,7 @@ public abstract class InteractiveObject : SpaceObject
 
     protected abstract void nonInteractiveObjectCollision(NonInteractiveObject other);
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerStay2D(Collider2D other)
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();
 
