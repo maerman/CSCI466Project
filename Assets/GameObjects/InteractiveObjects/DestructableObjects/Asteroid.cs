@@ -68,7 +68,7 @@ public class Asteroid :DestructableObject
                     for (int i = 0; i < pieces; i++)
                     {
                         float theAngle = i * 360.0f / pieces + angle;
-                        Asteroid current = (Asteroid)level.createObject("AsteroidPF", position + new Vector2(dimentions.x / pieces, 0).rotate(theAngle),
+                        Asteroid current = (Asteroid)level.createObject("AsteroidPF", position + new Vector2(size.x / pieces, 0).rotate(theAngle),
                             angle, velocity + new Vector2(pieces, 0).rotate(theAngle), angularVelocity + pieces, theScale);
 
                         current.mass = mass / pieces;

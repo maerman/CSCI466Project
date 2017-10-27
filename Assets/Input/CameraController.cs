@@ -20,6 +20,9 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float aspectRatio = camera.aspect;
+        Debug.Log(aspectRatio);
+
         Vector3 position = transform.position;
         Rect gameBounds;
         float xUpperLimit = position.x;
@@ -71,6 +74,8 @@ public class CameraController : MonoBehaviour
 
         if (2 * preferedSize > gameBounds.height)
             preferedSize = gameBounds.height / 2f;
+        else if (aspectRatio * 2 * preferedSize > gameBounds.width)
+            preferedSize = gameBounds.width / (aspectRatio * 2);
         else if (preferedSize < minSize)
             preferedSize = minSize;
 
@@ -90,15 +95,15 @@ public class CameraController : MonoBehaviour
         if (yLowerLimit < gameBounds.yMin)
             yLowerLimit = gameBounds.yMin;
 
-        if (xUpperLimit - xLowerLimit > size * 2.6666666666f)
-            size = (xUpperLimit - xLowerLimit) / 2.6666666666f;
+        if (xUpperLimit - xLowerLimit > size * 2 * aspectRatio)
+            size = (xUpperLimit - xLowerLimit) / (2 * aspectRatio);
         if (yUpperLimit - yLowerLimit > size * 2f)
             size = (yUpperLimit - yLowerLimit) / 2f;
 
-        if (position.x + size * 1.3333333333f > gameBounds.xMax)
-            position.x -= position.x + size * 1.3333333333f - gameBounds.xMax;
-        if (position.x - size * 1.3333333333f < gameBounds.xMin)
-            position.x += gameBounds.xMin - position.x + size * 1.3333333333f;
+        if (position.x + size * aspectRatio > gameBounds.xMax)
+            position.x -= position.x + size * aspectRatio - gameBounds.xMax;
+        if (position.x - size * aspectRatio < gameBounds.xMin)
+            position.x += gameBounds.xMin - position.x + size * aspectRatio;
         if (position.y + size > gameBounds.yMax)
             position.y -= position.y + size - gameBounds.yMax;
         if (position.y - size < gameBounds.yMin)

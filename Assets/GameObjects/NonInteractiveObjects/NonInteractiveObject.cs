@@ -57,12 +57,11 @@ public abstract class NonInteractiveObject : SpaceObject
         }
     }
 
-    public override Vector2 dimentions
+    public override Bounds bounds
     {
         get
         {
-            Vector2 size = GetComponent<SpriteRenderer>().bounds.size;
-            return new Vector2(size.x * scale.x, size.y * scale.y);
+            return GetComponent<SpriteRenderer>().bounds;
         }
     }
 

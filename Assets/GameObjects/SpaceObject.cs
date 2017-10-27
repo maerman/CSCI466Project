@@ -15,6 +15,26 @@ public static class extendVector
         return new Vector3(dividend.x % divisor.x, dividend.y % divisor.y, dividend.z % divisor.z);
     }
 
+    public static Vector2 dot(this Vector2 v1, Vector2 v2)
+    {
+        return new Vector2(v1.x * v2.x, v1.y * v2.y);
+    }
+
+    public static Vector3 dot(this Vector3 v1, Vector3 v2)
+    {
+        return new Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+    }
+
+    public static Vector2 div(this Vector2 dividend, Vector2 divisor)
+    {
+        return new Vector2(dividend.x / divisor.x, dividend.y / divisor.y);
+    }
+
+    public static Vector3 div(this Vector3 dividend, Vector3 divisor)
+    {
+        return new Vector3(dividend.x / divisor.x, dividend.y / divisor.y, dividend.z / divisor.z);
+    }
+
     public static Vector2 rotate(this Vector2 toRotate, float angle)
     {
         float sin = Mathf.Sin(angle * Mathf.Deg2Rad);
@@ -106,7 +126,7 @@ public abstract class SpaceObject : MonoBehaviour {
 
     public abstract float mass { get; set; }
 
-    public abstract Vector2 dimentions { get; }
+    public abstract Bounds bounds { get; }
 
     public Vector2 scale
     {
@@ -118,6 +138,18 @@ public abstract class SpaceObject : MonoBehaviour {
         set
         {
             transform.localScale = new Vector3(value.x, value.y, transform.localScale.z);
+        }
+    }
+
+    public Vector2 size
+    {
+        get
+        {
+            return spriteSize.dot(scale);
+        }
+        set
+        {
+            scale = value.div(spriteSize);
         }
     }
 
@@ -143,6 +175,22 @@ public abstract class SpaceObject : MonoBehaviour {
         set
         {
             GetComponent<SpriteRenderer>().sortingOrder = value;
+        }
+    }
+
+    public Vector2 spriteSize
+    {
+        get
+        {
+            return GetComponent<SpriteRenderer>().sprite.bounds.size;
+        }
+    }
+
+    public Vector2 spritePivot
+    {
+        get
+        {
+            return GetComponent<SpriteRenderer>().sprite.pivot / GetComponent<SpriteRenderer>().sprite.pixelsPerUnit;
         }
     }
 

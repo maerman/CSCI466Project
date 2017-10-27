@@ -459,6 +459,8 @@ public class Controls
     public const int MAX_PLAYERS = 2;
     public const string CONTROLS_FILE = "\\Controls.options";
 
+    public bool staticLevel = false;
+
     private PlayerControls[] thePlayers = new PlayerControls[MAX_PLAYERS];
 
     public PlayerControls[] players
@@ -482,7 +484,6 @@ public class Controls
         }
         catch
         {
-
             setDefaultControls();
         }
     }
@@ -614,6 +615,7 @@ public class Controls
 
     public void updateFromFile(System.IO.StreamReader file)
     {
+        staticLevel = System.Convert.ToBoolean(file.ReadLine());
         foreach (PlayerControls item in players)
         {
             item.updateFromString(file.ReadLine());
@@ -624,6 +626,7 @@ public class Controls
     {
         for (int i = 0; i < players[0].inputs.Count; i++)
         {
+            file.WriteLine(staticLevel.ToString());
             for (int j = 0; j < MAX_PLAYERS; j++)
             {
                 file.WriteLine(players[j].inputs[i].ToString());

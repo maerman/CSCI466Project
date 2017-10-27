@@ -54,12 +54,11 @@ public abstract class InteractiveObject : SpaceObject
         }
     }
 
-    public override Vector2 dimentions
+    public override Bounds bounds
     {
         get
         {
-            Vector2 size = gameObject.GetComponent<Collider2D>().bounds.size;
-            return new Vector2(size.x * scale.x, size.y * scale.y);
+            return GetComponent<Collider2D>().bounds;
         }
     }
 
@@ -72,6 +71,18 @@ public abstract class InteractiveObject : SpaceObject
         set
         {
             GetComponent<Rigidbody2D>().mass = value;
+        }
+    }
+
+    public bool usesPhysics
+    {
+        get
+        {
+            return GetComponent<Collider2D>().enabled;
+        }
+        set
+        {
+            GetComponent<Collider2D>().enabled = value;
         }
     }
 

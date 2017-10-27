@@ -16,8 +16,6 @@ public abstract class Level : MonoBehaviour
     private bool isReplay = false;
     private System.IO.StreamReader updateFile;
 
-    private Canvas canvas;
-
     private Rect theGameBounds = new Rect(Vector2.zero, new Vector2(80, 60));
     public Rect gameBounds
     {
@@ -26,11 +24,21 @@ public abstract class Level : MonoBehaviour
             return theGameBounds;
         }
     }
+    protected Vector2 levelSize
+    {
+        get
+        {
+            return theGameBounds.size;
+        }
+        set
+        {
+            theGameBounds.size = value;
+        }
+    }
 
     public abstract int levelNumber{ get; }
 
     private static Level theCurrentLevel;
-
     public static Level currentLevel
     {
         get
@@ -49,17 +57,6 @@ public abstract class Level : MonoBehaviour
         set
         {
             transform.position = new Vector3(value.x, value.y, 10);
-        }
-    }
-    public Color backgroundColor
-    {
-        get
-        {
-            return background.color;
-        }
-        set
-        {
-            background.color = value;
         }
     }
 
@@ -205,6 +202,7 @@ public abstract class Level : MonoBehaviour
         return current;
     }
 
+    /*
     protected Text addTextToCanvas(string textToAdd, Vector2 position)
     {
         if (canvas == null)
@@ -218,6 +216,7 @@ public abstract class Level : MonoBehaviour
         text.transform.position = position;
         return text;
     }
+    */
 
 
     private List<DestructableObject> removeDestructables = new List<DestructableObject>();
@@ -370,9 +369,16 @@ public abstract class Level : MonoBehaviour
             Controls.get().updateFromInput();
         }
 
-        if (!isReplay && duration.TotalSeconds > 2 && destructables.Count <= 0 && theCurrentLevel == this)
+        if (won() && duration.TotalSeconds > 2 && theCurrentLevel == this)
         {
-            nextLevel();
+            if (isReplay)
+            {
+
+            }
+            else
+            {
+                nextLevel();
+            }
         }
 
         for (int i = 0; i < players.Count; i++)
@@ -383,15 +389,41 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        Vector2 adveragePos = Vector2.zero;
-        foreach (Player item in players)
+        if (lost())
         {
-            adveragePos += item.position;
+            //game over
         }
-        adveragePos /= players.Count;
-        theGameBounds.center = adveragePos;
+
+        if (Controls.get().players[0].DropItem)
+            Controls.get().staticLevel = !Controls.get().staticLevel;
+
+        if (!Controls.get().staticLevel)
+        {
+            Vector2 adveragePos = Vector2.zero;
+            foreach (Player item in players)
+            {
+                adveragePos += item.position;
+            }
+            adveragePos /= players.Count;
+            theGameBounds.center = adveragePos;
+        }
 
         updateObjectLists();
+    }
+
+    protected virtual bool won()
+    {
+        if (destructables.Count <= 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected virtual bool lost()
+    {
+        return false;
     }
 
     private void updateObjectLists()

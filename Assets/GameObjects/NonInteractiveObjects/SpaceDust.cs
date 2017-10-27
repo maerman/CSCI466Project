@@ -3,8 +3,6 @@ using System.Collections;
 
 public class SpaceDust : NonInteractiveObject
 {
-    public Vector2 imageResolution = new Vector2(1920, 1080);
-
     protected override void destructableObjectCollision(DestructableObject other)
     {
         
@@ -24,35 +22,41 @@ public class SpaceDust : NonInteractiveObject
     {
         drawMode = SpriteDrawMode.Tiled;
         GetComponent<SpriteRenderer>().size = new Vector2(level.gameBounds.width * 2, level.gameBounds.height * 2);
-
-        scale = Vector2.one;
         position = level.gameBounds.center;
-
-        imageResolution /= 100f;
     }
 
     protected override void updateNonInteractiveObject()
     {
-        //make sure it always lines up no matter where it is put
+        if (size.x > level.gameBounds.width / 2f)
+        {
+            float toScale = level.gameBounds.width / 2f / spriteSize.x;
+            scale = new Vector2(toScale, toScale);
+        }
+        if (size.y > level.gameBounds.height / 2f)
+        {
+            float toScale = level.gameBounds.height / 2f / spriteSize.y;
+            scale = new Vector2(toScale, toScale);
+        }
+
 
         Vector2 pos = position;
 
-        if (level.gameBounds.center.x - pos.x > imageResolution.x)
+        if (level.gameBounds.center.x - pos.x > spriteSize.x * scale.x)
         {
-            pos.x += imageResolution.x;
+            pos.x += spriteSize.x * scale.x;
         }
-        else if (level.gameBounds.center.x - pos.x < -imageResolution.x)
+        else if (level.gameBounds.center.x - pos.x < -spriteSize.x * scale.x)
         {
-            pos.x -= imageResolution.x;
+            pos.x -= spriteSize.x * scale.x;
         }
 
-        if (level.gameBounds.center.y - pos.y> imageResolution.y)
+        if (level.gameBounds.center.y - pos.y> spriteSize.y * scale.y)
         {
-            pos.y += imageResolution.y;
+            pos.y += spriteSize.y * scale.y;
         }
-        else if (level.gameBounds.center.y - pos.y < -imageResolution.y)
+        else if (level.gameBounds.center.y - pos.y < -spriteSize.y * scale.y)
         {
-            pos.y -= imageResolution.y;
+            pos.y -= spriteSize.y * scale.y;
         }
 
         position = pos;
