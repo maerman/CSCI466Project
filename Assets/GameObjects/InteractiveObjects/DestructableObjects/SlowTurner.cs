@@ -9,6 +9,10 @@ public class SlowTurner : DestructableObject
     public float acceleration = 0.1f;
     private DestructableObject target;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {

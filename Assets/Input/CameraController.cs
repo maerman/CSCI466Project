@@ -21,7 +21,6 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         float aspectRatio = camera.aspect;
-        Debug.Log(aspectRatio);
 
         Vector3 position = transform.position;
         Rect gameBounds;

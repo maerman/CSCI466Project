@@ -12,6 +12,8 @@ public class Player : DestructableObject
     public float shootTimeSecs = 0.5f;
     public float shotSpeed = 15f;
 
+    protected PlayerControls input;
+
     private Item[] theItems = new Item[PlayerInput.NUM_ITEMS];
     public Item[] items
     {
@@ -54,13 +56,13 @@ public class Player : DestructableObject
                 break;
         }
 
-        LazerBeam beam = (LazerBeam)level.createObject("LazerBeamPF", position, 0);
-        beam.attachedTo = this;
+        LazerSword sword = (LazerSword)level.createObject("LazerSwordPF");
+        sword.pickup(this);
     }
 
     protected override void updateDestructableObject()
     {
-        PlayerControls input = Controls.get().players[playerNum];
+        input = Controls.get().players[playerNum];
 
         Vector2 move = new Vector2();
 
@@ -108,14 +110,24 @@ public class Player : DestructableObject
         {
             if (theItems[i] != null)
             {
-                theItems[i].updateItem(input.items(i), this);
+                if (input.pickupDrop && input.items(i))
+                {
+                    theItems[i].drop();
+                }
+                theItems[i].holding(input.items(i));
             }
         }
     }
 
-    public override void destroyThis()
+    protected override void destroyDestructableObject()
     {
-        
+        for (int i = 0; i < theItems.Length; i++)
+        {
+            if (theItems[i] != null)
+            {
+                theItems[i].drop();
+            }
+        }
     }
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
@@ -130,7 +142,19 @@ public class Player : DestructableObject
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
     {
-        
+        if (input.pickupDrop && other.GetType().IsSubclassOf(typeof(Item)))
+        {
+            Item item = (Item)other;
+            for (int i = 0; i < PlayerInput.NUM_ITEMS; i++)
+            {
+                if (input.items(i))
+                {
+                    item.pickup(this, i);
+                    return;
+                }
+            }
+            item.pickup(this);
+        }
     }
 
     protected override void playerCollision(Player other, Collision2D collision)

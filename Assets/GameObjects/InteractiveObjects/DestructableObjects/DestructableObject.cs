@@ -15,9 +15,32 @@ public abstract class DestructableObject : InteractiveObject
         }
     }
 
-    private void OnDestroy()
+    protected abstract void startDestructableObject();
+    protected override void startInteractiveObject()
     {
-        if (this.GetType() == typeof(Player))
+        startDestructableObject();
+        if (this.GetType() != typeof(Player))
+        {
+            level.addToGame(this);
+        }
+    }
+
+    protected abstract void updateDestructableObject();
+    protected override void updateInteractiveObject()
+    {
+        updateDestructableObject();
+
+        if (health <= 0)
+        {
+            destroyThis();
+        }       
+    }
+
+    protected abstract void destroyDestructableObject();
+    protected override void destroyInteractiveObject()
+    {
+        destroyDestructableObject();
+        if (GetType() == typeof(Player))
         {
             if (level != null && level.players != null)
             {
@@ -31,30 +54,6 @@ public abstract class DestructableObject : InteractiveObject
                 level.removeFromGame(this);
             }
         }
-        inPlay = false;
-    }
-
-    protected abstract void startDestructableObject();
-
-    protected override void startInteractiveObject()
-    {
-        startDestructableObject();
-        if (this.GetType() != typeof(Player))
-        {
-            level.addToGame(this);
-        }
-    }
-
-    protected abstract void updateDestructableObject();
-
-    protected override void updateInteractiveObject()
-    {
-        updateDestructableObject();
-
-        if (health <= 0)
-        {
-            destroyThis();
-        }       
     }
 
     void OnCollisionEnter2D(Collision2D collision)

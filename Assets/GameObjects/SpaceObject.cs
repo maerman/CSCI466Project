@@ -560,7 +560,7 @@ public abstract class SpaceObject : MonoBehaviour {
         }
     }
 
-    public virtual void destroyThis()
+    public void destroyThis()
     {
         inPlay = false;
         Destroy(gameObject);
@@ -575,15 +575,13 @@ public abstract class SpaceObject : MonoBehaviour {
     }
 
     protected abstract void startObject();
-    // Use this for initialization
-    void Start ()
+    private void Start ()
     {
         startObject();
 	}
 
     protected abstract void updateObject();
-	// Update is called once per frame
-	public void FixedUpdate ()
+	private void FixedUpdate ()
     {
         updateObject();
 
@@ -616,4 +614,11 @@ public abstract class SpaceObject : MonoBehaviour {
             position = pos;
         }
 	}
+
+    protected abstract void destroyObject();
+    private void OnDestroy()
+    {
+        destroyObject();
+        inPlay = false;
+    }
 }

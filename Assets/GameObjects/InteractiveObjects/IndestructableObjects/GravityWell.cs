@@ -10,6 +10,11 @@ class GravityWell : IndestructableObject
     public float gravity = 1f;
     public float damage = 10;
 
+    protected override void destroyIndestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         other.velocity = -collision.relativeVelocity.normalized * other.maxSpeed;

@@ -3,6 +3,11 @@ using System.Collections;
 
 public class SpaceDust : NonInteractiveObject
 {
+    protected override void destroyNonInteractiveObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other)
     {
         

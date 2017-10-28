@@ -13,6 +13,11 @@ public class MineLayer : DestructableObject
     public float turnSpeed = 0.5f;
     public float acceleration = 0.2f;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         

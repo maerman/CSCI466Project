@@ -17,6 +17,11 @@ class LazerShooter : DestructableObject
     public float acceleration = 0.3f;
     public float targetDistanceFrom = 10f;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         

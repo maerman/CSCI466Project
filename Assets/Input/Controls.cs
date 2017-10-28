@@ -14,7 +14,7 @@ public class PlayerInput
     public float turnL;
     public float turnR;
     public bool[] items = new bool[NUM_ITEMS];
-    public bool dropItem;
+    public bool pickupDrop;
     public bool shoot;
 
     public bool relativeMovement;
@@ -45,7 +45,7 @@ public class PlayerInput
                 items[i] = System.Convert.ToBoolean(parts[i + 8]);
             }
 
-            dropItem = System.Convert.ToBoolean(parts[18]);
+            pickupDrop = System.Convert.ToBoolean(parts[18]);
             shoot = System.Convert.ToBoolean(parts[19]);
             relativeMovement = System.Convert.ToBoolean(parts[21]);
             turns = System.Convert.ToBoolean(parts[22]);
@@ -72,7 +72,7 @@ public class PlayerInput
         {
             toReturn += items[i].ToString() + " ";
         }
-        toReturn += dropItem.ToString() + " ";
+        toReturn += pickupDrop.ToString() + " ";
         toReturn += shoot.ToString() + " ";
         toReturn += relativeMovement.ToString() + " ";
         toReturn += turns.ToString() + " ";
@@ -95,7 +95,7 @@ public class PlayerControls
     public Key turnLKey;
     public Key turnRKey;
     public Key[] itemKeys = new Key[PlayerInput.NUM_ITEMS];
-    public Key dropItemKey;
+    public Key pickupDropKey;
     public Key shootKey;
     public Key pauseKey;
     public Key zoomInKey;
@@ -195,11 +195,11 @@ public class PlayerControls
     {
         return current.items[index];
     }
-    public bool dropItem
+    public bool pickupDrop
     {
         get
         {
-            return current.dropItem;
+            return current.pickupDrop;
         }
     }
     public bool shoot
@@ -297,11 +297,11 @@ public class PlayerControls
     {
         return current.items[index] && !previous.items[index];
     }
-    public bool DropItem
+    public bool PickupDrop
     {
         get
         {
-            return current.dropItem && !previous.dropItem;
+            return current.pickupDrop && !previous.pickupDrop;
         }
     }
     public bool Shoot
@@ -369,7 +369,7 @@ public class PlayerControls
         {
             current.items[i] = itemKeys[i].isPressed();
         }
-        current.dropItem = dropItemKey.isPressed();
+        current.pickupDrop = pickupDropKey.isPressed();
         current.shoot = shootKey.isPressed();
 
         current.relativeMovement = theRelativeMovement;
@@ -416,7 +416,7 @@ public class PlayerControls
                 itemKeys[i] = new Key(System.Convert.ToInt32(parts[i + 8]));
             }
 
-            dropItemKey = new Key(System.Convert.ToInt32(parts[18]));
+            pickupDropKey = new Key(System.Convert.ToInt32(parts[18]));
             shootKey = new Key(System.Convert.ToInt32(parts[19]));
             pauseKey = new Key(System.Convert.ToInt32(parts[20]));
             theRelativeMovement = System.Convert.ToBoolean(parts[21]);
@@ -444,7 +444,7 @@ public class PlayerControls
         {
             toReturn += itemKeys[i].getValue() + " ";
         }
-        toReturn += dropItemKey.getValue() + " ";
+        toReturn += pickupDropKey.getValue() + " ";
         toReturn += shootKey.getValue() + " ";
         toReturn += pauseKey.getValue() + " ";
         toReturn += theRelativeMovement.ToString() + " ";
@@ -498,17 +498,17 @@ public class Controls
         players[0].turnDownKey = new Key(KeyCode.DownArrow);
         players[0].turnLKey = new Key(KeyCode.A);
         players[0].turnRKey = new Key(KeyCode.D);
-        players[0].itemKeys[0] = new Key(KeyCode.Keypad0);
-        players[0].itemKeys[1] = new Key(KeyCode.Keypad1);
-        players[0].itemKeys[2] = new Key(KeyCode.Keypad2);
-        players[0].itemKeys[3] = new Key(KeyCode.Keypad3);
-        players[0].itemKeys[4] = new Key(KeyCode.Keypad4);
-        players[0].itemKeys[5] = new Key(KeyCode.Keypad5);
-        players[0].itemKeys[6] = new Key(KeyCode.Keypad6);
-        players[0].itemKeys[7] = new Key(KeyCode.Keypad7);
-        players[0].itemKeys[8] = new Key(KeyCode.Keypad8);
-        players[0].itemKeys[9] = new Key(KeyCode.Keypad9);
-        players[0].dropItemKey = new Key(KeyCode.LeftAlt);
+        players[0].itemKeys[0] = new Key(KeyCode.Alpha1);
+        players[0].itemKeys[1] = new Key(KeyCode.Alpha2);
+        players[0].itemKeys[2] = new Key(KeyCode.Alpha3);
+        players[0].itemKeys[3] = new Key(KeyCode.Alpha4);
+        players[0].itemKeys[4] = new Key(KeyCode.Alpha5);
+        players[0].itemKeys[5] = new Key(KeyCode.Alpha6);
+        players[0].itemKeys[6] = new Key(KeyCode.Alpha7);
+        players[0].itemKeys[7] = new Key(KeyCode.Alpha8);
+        players[0].itemKeys[8] = new Key(KeyCode.Alpha9);
+        players[0].itemKeys[9] = new Key(KeyCode.Alpha0);
+        players[0].pickupDropKey = new Key(KeyCode.Tab);
         players[0].shootKey = new Key(KeyCode.Space);
         players[0].pauseKey = new Key(KeyCode.Escape);
         players[0].zoomInKey = new Key(KeyCode.LeftShift);
@@ -536,7 +536,7 @@ public class Controls
             players[1].itemKeys[7] = new Key(1, 7, true);
             players[1].itemKeys[8] = new Key(KeyCode.Joystick1Button8);
             players[1].itemKeys[9] = new Key(KeyCode.Joystick1Button9);
-            players[1].dropItemKey = new Key(1, 3, false);
+            players[1].pickupDropKey = new Key(1, 3, false);
             players[1].shootKey = new Key(1, 3, true);
             players[1].pauseKey = new Key(KeyCode.Joystick1Button7);
             players[1].zoomInKey = new Key(KeyCode.Joystick1Button4);
@@ -564,7 +564,7 @@ public class Controls
             players[2].itemKeys[7] = new Key(2, 7, true);
             players[2].itemKeys[8] = new Key(KeyCode.Joystick2Button8);
             players[2].itemKeys[9] = new Key(KeyCode.Joystick2Button9);
-            players[2].dropItemKey = new Key(2, 3, false);
+            players[2].pickupDropKey = new Key(2, 3, false);
             players[2].shootKey = new Key(2, 3, true);
             players[2].pauseKey = new Key(KeyCode.Joystick2Button7);
             players[2].zoomInKey = new Key(KeyCode.Joystick2Button4);
@@ -592,7 +592,7 @@ public class Controls
             players[3].itemKeys[7] = new Key(3, 7, true);
             players[3].itemKeys[8] = new Key(KeyCode.Joystick3Button8);
             players[3].itemKeys[9] = new Key(KeyCode.Joystick3Button9);
-            players[3].dropItemKey = new Key(3, 3, false);
+            players[3].pickupDropKey = new Key(3, 3, false);
             players[3].shootKey = new Key(3, 3, true);
             players[3].pauseKey = new Key(KeyCode.Joystick3Button7);
             players[3].zoomInKey = new Key(KeyCode.Joystick3Button4);

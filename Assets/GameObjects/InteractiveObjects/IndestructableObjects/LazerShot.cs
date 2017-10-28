@@ -7,6 +7,11 @@ public class LazerShot : IndestructableObject
     private int timeAlive = 0;
     public int updatesToLive = 50;
 
+    protected override void destroyIndestructableObject()
+    {
+
+    }
+
     protected override void startIndestructableObject()
     {
 

@@ -5,6 +5,11 @@ public class Asteroid :DestructableObject
 {
     public float minSize = 0.3f;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
 

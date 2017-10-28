@@ -11,6 +11,11 @@ public class RandomTurner : DestructableObject
     public float minSecsInADirection = 1;
     private bool turnLeft = false;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         if (other.team != team)
