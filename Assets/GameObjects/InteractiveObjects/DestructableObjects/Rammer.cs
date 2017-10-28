@@ -10,6 +10,11 @@ public class Rammer : DestructableObject
     private float ramTime = 0;
     public float overRunSecs = 2;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         if (other.team != team)

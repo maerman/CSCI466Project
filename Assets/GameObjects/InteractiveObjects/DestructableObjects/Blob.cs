@@ -29,6 +29,11 @@ public class Blob : DestructableObject
         other.destroyThis();
     }
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         if (other.GetType() == typeof(Blob))

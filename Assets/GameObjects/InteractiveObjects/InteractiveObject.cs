@@ -133,22 +133,24 @@ public abstract class InteractiveObject : SpaceObject
     }
 
     protected abstract void startInteractiveObject();
-
     protected override void startObject()
     {
         startInteractiveObject();
     }
 
     protected abstract void updateInteractiveObject();
-
-    // Update is called once per frame
     protected override void updateObject()
     {
         updateInteractiveObject();
     }
 
-    protected abstract void nonInteractiveObjectCollision(NonInteractiveObject other);
+    protected abstract void destroyInteractiveObject();
+    protected override void destroyObject()
+    {
+        destroyInteractiveObject();
+    }
 
+    protected abstract void nonInteractiveObjectCollision(NonInteractiveObject other);
     public void OnTriggerStay2D(Collider2D other)
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();

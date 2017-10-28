@@ -13,6 +13,11 @@ public class LazerBeam : NonInteractiveObject
 
     private float originalLength;
 
+    protected override void destroyNonInteractiveObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other)
     {
         if (other != attachedTo)

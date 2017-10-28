@@ -78,17 +78,7 @@ public abstract class NonInteractiveObject : SpaceObject
         }
     }
 
-    private void OnDestroy()
-    {
-        if (level != null && level.nonInteractives != null)
-        {
-            level.removeFromGame(this);
-        }
-        inPlay = false;
-    }
-
     protected abstract void startNonInteractiveObject();
-
     protected override void startObject()
     {
         startNonInteractiveObject();
@@ -96,8 +86,6 @@ public abstract class NonInteractiveObject : SpaceObject
     }
 
     protected abstract void updateNonInteractiveObject();
-
-    // Update is called once per frame
     protected override void updateObject()
     {
         updateNonInteractiveObject();
@@ -105,11 +93,19 @@ public abstract class NonInteractiveObject : SpaceObject
         angle += angularVelocity * level.secsPerUpdate;
     }
 
+    protected abstract void destroyNonInteractiveObject();
+    protected override void destroyObject()
+    {
+        destroyNonInteractiveObject();
+        if (level != null && level.nonInteractives != null)
+        {
+            level.removeFromGame(this);
+        }
+    }
 
     protected abstract void playerCollision(Player other);
     protected abstract void destructableObjectCollision(DestructableObject other);
     protected abstract void indestructableObjectCollision(IndestructableObject other);
-
     public void OnTriggerStay2D(Collider2D other)
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();

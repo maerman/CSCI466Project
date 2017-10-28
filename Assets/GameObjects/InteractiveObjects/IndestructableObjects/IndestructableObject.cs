@@ -3,17 +3,7 @@ using System.Collections;
 
 public abstract class IndestructableObject : InteractiveObject
 {
-    private void OnDestroy()
-    {
-        if (level != null && level.indestructables != null)
-        {
-            level.removeFromGame(this);
-        }
-        inPlay = false;
-    }
-
     protected abstract void startIndestructableObject();
-
     protected override void startInteractiveObject()
     {
         startIndestructableObject();
@@ -21,10 +11,19 @@ public abstract class IndestructableObject : InteractiveObject
     }
 
     protected abstract void updateIndestructableObject();
-
     protected override void updateInteractiveObject()
     {
         updateIndestructableObject();
+    }
+
+    protected abstract void destroyIndestructableObject();
+    protected override void destroyInteractiveObject()
+    {
+        destroyIndestructableObject();
+        if (level != null && level.indestructables != null)
+        {
+            level.removeFromGame(this);
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

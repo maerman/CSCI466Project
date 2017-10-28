@@ -508,7 +508,7 @@ public class Controls
         players[0].itemKeys[7] = new Key(KeyCode.Alpha8);
         players[0].itemKeys[8] = new Key(KeyCode.Alpha9);
         players[0].itemKeys[9] = new Key(KeyCode.Alpha0);
-        players[0].pickupDropKey = new Key(KeyCode.LeftAlt);
+        players[0].pickupDropKey = new Key(KeyCode.Tab);
         players[0].shootKey = new Key(KeyCode.Space);
         players[0].pauseKey = new Key(KeyCode.Escape);
         players[0].zoomInKey = new Key(KeyCode.LeftShift);

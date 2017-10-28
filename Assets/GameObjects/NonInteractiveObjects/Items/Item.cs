@@ -11,10 +11,21 @@ public abstract class Item : NonInteractiveObject
     private float doubleClickTimeSecs = 0.5f;
     private int doubleClickTimer;
 
+    protected override void destroyNonInteractiveObject()
+    {
+        drop();
+    }
+
     protected override void startNonInteractiveObject()
     {
 
     }
+
+    protected override void destructableObjectCollision(DestructableObject other) { }
+
+    protected override void indestructableObjectCollision(IndestructableObject other) { }
+
+    protected override void playerCollision(Player other) { }
 
     protected override void updateNonInteractiveObject()
     {
@@ -28,7 +39,7 @@ public abstract class Item : NonInteractiveObject
         }
         itemUpdated = false;
 
-        if (pickupDropTimer < 0)
+        if (pickupDropTimer > 0)
         {
             pickupDropTimer--;
         }
@@ -41,7 +52,7 @@ public abstract class Item : NonInteractiveObject
         {
             throw new System.Exception("Player value sent to Item.pickup() set to NULL");
         }
-        else
+        else if (pickupDropTimer <= 0)
         {
             for (int i = 0; i < player.items.Length; i++)
             {
@@ -49,9 +60,9 @@ public abstract class Item : NonInteractiveObject
                 { 
                     return pickup(player, i);
                 }
-            }
-            return false;         
+            }     
         }
+        return false;
     }
 
     public bool pickup(Player player, int itemSlot)
@@ -79,11 +90,7 @@ public abstract class Item : NonInteractiveObject
     protected abstract void dropItem();
     public void drop()
     {
-        if (holder == null)
-        {
-            throw new System.Exception("Item holder set to NULL in dropItem, an Item needs to be picked up by a player before it can be dropped");
-        }
-        else
+        if (holder != null && pickupDropTimer <= 0)
         {
             dropItem();
             for (int i = 0; i < holder.items.Length; i++)
@@ -95,6 +102,7 @@ public abstract class Item : NonInteractiveObject
             }
             position = holder.position;
             pickupDropTimer = pickupDropTime;
+            holder = null;
         }
     }
 
@@ -153,10 +161,4 @@ public abstract class Item : NonInteractiveObject
     {
         return "";
     }
-
-    protected override void destructableObjectCollision(DestructableObject other) { }
-
-    protected override void indestructableObjectCollision(IndestructableObject other) { }
-
-    protected override void playerCollision(Player other) { }
 }

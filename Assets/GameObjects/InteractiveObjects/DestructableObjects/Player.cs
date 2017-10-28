@@ -119,7 +119,7 @@ public class Player : DestructableObject
         }
     }
 
-    public override void destroyThis()
+    protected override void destroyDestructableObject()
     {
         for (int i = 0; i < theItems.Length; i++)
         {

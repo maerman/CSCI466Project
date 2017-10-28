@@ -12,6 +12,11 @@ public class HomingMine : DestructableObject
     public SpaceObject target;
     public float damage = 10f;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         other.damageThis(damage);

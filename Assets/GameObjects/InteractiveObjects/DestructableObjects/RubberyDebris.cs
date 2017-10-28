@@ -6,6 +6,11 @@ public class RubberyDebris : DestructableObject
     public float damage = 5;
     private Vector2 previousVelocity;
 
+    protected override void destroyDestructableObject()
+    {
+
+    }
+
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
         if (other.team != team)
