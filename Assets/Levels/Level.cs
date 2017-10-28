@@ -394,7 +394,7 @@ public abstract class Level : MonoBehaviour
             //game over
         }
 
-        if (Controls.get().players[0].DropItem)
+        if (Controls.get().players[0].PickupDrop)
             Controls.get().staticLevel = !Controls.get().staticLevel;
 
         if (!Controls.get().staticLevel)
@@ -552,8 +552,7 @@ public abstract class Level : MonoBehaviour
                 {
                     Item item = (Item)createObject(name, Vector2.zero, 0);
                     item.loadValues(values);
-                    player.items[i] = item;
-                    //set item position
+                    item.pickup(player, i);
                 }
             }
         }
