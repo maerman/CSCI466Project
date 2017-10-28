@@ -6,7 +6,6 @@ public abstract class DestructableObject : InteractiveObject
     public float maxHealth = 1000;
     public float health = 100;
     public float armor = 1;
-    public bool enemy = true;
 
     public virtual void damageThis(float damage)
     {
@@ -29,7 +28,7 @@ public abstract class DestructableObject : InteractiveObject
         {
             if (level != null && level.destructables != null)
             {
-                level.destructables.Remove(this);
+                level.removeFromGame(this);
             }
         }
         inPlay = false;
@@ -42,7 +41,7 @@ public abstract class DestructableObject : InteractiveObject
         startDestructableObject();
         if (this.GetType() != typeof(Player))
         {
-            level.destructables.AddLast(this);
+            level.addToGame(this);
         }
     }
 

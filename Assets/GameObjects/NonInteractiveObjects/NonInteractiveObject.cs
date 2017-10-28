@@ -15,7 +15,7 @@ public abstract class NonInteractiveObject : SpaceObject
         }
         set
         {
-            transform.position = value;
+            transform.position = new Vector3(value.x, value.y, transform.position.z);
         }
     }
 
@@ -35,11 +35,12 @@ public abstract class NonInteractiveObject : SpaceObject
     {
         get
         {
-            return transform.localRotation.z;
+            return transform.rotation.eulerAngles.z;
         }
         set
         {
-            transform.localRotation = new Quaternion(0, 0, value, 0);
+            Vector3 currentEuler = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(new Vector3(currentEuler.x, currentEuler.y, value));
         }
     }
 
@@ -56,16 +57,11 @@ public abstract class NonInteractiveObject : SpaceObject
         }
     }
 
-    public override Vector2 scale
+    public override Bounds bounds
     {
         get
         {
-            return transform.localScale;
-        }
-
-        set
-        {
-            transform.localScale = value;
+            return GetComponent<SpriteRenderer>().bounds;
         }
     }
 
@@ -86,7 +82,7 @@ public abstract class NonInteractiveObject : SpaceObject
     {
         if (level != null && level.nonInteractives != null)
         {
-            level.nonInteractives.Remove(this);
+            level.removeFromGame(this);
         }
         inPlay = false;
     }
@@ -96,7 +92,7 @@ public abstract class NonInteractiveObject : SpaceObject
     protected override void startObject()
     {
         startNonInteractiveObject();
-        level.nonInteractives.AddLast(this);
+        level.addToGame(this);
     }
 
     protected abstract void updateNonInteractiveObject();
@@ -114,7 +110,7 @@ public abstract class NonInteractiveObject : SpaceObject
     protected abstract void destructableObjectCollision(DestructableObject other);
     protected abstract void indestructableObjectCollision(IndestructableObject other);
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerStay2D(Collider2D other)
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();
 

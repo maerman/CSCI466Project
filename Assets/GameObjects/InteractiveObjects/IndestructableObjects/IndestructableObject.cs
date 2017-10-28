@@ -7,7 +7,7 @@ public abstract class IndestructableObject : InteractiveObject
     {
         if (level != null && level.indestructables != null)
         {
-            level.indestructables.Remove(this);
+            level.removeFromGame(this);
         }
         inPlay = false;
     }
@@ -17,7 +17,7 @@ public abstract class IndestructableObject : InteractiveObject
     protected override void startInteractiveObject()
     {
         startIndestructableObject();
-        level.indestructables.AddLast(this);
+        level.addToGame(this);
     }
 
     protected abstract void updateIndestructableObject();

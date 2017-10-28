@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Rammer : DestructableObject
 {
@@ -11,7 +12,10 @@ public class Rammer : DestructableObject
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
-        other.damageThis(damage);
+        if (other.team != team)
+        {
+            other.damageThis(damage);
+        }
     }
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
@@ -26,7 +30,10 @@ public class Rammer : DestructableObject
 
     protected override void playerCollision(Player other, Collision2D collision)
     {
-        other.damageThis(damage);
+        if (other.team != team)
+        {
+            other.damageThis(damage);
+        }
     }
 
     protected override void startDestructableObject()
@@ -65,20 +72,10 @@ public class Rammer : DestructableObject
 
     protected void getNewTarget()
     {
-        if (enemy)
-        {
-            target = closestObject<DestructableObject>(level.players, true);
+        IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
+        targetList[0] = level.destructables;
+        targetList[1] = level.players;
 
-            DestructableObject temp = closestObject<DestructableObject>(level.destructables, false);
-
-            if (target == null || temp != null && distanceFrom(temp) < distanceFrom(target))
-            {
-                target = temp;
-            }
-        }
-        else
-        {
-            target = closestObject<DestructableObject>(level.destructables, true);
-        }
+        target = closestObject<DestructableObject>(targetList, false);
     }
 }

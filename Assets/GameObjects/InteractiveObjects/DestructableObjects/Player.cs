@@ -33,6 +33,8 @@ public class Player : DestructableObject
 
     protected override void startDestructableObject()
     {
+        team = 1;
+
         switch (playerNum)
         {
             case 0:
@@ -51,6 +53,9 @@ public class Player : DestructableObject
                 color = Color.grey;
                 break;
         }
+
+        LazerBeam beam = (LazerBeam)level.createObject("LazerBeamPF", position, 0);
+        beam.attachedTo = this;
     }
 
     protected override void updateDestructableObject()

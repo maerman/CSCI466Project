@@ -6,7 +6,6 @@ using static User;
 
 public abstract class Level : MonoBehaviour
 {
-    public static Rect gameBounds = new Rect(Vector2.zero, new Vector2(40, 30));
     public const float PRECISION = 1024;
     public const string SAVE_PATH = "saves/";
     public const string AUTO_SAVE_EXTENTION = ".NEBULA";
@@ -14,24 +13,50 @@ public abstract class Level : MonoBehaviour
     public const string REPLAY_EXTENTION = ".replay";
     public const int MAX_AUTOSAVES = 20;
 
-
-
     private bool isReplay = false;
     private System.IO.StreamReader updateFile;
 
-    private Camera camera;
-    private Transform cameraTrans;
-    private Canvas canvas;
+    private Rect theGameBounds = new Rect(Vector2.zero, new Vector2(80, 60));
+    public Rect gameBounds
+    {
+        get
+        {
+            return theGameBounds;
+        }
+    }
+    protected Vector2 levelSize
+    {
+        get
+        {
+            return theGameBounds.size;
+        }
+        set
+        {
+            theGameBounds.size = value;
+        }
+    }
 
     public abstract int levelNumber{ get; }
 
     private static Level theCurrentLevel;
-
     public static Level currentLevel
     {
         get
         {
             return theCurrentLevel;
+        }
+    }
+
+    protected SpriteRenderer background;
+    public Vector2 backgroundPosition
+    {
+        get
+        {
+            return transform.position;
+        }
+        set
+        {
+            transform.position = new Vector3(value.x, value.y, 10);
         }
     }
 
@@ -177,6 +202,7 @@ public abstract class Level : MonoBehaviour
         return current;
     }
 
+    /*
     protected Text addTextToCanvas(string textToAdd, Vector2 position)
     {
         if (canvas == null)
@@ -190,8 +216,11 @@ public abstract class Level : MonoBehaviour
         text.transform.position = position;
         return text;
     }
+    */
 
 
+    private List<DestructableObject> removeDestructables = new List<DestructableObject>();
+    private List<DestructableObject> addDestructables = new List<DestructableObject>();
     private LinkedList<DestructableObject> theDestructables = new LinkedList<DestructableObject>();
 	public LinkedList<DestructableObject> destructables
 	{
@@ -201,6 +230,8 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
+    private List<IndestructableObject> removeIndestructables = new List<IndestructableObject>();
+    private List<IndestructableObject> addIndestructables = new List<IndestructableObject>();
     private LinkedList<IndestructableObject> theIndestructables = new LinkedList<IndestructableObject>();
 	public LinkedList<IndestructableObject> indestructables
 	{
@@ -210,7 +241,9 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
-	private LinkedList<NonInteractiveObject> theNonInteractives = new LinkedList<NonInteractiveObject>();
+    private List<NonInteractiveObject> removeNonInteractives = new List<NonInteractiveObject>();
+    private List<NonInteractiveObject> addNonInteractives = new List<NonInteractiveObject>();
+    private LinkedList<NonInteractiveObject> theNonInteractives = new LinkedList<NonInteractiveObject>();
 	public LinkedList<NonInteractiveObject> nonInteractives
 	{
 		get 
@@ -218,6 +251,36 @@ public abstract class Level : MonoBehaviour
 			return theNonInteractives;
 		}
 	}
+
+    public void removeFromGame(DestructableObject remove)
+    {
+        removeDestructables.Add(remove);
+    }
+
+    public void removeFromGame(IndestructableObject remove)
+    {
+        removeIndestructables.Add(remove);
+    }
+
+    public void removeFromGame(NonInteractiveObject remove)
+    {
+        removeNonInteractives.Add(remove);
+    }
+
+    public void addToGame(DestructableObject add)
+    {
+        addDestructables.Add(add);
+    }
+
+    public void addToGame(IndestructableObject add)
+    {
+        addIndestructables.Add(add);
+    }
+
+    public void addToGame(NonInteractiveObject add)
+    {
+        addNonInteractives.Add(add);
+    }
 
     private List<Player> initialPlayers;
     private List<Player> thePlayers = new List<Player>(Controls.MAX_PLAYERS);
@@ -231,16 +294,14 @@ public abstract class Level : MonoBehaviour
     
     public void Start()
     {
-        GameObject temp = GameObject.Find("Main Camera");
-        camera = temp.GetComponent<Camera>();
-        cameraTrans = temp.GetComponent<Transform>();
+        background = GetComponent<SpriteRenderer>();
     }
 
     protected abstract void initilizeLevel();
 
     public void initilize(int numPlayers, int difficulty, int randomSeed)
     {
-        theCurrentLevel = this;
+        background = GetComponent<SpriteRenderer>();
 
         this.randomSeed = randomSeed;
         theRandom = new System.Random(randomSeed);
@@ -277,7 +338,22 @@ public abstract class Level : MonoBehaviour
 
         initilizeLevel();
 
+        backgroundPosition = gameBounds.center;
+        transform.localScale = Vector3.one;
+        if (gameBounds.width / background.bounds.size.x > gameBounds.height / background.bounds.size.y)
+        {
+            float scale = gameBounds.width / background.bounds.size.x;
+            transform.localScale = new Vector3(scale, scale, 1);
+
+        }
+        else
+        {
+            float scale = gameBounds.height / background.bounds.size.y;
+            transform.localScale = new Vector3(scale, scale, 1);
+        }
+
         theStartTime = DateTime.Now;
+        theCurrentLevel = this;
     }
 
     protected abstract void updateLevel();
@@ -293,9 +369,16 @@ public abstract class Level : MonoBehaviour
             Controls.get().updateFromInput();
         }
 
-        if (!isReplay && duration.TotalSeconds > 2 && destructables.Count <= 0 && theCurrentLevel == this)
+        if (won() && duration.TotalSeconds > 2 && theCurrentLevel == this)
         {
-            nextLevel();
+            if (isReplay)
+            {
+
+            }
+            else
+            {
+                nextLevel();
+            }
         }
 
         for (int i = 0; i < players.Count; i++)
@@ -305,6 +388,81 @@ public abstract class Level : MonoBehaviour
                 //game over
             }
         }
+
+        if (lost())
+        {
+            //game over
+        }
+
+        if (Controls.get().players[0].DropItem)
+            Controls.get().staticLevel = !Controls.get().staticLevel;
+
+        if (!Controls.get().staticLevel)
+        {
+            Vector2 adveragePos = Vector2.zero;
+            foreach (Player item in players)
+            {
+                adveragePos += item.position;
+            }
+            adveragePos /= players.Count;
+            theGameBounds.center = adveragePos;
+        }
+
+        updateObjectLists();
+    }
+
+    protected virtual bool won()
+    {
+        if (destructables.Count <= 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected virtual bool lost()
+    {
+        return false;
+    }
+
+    private void updateObjectLists()
+    {
+        foreach (DestructableObject item in addDestructables)
+        {
+            theDestructables.AddLast(item);
+        }
+        addDestructables.Clear();
+
+        foreach (IndestructableObject item in addIndestructables)
+        {
+            theIndestructables.AddLast(item);
+        }
+        addIndestructables.Clear();
+
+        foreach (NonInteractiveObject item in addNonInteractives)
+        {
+            theNonInteractives.AddLast(item);
+        }
+        addNonInteractives.Clear();
+
+        foreach (DestructableObject item in removeDestructables)
+        {
+            theDestructables.Remove(item);
+        }
+        removeDestructables.Clear();
+
+        foreach (IndestructableObject item in removeIndestructables)
+        {
+            theIndestructables.Remove(item);
+        }
+        removeIndestructables.Clear();
+
+        foreach (NonInteractiveObject item in removeNonInteractives)
+        {
+            theNonInteractives.Remove(item);
+        }
+        removeNonInteractives.Clear();
     }
 
     private void OnDestroy()
@@ -319,6 +477,8 @@ public abstract class Level : MonoBehaviour
 
     private void clearLevel()
     {
+        updateObjectLists();
+
         foreach (Player item in thePlayers)
         {
             Destroy(item.gameObject);

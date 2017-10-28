@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class InteractiveObject : SpaceObject
 {
+    public byte team = 0;
 
     public override Vector2 position
     {
@@ -52,16 +54,11 @@ public abstract class InteractiveObject : SpaceObject
         }
     }
 
-    public override Vector2 scale
+    public override Bounds bounds
     {
         get
         {
-            return transform.localScale;
-        }
-
-        set
-        {
-            transform.localScale = value;
+            return GetComponent<Collider2D>().bounds;
         }
     }
 
@@ -75,6 +72,64 @@ public abstract class InteractiveObject : SpaceObject
         {
             GetComponent<Rigidbody2D>().mass = value;
         }
+    }
+
+    public bool usesPhysics
+    {
+        get
+        {
+            return GetComponent<Collider2D>().enabled;
+        }
+        set
+        {
+            GetComponent<Collider2D>().enabled = value;
+        }
+    }
+
+    public T closestObject<T>(IEnumerable<IEnumerable<T>> objectLists, bool sameTeam) where T : InteractiveObject
+    {
+        T closest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (IEnumerable<T> item in objectLists)
+        {
+            T temp = closestObject<T>(item, sameTeam);
+
+            if (temp != null)
+            {
+                float tempDistance = distanceFrom(temp);
+
+                if (tempDistance < closestDistance)
+                {
+                    closest = temp;
+
+                }
+                closestDistance = tempDistance;
+            }
+        }
+
+        return closest;
+    }
+
+    public T closestObject<T>(IEnumerable<T> objectList, bool sameTeam) where T : InteractiveObject
+    {
+        T closest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (T item in objectList)
+        {
+            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.inPlay)
+            {
+                float distance = this.distanceFrom(item);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = item;
+                }
+            }
+        }
+        return closest;
     }
 
     protected abstract void startInteractiveObject();
@@ -94,7 +149,7 @@ public abstract class InteractiveObject : SpaceObject
 
     protected abstract void nonInteractiveObjectCollision(NonInteractiveObject other);
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerStay2D(Collider2D other)
     {
         SpaceObject spaceObject = other.gameObject.GetComponent<SpaceObject>();
 

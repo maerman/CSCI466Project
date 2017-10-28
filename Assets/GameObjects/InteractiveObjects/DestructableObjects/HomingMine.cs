@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class HomingMine : DestructableObject
 {
@@ -13,11 +14,8 @@ public class HomingMine : DestructableObject
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
-        if (enemy && !other.enemy || (!enemy && other.enemy))
-        {
-            other.damageThis(damage);
-            destroyThis();
-        }
+        other.damageThis(damage);
+        destroyThis();
     }
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
@@ -32,11 +30,8 @@ public class HomingMine : DestructableObject
 
     protected override void playerCollision(Player other, Collision2D collision)
     {
-        if (enemy)
-        {
-            other.damageThis(damage);
-            destroyThis();
-        }
+        other.damageThis(damage);
+        destroyThis();
     }
 
     protected override void startDestructableObject()
@@ -46,53 +41,22 @@ public class HomingMine : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (distanceFrom(target) > targetLossProximity)
+        if (target != null && distanceFrom(target) > targetLossProximity)
         {
             target = null;
         }
 
         if (target == null || !target.inPlay)
         {
-            if (enemy)
-            {
-                DestructableObject tempTarget = closestObject<DestructableObject>(level.players);
-                DestructableObject tempTarget2 = closestObject<DestructableObject>(level.destructables, false);
+            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
+            targetList[0] = level.destructables;
+            targetList[1] = level.players;
 
-                if (tempTarget != null)
-                {
-                    if (tempTarget2 != null)
-                    {
-                        if (distanceFrom(tempTarget2) < targetFindProximity)
-                        {
-                            target = tempTarget2;
-                        }
-                        if (distanceFrom(tempTarget) < targetFindProximity && distanceFrom(tempTarget) < distanceFrom(tempTarget2))
-                        {
-                            target = tempTarget;
-                        }
-                    }
-                    else if (distanceFrom(tempTarget) < targetFindProximity)
-                    {
-                        target = tempTarget;
-                    }
-                }
-                else if (tempTarget2 != null)
-                {
-                    if (distanceFrom(tempTarget2) < targetFindProximity)
-                    {
-                        target = tempTarget2;
-                    }
-                }
-            }
-            else
+            target = closestObject<DestructableObject>(targetList, false);
+
+            if (distanceFrom(target) > targetFindProximity)
             {
-                foreach (DestructableObject item in level.destructables)
-                {
-                    if (target == null || distanceFrom(target) > distanceFrom(item))
-                    {
-                        target = item;
-                    }
-                }
+                target = null;
             }
         }
 

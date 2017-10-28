@@ -109,14 +109,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 15
   inPlay: 1
+  enemy: 0
   maxHealth: 1000
   health: 100
   armor: 1
-  enemy: 1
   playerNum: 0
   acceleration: 0.4
   turnSpeed: 100
-  shootTime: 30
+  shootTimeSecs: 0.5
+  shotSpeed: 15
 --- !u!212 &212502499608731378
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -89,15 +89,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e2202c188ccc9d4a9cb3f305e842d4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 10
+  maxSpeed: 20
   inPlay: 1
+  enemy: 1
   maxHealth: 50
   health: 15
   armor: 1
-  enemy: 1
   acceleration: 0.5
   targetAngularVelocity: 6
   angularAcceleration: 0.4
+  targetFindProximity: 8
+  targetLossProximity: 15
   target: {fileID: 0}
   damage: 10
 --- !u!212 &212919671705286606

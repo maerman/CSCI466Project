@@ -86,7 +86,7 @@ public class Blob : DestructableObject
                 for (int i = 0; i < pieces; i++)
                 {
                     float theAngle = i * 360.0f / pieces + angle;
-                    Blob current = (Blob)level.createObject("BlobPF", position + new Vector2(dimentions.x / pieces, 0).rotate(theAngle), angle,
+                    Blob current = (Blob)level.createObject("BlobPF", position + new Vector2(size.x / pieces, 0).rotate(theAngle), angle,
                         velocity + new Vector2(pieces, 0).rotate(theAngle), angularVelocity + pieces, theScale);
 
                     current.mass = mass / pieces;
