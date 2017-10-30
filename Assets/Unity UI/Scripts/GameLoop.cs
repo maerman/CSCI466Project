@@ -7,9 +7,12 @@ using System;
 public class GameLoop : MonoBehaviour {
     private static GameLoop gameLoop;
     private GameState lastGameState;
-    //public GameObject Level1;     //you can get the current Level from Level.currentLevel but it might be null if the game is not currently being played
-    public GameObject loginMenu; //initilzed in editor
-    public GameObject levelCompleteMenu; //initilized in editor
+
+    //initilzed in editor
+    public GameObject loginMenu; 
+    public GameObject pauseMenu;
+    public GameObject levelCompleteMenu;
+
     bool inGame = true; 
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
@@ -38,12 +41,13 @@ public class GameLoop : MonoBehaviour {
         previousGameState = GameState.LoggingIn;
         lastGameState = GameState.LoggingIn;
 
-        while (inGame)
+        while (gameState != GameState.Exit)
         {
             if (gameState != lastGameState)
             {
                 previousGameState = lastGameState;
             }
+            lastGameState = gameState;
 
             try
             {
@@ -52,16 +56,17 @@ public class GameLoop : MonoBehaviour {
 
                 //set them all to false, then in the switch, set only the correct one to true
                 loginMenu.SetActive(false);
-                //createAccountMenu.enabled = false;
-                //mainMenu.enabled = false;
-                //newGameMenu.enabled = false;
-                //loadGameMenu.enabled = false;
+                //createAccountMenu.SetActive(false);
+                //mainMenu.SetActive(false);
+                //newGameMenu.SetActive(false);
+                //loadGameMenu.SetActive(false);
                 levelCompleteMenu.SetActive(false);
-                //pasueGameMenu.enabled = false;
-                //lostGameMenu.enabled = false;
-                //wonGameMenu.enabled = false;
-                //loadReplayMenu.enabled = false;
-                //aboutMenu.enabled = false;
+                pauseMenu.SetActive(false);
+                //lostGameMenu.SetActive(false);
+                //wonGameMenu.SetActive(false);
+                //loadReplayMenu.SetActive(false);
+                //optionsMenu.SetActive(false);
+                //aboutMenu.SetActive(false);
 
                 switch (gameState)
                 {
@@ -69,43 +74,73 @@ public class GameLoop : MonoBehaviour {
                         loginMenu.SetActive(true);
                         break;
                     case GameState.CreatAccount:
-                        //createAccountMenu.enabled = true;
+                        //createAccountMenu.SetActive(true);
                         break;
                     case GameState.Main:
-                        //mainMenu.enabled = true;
+                        //mainMenu.SetActive(true);
                         break;
                     case GameState.NewGame:
-                        //newGameMenu.enabled = true;
+                        //newGameMenu.SetActive(true);
                         break;
                     case GameState.LoadGame:
-                        //loadGameMenu.enabled = true;
+                        //loadGameMenu.SetActive(true);
                         break;
                     case GameState.Playing:
                         Time.timeScale = 1;
+                        foreach (PlayerControls item in Controls.get().players)
+                        {
+                            if (item.Pause)
+                            {
+                                gameState = GameState.Paused;
+                                break;
+                            }
+                        }
                         break;
                     case GameState.Paused:
-                        //pasueGameMenu.enabled = true;
+                        pauseMenu.SetActive(true);
+                        foreach (PlayerControls item in Controls.get().players)
+                        {
+                            if (item.Pause)
+                            {
+                                gameState = previousGameState;
+                                break;
+                            }
+                        }
                         break;
                     case GameState.LevelComplete:
                         levelCompleteMenu.SetActive(true);
                         break;
                     case GameState.LostGame:
-                        //lostGameMenu.enabled = true;
+                        //lostGameMenu.SetActive(true);
                         break;
                     case GameState.WonGame:
-                        //wonGameMenu.enabled = true;
+                        //wonGameMenu.SetActive(true);
                         break;
                     case GameState.LoadReplay:
-                        //loadReplayMenu.enabled = true;
+                        //loadReplayMenu.SetActive(true);
                         break;
                     case GameState.Replay:
                         Time.timeScale = 1;
+                        foreach (PlayerControls item in Controls.get().players)
+                        {
+                            if (item.Pause)
+                            {
+                                gameState = GameState.Paused;
+                                break;
+                            }
+                        }
+                        break;
+                    case GameState.Options:
+                        //optionsMenu.SetActive(true);
                         break;
                     case GameState.About:
-                        //aboutMenu.enabled = true;
+                        //aboutMenu.SetActive(true);
                         break;
                     case GameState.Exit:
                         Application.Quit();
+                        break;
+                    default:
+                        throw new Exception("Invalid GameState: " + gameState.ToString());
                         break;
                 }
 
@@ -117,6 +152,7 @@ public class GameLoop : MonoBehaviour {
             }
             yield return null; //return null to allow other things to continue
         }
+        Application.Quit();
     }
 }
         
