@@ -31,8 +31,8 @@ public class Login : MonoBehaviour {
             showErrorMenu("Error! There was no user account found with the details entered!");
             return;
         }
-        Debug.Assert(playerState == PlayerState.LoggedIn, "Player is not logged in!"); //player should be logged in here
-        gameState = GameState.PlayingFull;
+        //Debug.Assert(playerState == PlayerState.LoggedIn, "Player is not logged in!"); //player should be logged in here
+        gameState = GameState.Main;
 
     }
 
@@ -44,7 +44,7 @@ public class Login : MonoBehaviour {
             return;
         }
 
-        crud.CreateNewUser(userName.text, password.text, null, 0);
+        crud.CreateNewUser(userName.text, password.text, null, false);
 
         if (loginError(LoginState.CreationError))
         {
@@ -52,7 +52,7 @@ public class Login : MonoBehaviour {
             return;
         }
         Debug.Assert(user.username != null, "The user was not created successfully!");
-        gameState = GameState.PlayingFull;
+        gameState = GameState.Main;
 
     }
 
@@ -82,6 +82,4 @@ public class Login : MonoBehaviour {
         errorPanel.SetActive(true);       
         canvasGroup.DOFade(1.0f, 2.0f);
     }
-
-
 }

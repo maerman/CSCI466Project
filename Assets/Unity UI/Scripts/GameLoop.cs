@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using static GameStates;
-using static User;
 using UnityEngine;
 using System;
 
 public class GameLoop : MonoBehaviour {
-    private GameLoop gameLoop;
+    private static GameLoop gameLoop;
+    private GameState lastGameState;
     //public GameObject Level1;     //you can get the current Level from Level.currentLevel but it might be null if the game is not currently being played
-    public Canvas Menu; //initilzed in editor
+    public GameObject loginMenu; //initilzed in editor
+    public GameObject levelCompleteMenu; //initilized in editor
     bool inGame = true; 
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
@@ -20,62 +21,94 @@ public class GameLoop : MonoBehaviour {
         }
         else
         {
-            Destroy(gameLoop); //destroy if another one is attempted to be created.
+            Destroy(this); //destroy if another one is attempted to be created.
         }
     }
     // Use this for initialization
     //start the state machine
-    void Start() {
+    void Start()
+    {
        
         StartCoroutine("StateMachine"); //Start the GameLoop
     }
 
     IEnumerator StateMachine()
     {
-        gameState = GameState.Loading; //initial game state
-        //Level1.SetActive(false); //disable Level1 Menu
-        Menu.enabled = true; //enable the main menu
+        gameState = GameState.LoggingIn; //initial game state
+        previousGameState = GameState.LoggingIn;
+        lastGameState = GameState.LoggingIn;
 
-        playerState = PlayerState.NotLoggedIn; //initial player state
-
-            while (inGame)
+        while (inGame)
+        {
+            if (gameState != lastGameState)
             {
+                previousGameState = lastGameState;
+            }
+
             try
             {
+                //set to 0, then set to 1 only when playing
+                Time.timeScale = 0;
+
+                //set them all to false, then in the switch, set only the correct one to true
+                loginMenu.SetActive(false);
+                //createAccountMenu.enabled = false;
+                //mainMenu.enabled = false;
+                //newGameMenu.enabled = false;
+                //loadGameMenu.enabled = false;
+                levelCompleteMenu.SetActive(false);
+                //pasueGameMenu.enabled = false;
+                //lostGameMenu.enabled = false;
+                //wonGameMenu.enabled = false;
+                //loadReplayMenu.enabled = false;
+                //aboutMenu.enabled = false;
+
                 switch (gameState)
                 {
-                    case (GameState.Loading):
+                    case GameState.LoggingIn:
+                        loginMenu.SetActive(true);
                         break;
-                    case (GameState.PlayingDemo):
-                        Menu.enabled = false;
-                        //Level.SetActive(true);
+                    case GameState.CreatAccount:
+                        //createAccountMenu.enabled = true;
                         break;
-                    case GameState.PlayingFull:
-                        Menu.enabled = false;
-                        //Level1.SetActive(true);
+                    case GameState.Main:
+                        //mainMenu.enabled = true;
+                        break;
+                    case GameState.NewGame:
+                        //newGameMenu.enabled = true;
+                        break;
+                    case GameState.LoadGame:
+                        //loadGameMenu.enabled = true;
+                        break;
+                    case GameState.Playing:
+                        Time.timeScale = 1;
                         break;
                     case GameState.Paused:
+                        //pasueGameMenu.enabled = true;
                         break;
-                    case GameState.GameOver:
-                        if (playerState == PlayerState.Killed)
-                        {
-
-                        }
-                        else if (playerState == PlayerState.Victorious)
-                        {
-
-                        }
-                        else
-                        {
-                            Debug.Log("gameState is GameOver but the playerState is NOT in an appropriate state! " +
-                                "playerState should either be 'Killed or 'Victorious' but is currently '" + playerState.ToString() + "'");
-                        }
+                    case GameState.LevelComplete:
+                        levelCompleteMenu.SetActive(true);
+                        break;
+                    case GameState.LostGame:
+                        //lostGameMenu.enabled = true;
+                        break;
+                    case GameState.WonGame:
+                        //wonGameMenu.enabled = true;
+                        break;
+                    case GameState.LoadReplay:
+                        //loadReplayMenu.enabled = true;
+                        break;
+                    case GameState.Replay:
+                        Time.timeScale = 1;
+                        break;
+                    case GameState.About:
+                        //aboutMenu.enabled = true;
                         break;
                     case GameState.Exit:
                         Application.Quit();
                         break;
                 }
-                        
+
             }
             catch (Exception e)
             {
@@ -84,7 +117,6 @@ public class GameLoop : MonoBehaviour {
             }
             yield return null; //return null to allow other things to continue
         }
-
     }
 }
         

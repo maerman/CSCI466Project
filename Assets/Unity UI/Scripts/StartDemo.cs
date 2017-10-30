@@ -11,8 +11,10 @@ public class StartDemo : MonoBehaviour {
     public void StartDemoGame()
     {
         Level lvl1 = Level.getLevel(1);
-        lvl1.initilize(1, 1, (int)System.DateTime.Now.Ticks);
+        lvl1.create(1, 1, (int)System.DateTime.Now.Ticks);
 
-        gameState = GameState.PlayingDemo;
+        User.user.isTrial = true;
+
+        gameState = GameState.Playing;
     }
 }

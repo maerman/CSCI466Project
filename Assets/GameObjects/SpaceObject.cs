@@ -575,13 +575,13 @@ public abstract class SpaceObject : MonoBehaviour {
     }
 
     protected abstract void startObject();
-    private void Start ()
+    protected void Start ()
     {
         startObject();
 	}
 
     protected abstract void updateObject();
-	private void FixedUpdate ()
+	protected void FixedUpdate ()
     {
         updateObject();
 
@@ -616,7 +616,7 @@ public abstract class SpaceObject : MonoBehaviour {
 	}
 
     protected abstract void destroyObject();
-    private void OnDestroy()
+    protected void OnDestroy()
     {
         destroyObject();
         inPlay = false;

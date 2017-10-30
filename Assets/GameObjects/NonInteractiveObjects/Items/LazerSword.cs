@@ -19,8 +19,11 @@ public class LazerSword : Item
 
     protected override void dropItem()
     {
-        sword.destroyThis();
-        sword = null;
+        if (sword != null)
+        {
+            sword.destroyThis();
+            sword = null;
+        }
     }
 
     protected override void holdingItem(bool use, bool startUse, bool endUse, bool doubleUse)

@@ -77,6 +77,7 @@ public abstract class Item : NonInteractiveObject
         }
         else if (pickupDropTimer <= 0)
         {
+            dropItem();
             player.items[itemSlot] = this;
             holder = player;
             pickupItem();

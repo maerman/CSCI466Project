@@ -56,8 +56,11 @@ public class Player : DestructableObject
                 break;
         }
 
-        LazerSword sword = (LazerSword)level.createObject("LazerSwordPF");
-        sword.pickup(this);
+        if (level.levelNumber == 1)
+        {
+            LazerSword sword = (LazerSword)level.createObject("LazerSwordPF");
+            sword.pickup(this);
+        }
     }
 
     protected override void updateDestructableObject()

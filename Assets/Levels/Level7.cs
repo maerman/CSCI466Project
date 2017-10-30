@@ -15,7 +15,7 @@ public class Level7 : Level
         }
     }
 
-    protected override void initilizeLevel()
+    protected override void createLevel()
     {
         createObject("SpaceDustPF", gameBounds.center, 0);
 

@@ -15,7 +15,7 @@ public class Level1 : Level
         }
     }
 
-    protected override void initilizeLevel()
+    protected override void createLevel()
     {
         //levelSize = new Vector2(80, 60); //set the level size
 
@@ -23,12 +23,12 @@ public class Level1 : Level
 
         for (int i = 0; i < 3; i++)
         {
-            Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            //Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
         for (int i = 0; i < 1; i++)
         {
-            //HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
         for (int i = 0; i < 2; i++)

@@ -43,9 +43,9 @@ public class CRUD : MonoBehaviour {
                 user.username = myObj[1];
                 user.password = myObj[2];
                 user.email = myObj[3];
-                user.isTrial = int.Parse(myObj[4]); //convert to an int
+                user.isTrial = bool.Parse(myObj[4]); //convert to an int
                 
-                playerState = PlayerState.LoggedIn; //change the game state to LoggedIn
+                //playerState = PlayerState.LoggedIn; //change the game state to LoggedIn
                 Debug.Log("Successfully Logged In as " + user.username);
             }
             catch(Exception e)
@@ -57,7 +57,7 @@ public class CRUD : MonoBehaviour {
 
     }
     //POST -Creates a new user
-    public void CreateNewUser(string username, string password, string email, int isTrial) //user object should already be populated with values
+    public void CreateNewUser(string username, string password, string email, bool isTrial) //user object should already be populated with values
     {
         string url = baseUrl + "createUser.php?username=" + username + "&password=" + password + "&email=" + email + "&isTrial=" + isTrial;
         WWW www = new WWW(url);
