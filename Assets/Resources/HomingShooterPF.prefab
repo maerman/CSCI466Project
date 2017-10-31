@@ -71,10 +71,11 @@ MonoBehaviour:
   maxSpeed: 20
   inPlay: 1
   team: 0
-  damage: 15
-  acceleration: 1
-  turnSpeed: 4
-  timeToLiveSecs: 5
+  missileDamge: 15
+  missileAcceleration: 1
+  missileMaxSpeed: 20
+  missileTurnSpeed: 4
+  missleLifeTimeSecs: 5
   shootTimeSecs: 1
   offset: {x: 0, y: 2}
 --- !u!212 &212348562637996704

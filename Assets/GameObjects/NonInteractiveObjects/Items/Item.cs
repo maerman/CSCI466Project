@@ -65,6 +65,7 @@ public abstract class Item : NonInteractiveObject
                 }
             }     
         }
+
         return false;
     }
 
@@ -84,8 +85,7 @@ public abstract class Item : NonInteractiveObject
             player.items[itemSlot] = this;
             holder = player;
             pickupItem();
-            //transparancy = 0;
-            //remove item from level
+            enabled = false;
             pickupDropTimer = pickupDropTime;
             return true;
         }
@@ -106,7 +106,7 @@ public abstract class Item : NonInteractiveObject
                 }
             }
             position = holder.position;
-            //transparancy = 1f;
+            enabled = true;
             pickupDropTimer = pickupDropTime;
             holder = null;
         }
@@ -152,6 +152,12 @@ public abstract class Item : NonInteractiveObject
             }
 
             holdingItem(use, start, end, dbl);
+        }
+
+
+        if (pickupDropTimer > 0)
+        {
+            pickupDropTimer--;
         }
 
         previousUse = use;

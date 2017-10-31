@@ -127,6 +127,18 @@ public abstract class SpaceObject : MonoBehaviour
         }
     }
 
+    public bool enabled
+    {
+        get
+        {
+            return gameObject.activeSelf;
+        }
+        set
+        {
+            gameObject.SetActive(value);
+        }
+    }
+
     public void modifyVelocityAbsolute(float changeX, float changeY)
     {
         modifyVelocityAbsolute(new Vector2(changeX, changeY));

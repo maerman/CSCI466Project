@@ -122,11 +122,11 @@ public class Player : DestructableObject
         {
             if (theItems[i] != null)
             {
+                theItems[i].holding(input.items(i));
                 if (input.pickupDrop && input.items(i))
                 {
                     theItems[i].drop();
                 }
-                theItems[i].holding(input.items(i));
             }
         }
     }
