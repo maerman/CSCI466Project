@@ -28,7 +28,7 @@ public class Level1 : Level
 
         for (int i = 0; i < 1; i++)
         {
-            HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            //HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
         for (int i = 0; i < 2; i++)
@@ -56,9 +56,9 @@ public class Level1 : Level
             //LazerShooter current = (LazerShooter)createObject("LazerShooterPF", getRandomPosition(), getRandomAngle());
         }
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 2; i++)
         {
-            //RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
+            RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
         }
 
         for (int i = 0; i < 1; i++)

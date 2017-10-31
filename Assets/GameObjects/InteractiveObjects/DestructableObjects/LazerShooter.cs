@@ -85,7 +85,7 @@ class LazerShooter : DestructableObject
                     shot.maxSpeed = shotSpeed;
                     shot.speed = shotSpeed;
                     shot.color = Color.red;
-                    shot.updatesToLive = (int)(maxShotLiveSecs * level.updatesPerSec + 1);
+                    shot.timeToLiveSecs = (int)(maxShotLiveSecs * level.updatesPerSec + 1);
                     shot.damage = damage;
                 }
             }

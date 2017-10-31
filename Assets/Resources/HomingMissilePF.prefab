@@ -9,47 +9,47 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1530445469665066}
+  m_RootGameObject: {fileID: 1856483353402846}
   m_IsPrefabParent: 1
---- !u!1 &1530445469665066
+--- !u!1 &1856483353402846
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4632082371109496}
-  - component: {fileID: 212064726747981216}
-  - component: {fileID: 114958445573209148}
-  - component: {fileID: 50844473796836074}
-  - component: {fileID: 70253137083797084}
+  - component: {fileID: 4190457405607378}
+  - component: {fileID: 212402778611172752}
+  - component: {fileID: 50005180309349286}
+  - component: {fileID: 70046027823498192}
+  - component: {fileID: 114206771870698692}
   m_Layer: 0
-  m_Name: LazerShotPF
+  m_Name: HomingMissilePF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4632082371109496
+--- !u!4 &4190457405607378
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1530445469665066}
+  m_GameObject: {fileID: 1856483353402846}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.46, y: 10.82, z: 0}
-  m_LocalScale: {x: 0.05, y: 0.5, z: 1}
+  m_LocalPosition: {x: 20.394861, y: 14.579652, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &50844473796836074
+--- !u!50 &50005180309349286
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1530445469665066}
+  m_GameObject: {fileID: 1856483353402846}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -63,43 +63,48 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!70 &70253137083797084
+--- !u!70 &70046027823498192
 CapsuleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1530445469665066}
+  m_GameObject: {fileID: 1856483353402846}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.1}
-  m_Size: {x: 2, y: 2.5}
+  m_Offset: {x: 0, y: -0.05}
+  m_Size: {x: 0.28668022, y: 1.3695784}
   m_Direction: 0
---- !u!114 &114958445573209148
+--- !u!114 &114206771870698692
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1530445469665066}
+  m_GameObject: {fileID: 1856483353402846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de2cbd0956394fe4289a12d5e2b4779a, type: 3}
+  m_Script: {fileID: 11500000, guid: 08cc70b514a608b4cb510d9d788ee3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 50
+  maxSpeed: 20
   inPlay: 1
   team: 0
-  damage: 10
-  timeToLiveSecs: 2
---- !u!212 &212064726747981216
+  maxHealth: 1000
+  health: 100
+  armor: 1
+  damage: 20
+  acceleration: 1
+  turnSpeed: 4
+  timeToLiveSecs: 5
+--- !u!212 &212402778611172752
 SpriteRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1530445469665066}
+  m_GameObject: {fileID: 1856483353402846}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -126,12 +131,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0661147511bbc5c4d9a253806c0488a0, type: 3}
-  m_Color: {r: 1, g: 1, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 88be359d1e26dd1489ceb5219bba2f7d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3, y: 3}
+  m_Size: {x: 0.95, y: 1.51}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

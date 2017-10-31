@@ -60,6 +60,15 @@ public class Player : DestructableObject
         {
             LazerSword sword = (LazerSword)level.createObject("LazerSwordPF");
             sword.pickup(this);
+
+            MultiShooter multiShot = (MultiShooter)level.createObject("MultiShotPF");
+            multiShot.pickup(this);
+
+            HomingMissiles homing = (HomingMissiles)level.createObject("HomingShooterPF");
+            homing.pickup(this);
+
+            HomingMines mines = (HomingMines)level.createObject("HomingMinesPF");
+            mines.pickup(this);
         }
     }
 

@@ -2623,9 +2623,9 @@ MonoBehaviour:
   loginBtn: {fileID: 1736404528}
   userName: {fileID: 1024704197}
   password: {fileID: 1786366039}
-  errorPanel: {fileID: 455649353}
-  canvasGroup: {fileID: 455649358}
-  errorText: {fileID: 1263492039}
+  errorPanel: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  errorText: {fileID: 0}
 --- !u!114 &1389554306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3267,9 +3267,9 @@ MonoBehaviour:
   loginBtn: {fileID: 1736404528}
   userName: {fileID: 1024704197}
   password: {fileID: 1786366039}
-  errorPanel: {fileID: 455649353}
-  canvasGroup: {fileID: 455649358}
-  errorText: {fileID: 709600379}
+  errorPanel: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  errorText: {fileID: 0}
 --- !u!1 &1766275211
 GameObject:
   m_ObjectHideFlags: 0
@@ -3597,9 +3597,9 @@ MonoBehaviour:
   loginBtn: {fileID: 1831386524}
   userName: {fileID: 1024704197}
   password: {fileID: 1786366039}
-  errorPanel: {fileID: 455649353}
-  canvasGroup: {fileID: 455649358}
-  errorText: {fileID: 709600379}
+  errorPanel: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  errorText: {fileID: 0}
 --- !u!1 &1907887449
 GameObject:
   m_ObjectHideFlags: 0

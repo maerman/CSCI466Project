@@ -59,7 +59,7 @@ public class HomingMine : DestructableObject
 
             target = closestObject<DestructableObject>(targetList, false);
 
-            if (distanceFrom(target) > targetFindProximity)
+            if (target != null && distanceFrom(target) > targetFindProximity)
             {
                 target = null;
             }

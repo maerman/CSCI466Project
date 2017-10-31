@@ -4,7 +4,7 @@ using System.Collections;
 public abstract class Item : NonInteractiveObject
 {
     private bool previousUse;
-    private bool itemUpdated;
+    private bool itemUpdated = true;
     protected Player holder;
     private int pickupDropTime = 100;
     private int pickupDropTimer;
@@ -34,7 +34,6 @@ public abstract class Item : NonInteractiveObject
             if (!itemUpdated || !holder.inPlay)
             {
                 drop();
-                holder = null;
             }
         }
         itemUpdated = false;
@@ -60,6 +59,10 @@ public abstract class Item : NonInteractiveObject
                 { 
                     return pickup(player, i);
                 }
+                else if (player.items[i] == this)
+                {
+                    break;
+                }
             }     
         }
         return false;
@@ -81,6 +84,7 @@ public abstract class Item : NonInteractiveObject
             player.items[itemSlot] = this;
             holder = player;
             pickupItem();
+            //transparancy = 0;
             //remove item from level
             pickupDropTimer = pickupDropTime;
             return true;
@@ -102,6 +106,7 @@ public abstract class Item : NonInteractiveObject
                 }
             }
             position = holder.position;
+            //transparancy = 1f;
             pickupDropTimer = pickupDropTime;
             holder = null;
         }

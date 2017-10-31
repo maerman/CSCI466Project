@@ -50,11 +50,14 @@ public class Rammer : DestructableObject
     {
         if (target == null || !target.inPlay)
         {
-            getNewTarget();
+            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
+            targetList[0] = level.destructables;
+            targetList[1] = level.players;
+
+            target = closestObject<DestructableObject>(targetList, false);
         }
         else if (ramTime > 0)
         {
-            Debug.Log(ramTime);
             ramTime--;
         }
         else
@@ -62,7 +65,7 @@ public class Rammer : DestructableObject
             Vector3 temp = intersectPosTime(target, maxSpeed);
             if (temp.z < 0)
             {
-                getNewTarget();
+                target = null;
             }
             else
             {
@@ -73,14 +76,5 @@ public class Rammer : DestructableObject
                 moveTowards(temp, maxSpeed);
             }
         }
-    }
-
-    protected void getNewTarget()
-    {
-        IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
-        targetList[0] = level.destructables;
-        targetList[1] = level.players;
-
-        target = closestObject<DestructableObject>(targetList, false);
     }
 }

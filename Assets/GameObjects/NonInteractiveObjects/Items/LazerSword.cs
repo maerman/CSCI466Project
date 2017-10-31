@@ -7,8 +7,10 @@ public class LazerSword : Item
     private int turnTimer;
     public float turnSpeed = 1;
 
-    public int length = 5;
-    public int damage = 5;
+    public int swordLength = 5;
+    public int swordDamge = 5;
+
+    public Vector2 offset = new Vector2(0, 1);
 
     private LazerBeam sword;
 
@@ -39,9 +41,10 @@ public class LazerSword : Item
             {
                 sword = (LazerBeam)level.createObject("LazerBeamPF");
                 sword.attachedTo = holder;
-                sword.damage = damage;
-                sword.length = length;
+                sword.damage = swordDamge;
+                sword.length = swordLength;
                 sword.color = color;
+                sword.attachPoint = offset;
             }
             turnTimer = (int)(timeToTurnSecs * level.updatesPerSec);
         }

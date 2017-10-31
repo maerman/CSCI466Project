@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MineLayer : DestructableObject
 {
-    LinkedList<HomingMine> mines = new LinkedList<HomingMine>();
+    private LinkedList<HomingMine> mines = new LinkedList<HomingMine>();
     public int maxMines = 10;
     public float mineLayWaitSecs = 4;
     private int updatesUntilNextMine = 0;

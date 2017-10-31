@@ -588,7 +588,7 @@ public abstract class Level : MonoBehaviour
             {
                 for (int j = 0; j < thePlayers[i].items.Length; j++)
                 {
-                    if (lvl.thePlayers[i].items[j] != null)
+                    if (thePlayers[i].items[j] != null)
                     {
                         thePlayers[i].items[j].pickup(lvl.thePlayers[i], j);
                         lvl.theNonInteractives.AddLast(lvl.thePlayers[i].items[j]);
@@ -625,7 +625,7 @@ public abstract class Level : MonoBehaviour
             {
                 for (int j = 0; j < thePlayers[i].items.Length; j++)
                 {
-                    if (lvl.thePlayers[i].items[j] != null)
+                    if (thePlayers[i].items[j] != null)
                     {
                         thePlayers[i].items[j].pickup(lvl.thePlayers[i], j);
                         lvl.theNonInteractives.AddLast(lvl.thePlayers[i].items[j]);
