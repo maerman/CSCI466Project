@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameOver : MonoBehaviour {
+public class VictoryScript : MonoBehaviour {
 	public GameObject canvas;
 	// Use this for initialization
 	void Start () {
@@ -12,10 +12,6 @@ public class GameOver : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-	}
-
-	public void Restart() {
-		Application.LoadLevel (Application.loadedLevel);
 	}
 
 	public void Exit() {
