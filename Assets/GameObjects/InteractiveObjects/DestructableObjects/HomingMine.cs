@@ -25,7 +25,7 @@ public class HomingMine : DestructableObject
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
     {
-        ScoreScript.ScoreValue += 10;
+        //ScoreScript.ScoreValue += 10;
     }
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
@@ -37,7 +37,7 @@ public class HomingMine : DestructableObject
     {
         other.damageThis(damage);
         destroyThis();
-        ScoreScript.ScoreValue += -50;
+        //ScoreScript.ScoreValue += -50;
     }
 
     protected override void startDestructableObject()

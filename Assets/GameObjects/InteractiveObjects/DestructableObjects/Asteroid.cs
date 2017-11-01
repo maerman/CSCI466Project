@@ -17,7 +17,7 @@ public class Asteroid :DestructableObject
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
     {
-        ScoreScript.ScoreValue += 10;
+        //ScoreScript.ScoreValue += 10;
     }
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
@@ -27,7 +27,7 @@ public class Asteroid :DestructableObject
 
     protected override void playerCollision(Player other, Collision2D collision)
     {
-        ScoreScript.ScoreValue += -20;
+        //ScoreScript.ScoreValue += -20;
     }
 
     protected override void startDestructableObject()
