@@ -343,6 +343,8 @@ public abstract class Level : MonoBehaviour
             return;
         }
 
+        Options.updateOptions();
+
         theDuration += UnityEngine.Time.fixedDeltaTime;
 
         if (GameStates.gameState == GameStates.GameState.Replay)
@@ -393,9 +395,6 @@ public abstract class Level : MonoBehaviour
                 GameStates.gameState = GameStates.GameState.LostGame;
             }
         }
-
-        if (Controls.get().players[0].PickupDrop)
-            Controls.get().staticLevel = !Controls.get().staticLevel;
 
         if (!Controls.get().staticLevel)
         {
