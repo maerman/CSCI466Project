@@ -431,12 +431,15 @@ public abstract class Level : MonoBehaviour
 
     protected virtual bool won()
     {
-        if (destructables.Count <= 0)
+        foreach (DestructableObject item in destructables)
         {
-            return true;
+            if (item.team <= 0)
+            {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
     protected virtual bool lost()

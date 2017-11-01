@@ -60,7 +60,7 @@ public class PlayerPanel : MonoBehaviour
                     items[i].sprite = player.items[i].sprite;
                     items[i].color = player.items[i].color;
                 }
-                    itemKeys[i].text = controls.itemKeys[i].ToString();
+                itemKeys[i].text = controls.itemKeys[i].toShortString();
             }
         }
     }
