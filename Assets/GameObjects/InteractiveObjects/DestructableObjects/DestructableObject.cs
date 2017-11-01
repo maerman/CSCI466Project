@@ -7,6 +7,8 @@ public abstract class DestructableObject : InteractiveObject
     public float health = 100;
     public float armor = 1;
 
+    private GameObject healthBar;
+
     public virtual void damageThis(float damage)
     {
         if (damage > armor)
@@ -23,6 +25,9 @@ public abstract class DestructableObject : InteractiveObject
         {
             level.addToGame(this);
         }
+
+        healthBar = Instantiate(Resources.Load("HealthBarPF"), position, Quaternion.Euler(0, 0, 0)) as GameObject;
+        healthBar.GetComponent<HealthBar>().owner = this;
     }
 
     protected abstract void updateDestructableObject();
@@ -54,6 +59,7 @@ public abstract class DestructableObject : InteractiveObject
                 level.removeFromGame(this);
             }
         }
+        Destroy(healthBar);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

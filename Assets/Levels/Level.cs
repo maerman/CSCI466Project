@@ -16,6 +16,9 @@ public abstract class Level : MonoBehaviour
 
     private System.IO.StreamReader updateFile;
 
+    public abstract int levelNumber { get; }
+    public abstract string levelName { get; }
+
     private Rect theGameBounds = new Rect(Vector2.zero, new Vector2(80, 60));
     public Rect gameBounds
     {
@@ -35,8 +38,6 @@ public abstract class Level : MonoBehaviour
             theGameBounds.size = value;
         }
     }
-
-    public abstract int levelNumber{ get; }
 
     private static Level theCurrentLevel;
     public static Level currentLevel
@@ -60,20 +61,12 @@ public abstract class Level : MonoBehaviour
         }
     }
 
-    private DateTime theStartTime;
-    public DateTime startTime
-    {
-        get
-        {
-            return theStartTime;
-        }
-    }
-
+    private float theDuration = 0;
     public TimeSpan duration
     {
         get
         {
-            return System.DateTime.Now - startTime;
+            return new TimeSpan(0, 0, (int)theDuration);
         }
     }
 
@@ -202,23 +195,6 @@ public abstract class Level : MonoBehaviour
         return current;
     }
 
-    /*
-    protected Text addTextToCanvas(string textToAdd, Vector2 position)
-    {
-        if (canvas == null)
-        {
-            canvas = FindObjectOfType<Canvas>();
-        }
-        GameObject obj = Instantiate(Resources.Load("TextPF"), Vector2.zero, Quaternion.identity) as GameObject;
-        //obj.transform.SetParent(canvas.transform);
-        Text text = obj.GetComponent<Text>();
-        text.text = textToAdd;
-        text.transform.position = position;
-        return text;
-    }
-    */
-
-
     private List<DestructableObject> removeDestructables = new List<DestructableObject>();
     private List<DestructableObject> addDestructables = new List<DestructableObject>();
     private LinkedList<DestructableObject> theDestructables = new LinkedList<DestructableObject>();
@@ -301,6 +277,11 @@ public abstract class Level : MonoBehaviour
 
     public void create(int numPlayers, int difficulty, int randomSeed)
     {
+        if (numPlayers > Controls.MAX_PLAYERS)
+        {
+            throw new Exception("Too manp players given to Level.create(): " + numPlayers.ToString() + " players given.");
+        }
+
         theCurrentLevel = this;
 
         background = GetComponent<SpriteRenderer>();
@@ -349,7 +330,6 @@ public abstract class Level : MonoBehaviour
         }
 
         GameStates.gameState = GameStates.GameState.Playing;
-        theStartTime = DateTime.Now;
     }
 
     protected abstract void updateLevel();
@@ -362,6 +342,8 @@ public abstract class Level : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+
+        theDuration += UnityEngine.Time.fixedDeltaTime;
 
         if (GameStates.gameState == GameStates.GameState.Replay)
         {
@@ -388,18 +370,15 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < players.Count; i++)
+        if (players.Count == 0)
         {
-            if (players[i] == null || !players[i].inPlay || players[i].health < 0)
+            if (GameStates.gameState == GameStates.GameState.Replay)
             {
-                if (GameStates.gameState == GameStates.GameState.Replay)
-                {
-                    GameStates.gameState = GameStates.GameState.LoadReplay;
-                }
-                else
-                {
-                    GameStates.gameState = GameStates.GameState.LostGame;
-                }
+                GameStates.gameState = GameStates.GameState.LoadReplay;
+            }
+            else
+            {
+                GameStates.gameState = GameStates.GameState.LostGame;
             }
         }
 
@@ -430,6 +409,24 @@ public abstract class Level : MonoBehaviour
         }
 
         updateObjectLists();
+    }
+
+    public virtual string progress
+    {
+        get
+        {
+            int remaining = 0;
+
+            foreach (DestructableObject item in destructables)
+            {
+                if (item.team <= 0)
+                {
+                    remaining++;
+                }
+            }
+
+            return remaining.ToString() + " enemies remaining.";
+        }
     }
 
     protected virtual bool won()

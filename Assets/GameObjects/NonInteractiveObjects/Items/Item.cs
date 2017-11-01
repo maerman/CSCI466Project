@@ -31,7 +31,7 @@ public abstract class Item : NonInteractiveObject
     {
         if (holder != null)
         {
-            if (!itemUpdated || !holder.inPlay)
+            if (!itemUpdated || !holder.destroyed)
             {
                 drop();
             }
@@ -119,7 +119,7 @@ public abstract class Item : NonInteractiveObject
         {
             throw new System.Exception("Item holder set to NULL in updateItem, call pickup() first");
         }
-        else if (!holder.inPlay)
+        else if (!holder.destroyed)
         {
             drop();
         }

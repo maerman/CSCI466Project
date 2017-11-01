@@ -47,7 +47,7 @@ public class LazerBeam : NonInteractiveObject
 
     protected override void updateNonInteractiveObject()
     {
-        if (attachedTo != null && attachedTo.inPlay)
+        if (attachedTo != null && attachedTo.destroyed)
         {
             float currentLenght = originalLength * scale.y;
             if (currentLenght < length)

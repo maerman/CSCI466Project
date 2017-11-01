@@ -56,7 +56,7 @@ public class HomingMissile : DestructableObject
             }
         }
 
-        if (target == null || !target.inPlay)
+        if (target == null || !target.destroyed)
         {
             IEnumerable<DestructableObject>[] list = new IEnumerable<DestructableObject>[2];
             list[0] = level.players;

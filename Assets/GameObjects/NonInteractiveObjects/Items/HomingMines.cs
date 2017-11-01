@@ -33,7 +33,7 @@ public class HomingMines : Item
         List<HomingMine> remove = new List<HomingMine>();
         foreach (HomingMine item in mines)
         {
-            if (item == null || !item.inPlay)
+            if (item == null || !item.destroyed)
             {
                 remove.Add(item);
             }

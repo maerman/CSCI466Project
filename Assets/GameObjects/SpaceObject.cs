@@ -7,7 +7,7 @@ public abstract class SpaceObject : MonoBehaviour
 {
     public float maxSpeed = 15;
 
-    public bool inPlay = true;
+    public bool destroyed = true;
 
     public sbyte team = 0;
 
@@ -58,6 +58,18 @@ public abstract class SpaceObject : MonoBehaviour
         set
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, value);
+        }
+    }
+
+    public Sprite sprite
+    {
+        get
+        {
+            return GetComponent<SpriteRenderer>().sprite;
+        }
+        set
+        {
+            GetComponent<SpriteRenderer>().sprite = value;
         }
     }
 
@@ -306,7 +318,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item.inPlay && item != this)
+            if (item.destroyed && item != this)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -353,7 +365,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.inPlay)
+            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.destroyed)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -401,7 +413,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item.inPlay && item != this)
+            if (item.destroyed && item != this)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -449,7 +461,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.inPlay)
+            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.destroyed)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -646,7 +658,7 @@ public abstract class SpaceObject : MonoBehaviour
 
     public void destroyThis()
     {
-        inPlay = false;
+        destroyed = false;
         Destroy(gameObject);
     }
 
@@ -703,6 +715,6 @@ public abstract class SpaceObject : MonoBehaviour
     protected void OnDestroy()
     {
         destroyObject();
-        inPlay = false;
+        destroyed = false;
     }
 }

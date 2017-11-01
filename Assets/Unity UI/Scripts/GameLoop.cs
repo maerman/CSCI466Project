@@ -9,7 +9,8 @@ public class GameLoop : MonoBehaviour {
     private GameState lastGameState;
 
     //initilzed in editor
-    public GameObject loginMenu; 
+    public GameObject loginMenu;
+    public GameObject ingameInterface;
     public GameObject pauseMenu;
     public GameObject levelCompleteMenu;
 
@@ -60,6 +61,7 @@ public class GameLoop : MonoBehaviour {
                 //mainMenu.SetActive(false);
                 //newGameMenu.SetActive(false);
                 //loadGameMenu.SetActive(false);
+                ingameInterface.SetActive(false);
                 levelCompleteMenu.SetActive(false);
                 pauseMenu.SetActive(false);
                 //lostGameMenu.SetActive(false);
@@ -86,6 +88,7 @@ public class GameLoop : MonoBehaviour {
                         //loadGameMenu.SetActive(true);
                         break;
                     case GameState.Playing:
+                        ingameInterface.SetActive(true);
                         Time.timeScale = 1;
                         foreach (PlayerControls item in Controls.get().players)
                         {
@@ -97,6 +100,7 @@ public class GameLoop : MonoBehaviour {
                         }
                         break;
                     case GameState.Paused:
+                        ingameInterface.SetActive(true);
                         pauseMenu.SetActive(true);
                         foreach (PlayerControls item in Controls.get().players)
                         {
@@ -120,6 +124,7 @@ public class GameLoop : MonoBehaviour {
                         //loadReplayMenu.SetActive(true);
                         break;
                     case GameState.Replay:
+                        ingameInterface.SetActive(true);
                         Time.timeScale = 1;
                         foreach (PlayerControls item in Controls.get().players)
                         {

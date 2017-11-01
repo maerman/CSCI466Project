@@ -15,6 +15,14 @@ public class Level1 : Level
         }
     }
 
+    public override string levelName
+    {
+        get
+        {
+            return "One";
+        }
+    }
+
     protected override void createLevel()
     {
         //levelSize = new Vector2(80, 60); //set the level size
@@ -77,6 +85,18 @@ public class Level1 : Level
         
     }
 
+    /*
+    public override string progress
+    {
+        get
+        {
+            //return a string representing the progress though the level here
+            //default is stating how many enemies are remaining in the level
+
+            return "";
+        }
+    }
+    */
     /*
     protected override bool won()
     {
