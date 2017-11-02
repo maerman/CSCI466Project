@@ -11,7 +11,6 @@ public abstract class Level : MonoBehaviour
     public const string AUTO_SAVE_EXTENTION = ".NEBULA";
     public const string SAVE_EXTENTION = ".nebula";
     public const string REPLAY_EXTENTION = ".replay";
-    public const int MAX_AUTOSAVES = 20;
     public const int TRIAL_LEVELS = 5;
 
     private System.IO.StreamReader updateFile;
@@ -376,7 +375,7 @@ public abstract class Level : MonoBehaviour
 
         foreach (Player item in players)
         {
-            if (item != null && item.enabled)
+            if (item != null && item.active)
             {
                 playersRemaining++;
             }
@@ -405,9 +404,6 @@ public abstract class Level : MonoBehaviour
                 GameStates.gameState = GameStates.GameState.LostGame;
             }
         }
-
-        if (Controls.get().players[0].PickupDrop)
-            Controls.get().staticLevel = !Controls.get().staticLevel;
         
         if (!Controls.get().staticLevel && playersRemaining > 0)
         {
@@ -418,7 +414,7 @@ public abstract class Level : MonoBehaviour
 
             foreach (Player item in Level.currentLevel.players)
             {
-                if (item != null && item.enabled)
+                if (item != null && item.active)
                 {
                     if (item.position.x > xUpperLimit)
                         xUpperLimit = item.position.x;
@@ -674,7 +670,7 @@ public abstract class Level : MonoBehaviour
 
         Array.Sort(filePaths);
 
-        for (int i = 0; i < filePaths.Length - MAX_AUTOSAVES - 1; i++)
+        for (int i = 0; i < filePaths.Length - Options.maxAutosaves - 1; i++)
         {
             System.IO.File.Delete(filePaths[i]);
         }

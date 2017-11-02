@@ -137,7 +137,7 @@ public abstract class SpaceObject : MonoBehaviour
         }
     }
 
-    public virtual bool enabled
+    public virtual bool active
     {
         get
         {
@@ -320,7 +320,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item != null && item.enabled && item != this)
+            if (item != null && item.active && item != this)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -370,7 +370,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item != null && ((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.enabled)
+            if (item != null && ((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.active)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -421,7 +421,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item != null && item.enabled && item != this)
+            if (item != null && item.active && item != this)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -472,7 +472,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item != null && ((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.enabled)
+            if (item != null && ((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.active)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -669,7 +669,7 @@ public abstract class SpaceObject : MonoBehaviour
 
     public void destroyThis()
     {
-        enabled = false;
+        active = false;
         if (GetType() == typeof(Player))
         {
             destroyObject();

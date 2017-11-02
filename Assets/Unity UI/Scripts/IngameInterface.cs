@@ -94,15 +94,16 @@ public class IngameInterface : MonoBehaviour
          
         if (Level.currentLevel != null)
         {
-            Color color;
             Level level = Level.currentLevel;
 
-            System.TimeSpan duration = level.duration;
-            durationText.text = duration.ToString(@"hh\:mm\:ss");
+            durationText.text = level.duration.ToString(@"hh\:mm\:ss");
+            durationText.applyAlpha(interfaceAlpha);
 
             numberName.text = level.levelNumber.ToString() + ":" + level.levelName;
+            numberName.applyAlpha(interfaceAlpha);
 
             progress.text = level.progress;
+            progress.applyAlpha(interfaceAlpha);
 
             string messageText = "";
             for (int i = messageList.Count - 1; i >= 0; i--)
@@ -123,10 +124,11 @@ public class IngameInterface : MonoBehaviour
                 }
             }
             messages.text = messageText;
+            messages.applyAlpha(interfaceAlpha);
 
             for (int i = 0; i < playerPanels.Count; i++)
             {
-                if (level.players.Length <= i || level.players[i] == null || !level.players[i].enabled)
+                if (level.players.Length <= i || level.players[i] == null || !level.players[i].active)
                 {
                     playerPanels[i].SetActive(false);
                 }
@@ -134,6 +136,7 @@ public class IngameInterface : MonoBehaviour
                 {
                     playerPanels[i].SetActive(true);
                     playerPanels[i].GetComponent<PlayerPanel>().player = level.players[i];
+                    playerPanels[i].applyAlphaToChildren(interfaceAlpha);
                 }
             }
         }      

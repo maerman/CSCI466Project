@@ -8,6 +8,7 @@ public class PlayerPanel : MonoBehaviour
     //Initilize in editor
     public Text healthText;
     public Image healthBar;
+    public Image backHealthBar;
     public List<Image> items;
     public List<Text> itemKeys;
 
@@ -41,6 +42,8 @@ public class PlayerPanel : MonoBehaviour
             Vector3 scale = healthBar.transform.localScale;
             scale.x = player.health / player.maxHealth;
             healthBar.transform.localScale = scale;
+            scale.x = 1 - scale.x;
+            backHealthBar.transform.localScale = scale;
 
             if (player.items.Length != items.Count || controls.itemKeys.Length != itemKeys.Count || itemKeys.Count != items.Count)
             {

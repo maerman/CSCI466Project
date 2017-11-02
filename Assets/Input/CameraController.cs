@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
 {
     public static float edgeBufferSize = 10;
 
-    public Camera camera;
+    public Camera gameCamera;
     public float zoomSpeed = 0.02f;
     public Rect defaultScreenSize = new Rect(Vector2.zero, new Vector2(40, 30));
     private float preferedSize;
@@ -13,14 +13,14 @@ public class CameraController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        camera = GetComponent<Camera>();
-        preferedSize = camera.orthographicSize;
+        gameCamera = GetComponent<Camera>();
+        preferedSize = gameCamera.orthographicSize;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float aspectRatio = camera.aspect;
+        float aspectRatio = gameCamera.aspect;
 
         Vector3 position = transform.position;
         Rect gameBounds;
@@ -36,7 +36,7 @@ public class CameraController : MonoBehaviour
 
             foreach (Player item in Level.currentLevel.players)
             {
-                if (item != null && item.enabled)
+                if (item != null && item.active)
                 {
                     if (item.position.x > xUpperLimit)
                         xUpperLimit = item.position.x;
@@ -107,7 +107,7 @@ public class CameraController : MonoBehaviour
         if (Level.currentLevel != null)
             Level.currentLevel.backgroundPosition = position;
 
-        camera.orthographicSize = size;
+        gameCamera.orthographicSize = size;
         transform.position = position;
         
     }

@@ -43,28 +43,28 @@ public class GameLoop : MonoBehaviour {
 
         while (gameState != GameState.Exit)
         {
-            if (gameState != lastGameState)
-            {
-                //set them all to false, then in the switch, set only the correct one to true
-                loginMenu.SetActive(false);
-                //createAccountMenu.SetActive(false);
-                //mainMenu.SetActive(false);
-                //newGameMenu.SetActive(false);
-                //loadGameMenu.SetActive(false);
-                ingameInterface.SetActive(false);
-                levelCompleteMenu.SetActive(false);
-                pauseMenu.SetActive(false);
-                gameOverMenu.SetActive(false);
-                //wonGameMenu.SetActive(false);
-                //loadReplayMenu.SetActive(false);
-                //optionsMenu.SetActive(false);
-                //aboutMenu.SetActive(false);
-                previousGameState = lastGameState;
-            }
-            lastGameState = gameState;
-
             try
             {
+                if (gameState != lastGameState)
+                {
+                    //set them all to false, then in the switch, set only the correct one to true
+                    loginMenu.SetActive(false);
+                    //createAccountMenu.SetActive(false);
+                    //mainMenu.SetActive(false);
+                    //newGameMenu.SetActive(false);
+                    //loadGameMenu.SetActive(false);
+                    ingameInterface.SetActive(false);
+                    levelCompleteMenu.SetActive(false);
+                    pauseMenu.SetActive(false);
+                    gameOverMenu.SetActive(false);
+                    //wonGameMenu.SetActive(false);
+                    //loadReplayMenu.SetActive(false);
+                    //optionsMenu.SetActive(false);
+                    //aboutMenu.SetActive(false);
+                    previousGameState = lastGameState;
+                }
+                lastGameState = gameState;
+
                 //set to 0, then set to 1 only when playing
                 Time.timeScale = 0;
 
@@ -144,9 +144,7 @@ public class GameLoop : MonoBehaviour {
                         break;
                     default:
                         throw new Exception("Invalid GameState: " + gameState.ToString());
-                        break;
                 }
-
             }
             catch (Exception e)
             {

@@ -203,14 +203,19 @@ public class Key
         toReturn = toReturn.Replace("Apple", "Apl");
         toReturn = toReturn.Replace("Windows", "Win");
 
+        if (toReturn.Equals("L"))
+            toReturn = "Left";
+        else if (toReturn.Equals("R"))
+            toReturn = "Right";
+
         if (XBoxControllerNames)
         {
             if (toReturn.Contains("Button"))
             {
-                toReturn = toReturn.Replace("Button0", "A");
-                toReturn = toReturn.Replace("Button1", "B");
-                toReturn = toReturn.Replace("Button2", "X");
-                toReturn = toReturn.Replace("Button3", "Y");
+                toReturn = toReturn.Replace("Button0", "A_Bt");
+                toReturn = toReturn.Replace("Button1", "B_Bt");
+                toReturn = toReturn.Replace("Button2", "X_Bt");
+                toReturn = toReturn.Replace("Button3", "Y_Bt");
                 toReturn = toReturn.Replace("Button4", "LBmp");
                 toReturn = toReturn.Replace("Button5", "RBmp");
                 toReturn = toReturn.Replace("Button6", "Back");

@@ -52,7 +52,7 @@ public class HomingMine : DestructableObject
             target = null;
         }
 
-        if (target == null || !target.enabled)
+        if (target == null || !target.active)
         {
             IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
             targetList[0] = level.destructables;
@@ -67,7 +67,7 @@ public class HomingMine : DestructableObject
         }
 
 
-        if (target == null || !target.enabled)
+        if (target == null || !target.active)
         {
             if (speed > acceleration)
             {

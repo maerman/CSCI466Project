@@ -4,6 +4,7 @@ using System.Collections;
 public class Asteroid :DestructableObject
 {
     public float minSize = 0.3f;
+    public float damageMultiply = 5f;
 
     protected override void destroyDestructableObject()
     {
@@ -12,7 +13,7 @@ public class Asteroid :DestructableObject
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
-
+        other.damageThis(damageMultiply * mass);
     }
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
@@ -27,6 +28,7 @@ public class Asteroid :DestructableObject
 
     protected override void playerCollision(Player other, Collision2D collision)
     {
+        other.damageThis(damageMultiply * mass);
         //ScoreScript.ScoreValue += -20;
     }
 

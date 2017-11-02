@@ -1,7 +1,67 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public static class VectorExtention
+public static class GameObjectExtentions
+{
+    public static void applyAlpha(this Transform applyTo, float alpha)
+    {
+        SpriteRenderer sprite = applyTo.GetComponent<SpriteRenderer>();
+        if (sprite != null)
+        {
+            Color color = sprite.color;
+            color.a = alpha;
+            sprite.color = color;
+        }
+
+        Image image = applyTo.GetComponent<Image>();
+        if (image != null)
+        {
+            Color color = image.color;
+            color.a = alpha;
+            image.color = color;
+        }
+
+        Text text = applyTo.GetComponent<Text>();
+        if (text != null)
+        {
+            Color color = text.color;
+            color.a = alpha;
+            text.color = color;
+        }
+    }
+
+    public static void applyAlpha(this Text applyTo, float alpha)
+    { 
+            Color color = applyTo.color;
+            color.a = alpha;
+            applyTo.color = color;
+    }
+
+    public static void applyAlpha(this SpriteRenderer applyTo, float alpha)
+    {
+        Color color = applyTo.color;
+        color.a = alpha;
+        applyTo.color = color;
+    }
+
+    public static void applyAlpha(this Image applyTo, float alpha)
+    {
+        Color color = applyTo.color;
+        color.a = alpha;
+        applyTo.color = color;
+    }
+
+    public static void applyAlphaToChildren(this GameObject applyTo, float alpha)
+    {
+        foreach (Transform item in applyTo.transform)
+        {
+            item.applyAlpha(alpha);
+        }
+    }
+}
+
+public static class VectorExtentions
 {
     public static Vector2 mod(this Vector2 dividend, Vector2 divisor)
     {

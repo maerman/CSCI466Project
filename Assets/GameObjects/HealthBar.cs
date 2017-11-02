@@ -3,8 +3,7 @@ using System.Collections;
 
 public class HealthBar : MonoBehaviour
 {
-    public static float frontAlpha = 0.7f;
-    public static float backAlpha = 0.5f;
+    public static float healthBarAlpha = 0.7f;
 
     public DestructableObject owner;
 
@@ -26,7 +25,7 @@ public class HealthBar : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        else if (!owner.enabled || !owner.gameObject.activeInHierarchy)
+        else if (!owner.active || !owner.gameObject.activeInHierarchy)
         {
             Vector3 scale = transform.localScale;
             scale.x = 0;
@@ -39,11 +38,11 @@ public class HealthBar : MonoBehaviour
             healthFront.transform.localScale = scale;
 
             Color color = frontSpriteRenderer.color;
-            color.a = frontAlpha;
+            color.a = healthBarAlpha;
             frontSpriteRenderer.color = color;
 
             color = backSpriteRenderer.color;
-            color.a = backAlpha;
+            color.a = healthBarAlpha / 2.0f;
             backSpriteRenderer.color = color;
 
             Vector3 pos = owner.position;

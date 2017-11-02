@@ -32,7 +32,7 @@ public abstract class Item : NonInteractiveObject
     {
         if (holder != null)
         {
-            if (!itemUpdated || !holder.enabled)
+            if (!itemUpdated || !holder.active)
             {
                 drop();
             }
@@ -86,7 +86,7 @@ public abstract class Item : NonInteractiveObject
             player.items[itemSlot] = this;
             holder = player;
             pickupItem();
-            enabled = false;
+            active = false;
             pickupDropTimer = pickupDropTime;
             return true;
         }
@@ -107,7 +107,7 @@ public abstract class Item : NonInteractiveObject
                 }
             }
             position = holder.position;
-            enabled = true;
+            active = true;
             pickupDropTimer = pickupDropTime;
             holder = null;
         }
@@ -120,7 +120,7 @@ public abstract class Item : NonInteractiveObject
         {
             throw new System.Exception("Item holder set to NULL in updateItem, call pickup() first");
         }
-        else if (!holder.enabled)
+        else if (!holder.active)
         {
             drop();
         }

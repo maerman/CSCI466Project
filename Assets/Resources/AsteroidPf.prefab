@@ -108,12 +108,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 15
-  inPlay: 1
-  maxHealth: 1000
+  team: 0
   health: 50
-  armor: 1
-  enemy: 1
+  armor: 2
   minSize: 0.1
+  damageMultiply: 5
 --- !u!212 &212176013517283160
 SpriteRenderer:
   m_ObjectHideFlags: 1

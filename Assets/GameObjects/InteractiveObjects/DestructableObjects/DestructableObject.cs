@@ -53,7 +53,7 @@ public abstract class DestructableObject : InteractiveObject
         {
             if (this.GetType() == typeof(Player))
             {
-                enabled = false;
+                active = false;
             }
             else
             {
@@ -62,7 +62,7 @@ public abstract class DestructableObject : InteractiveObject
         }       
     }
 
-    public override bool enabled
+    public override bool active
     {
         get
         {

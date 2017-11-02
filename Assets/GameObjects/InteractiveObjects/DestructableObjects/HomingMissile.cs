@@ -56,7 +56,7 @@ public class HomingMissile : DestructableObject
             }
         }
 
-        if (target == null || !target.enabled)
+        if (target == null || !target.active)
         {
             IEnumerable<DestructableObject>[] list = new IEnumerable<DestructableObject>[2];
             list[0] = level.players;
@@ -69,7 +69,6 @@ public class HomingMissile : DestructableObject
         {
             turnTowards(target);
             //rotateTowards(target); //better to use this but it is currently broken
-            Debug.Log(target);
         }
         moveForward(acceleration);
     }
