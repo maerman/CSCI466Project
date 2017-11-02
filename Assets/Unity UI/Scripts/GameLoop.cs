@@ -13,8 +13,7 @@ public class GameLoop : MonoBehaviour {
     public GameObject ingameInterface;
     public GameObject pauseMenu;
     public GameObject levelCompleteMenu;
-
-    bool inGame = true; 
+    public GameObject gameOverMenu;
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
     {
@@ -55,7 +54,7 @@ public class GameLoop : MonoBehaviour {
                 ingameInterface.SetActive(false);
                 levelCompleteMenu.SetActive(false);
                 pauseMenu.SetActive(false);
-                //lostGameMenu.SetActive(false);
+                gameOverMenu.SetActive(false);
                 //wonGameMenu.SetActive(false);
                 //loadReplayMenu.SetActive(false);
                 //optionsMenu.SetActive(false);
@@ -114,7 +113,7 @@ public class GameLoop : MonoBehaviour {
                         levelCompleteMenu.SetActive(true);
                         break;
                     case GameState.LostGame:
-                        //lostGameMenu.SetActive(true);
+                        gameOverMenu.SetActive(true);
                         break;
                     case GameState.WonGame:
                         //wonGameMenu.SetActive(true);

@@ -124,7 +124,7 @@ public class IngameInterface : MonoBehaviour
 
             for (int i = 0; i < playerPanels.Count; i++)
             {
-                if (level.players.Count <= i || level.players[i] == null)
+                if (level.players.Length <= i || level.players[i] == null || !level.players[i].enabled)
                 {
                     playerPanels[i].SetActive(false);
                 }

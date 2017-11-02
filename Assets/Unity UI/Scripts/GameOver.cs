@@ -14,11 +14,18 @@ public class GameOver : MonoBehaviour {
 		
 	}
 
-	public void Restart() {
-		Application.LoadLevel (Application.loadedLevel);
+	public void Restart()
+    {
+		if (Level.currentLevel == null)
+        {
+            throw new System.Exception("Can't restart level, current level is set to null");
+        }
+        Level.currentLevel.restartLevel();
+        GameStates.gameState = GameStates.GameState.Playing;
 	}
 
-	public void Exit() {
-		Application.LoadLevel (1);
+	public void Exit()
+    {
+        GameStates.gameState = GameStates.GameState.Main;
 	}
 }

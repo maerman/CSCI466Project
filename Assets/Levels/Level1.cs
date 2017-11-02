@@ -29,9 +29,9 @@ public class Level1 : Level
 
         createObject("SpaceDustPF", gameBounds.center, 0);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 1; i++)
         {
-            //Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), new Vector2(0, 0), random.Next(100));
         }
 
         for (int i = 0; i < 1; i++)
@@ -66,7 +66,7 @@ public class Level1 : Level
 
         for (int i = 0; i < 2; i++)
         {
-            RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
+            //RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
         }
 
         for (int i = 0; i < 1; i++)

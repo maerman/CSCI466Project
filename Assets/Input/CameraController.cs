@@ -3,9 +3,9 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
+    public static float edgeBufferSize = 10;
+
     public Camera camera;
-    public float edgeBufferSize = 2;
-    public float minSize = 5;
     public float zoomSpeed = 0.02f;
     public Rect defaultScreenSize = new Rect(Vector2.zero, new Vector2(40, 30));
     private float preferedSize;
@@ -34,13 +34,10 @@ public class CameraController : MonoBehaviour
         {
             gameBounds = Level.currentLevel.gameBounds;
 
-            if (Level.currentLevel.players.Count > 0)
+            foreach (Player item in Level.currentLevel.players)
             {
-                Vector2 total = Vector2.zero;
-                foreach (Player item in Level.currentLevel.players)
+                if (item != null && item.enabled)
                 {
-                    total += item.position;
-
                     if (item.position.x > xUpperLimit)
                         xUpperLimit = item.position.x;
                     if (item.position.x < xLowerLimit)
@@ -50,20 +47,14 @@ public class CameraController : MonoBehaviour
                     if (item.position.y < yLowerLimit)
                         yLowerLimit = item.position.y;
                 }
-                position.x = total.x / Level.currentLevel.players.Count;
-                position.y = total.y / Level.currentLevel.players.Count;
             }
 
             foreach (PlayerControls item in Controls.get().players)
             {
                 if (item.zoomOut)
-                {
                     preferedSize *= 1 + zoomSpeed;
-                }
                 if (item.zoomIn)
-                {
                     preferedSize /= 1 + zoomSpeed;
-                }
             }
         }
         else
@@ -71,12 +62,12 @@ public class CameraController : MonoBehaviour
             gameBounds = defaultScreenSize;
         }
 
-        if (2 * preferedSize > gameBounds.height)
+        if (2f * preferedSize > gameBounds.height)
             preferedSize = gameBounds.height / 2f;
-        else if (aspectRatio * 2 * preferedSize > gameBounds.width)
-            preferedSize = gameBounds.width / (aspectRatio * 2);
-        else if (preferedSize < minSize)
-            preferedSize = minSize;
+        else if (aspectRatio * 2f * preferedSize > gameBounds.width)
+            preferedSize = gameBounds.width / (aspectRatio * 2f);
+        else if (preferedSize < edgeBufferSize)
+            preferedSize = edgeBufferSize;
 
         size = preferedSize;
 
@@ -94,8 +85,12 @@ public class CameraController : MonoBehaviour
         if (yLowerLimit < gameBounds.yMin)
             yLowerLimit = gameBounds.yMin;
 
-        if (xUpperLimit - xLowerLimit > size * 2 * aspectRatio)
-            size = (xUpperLimit - xLowerLimit) / (2 * aspectRatio);
+        position.x = (xUpperLimit - xLowerLimit) / 2.0f + xLowerLimit;
+        position.y = (yUpperLimit - yLowerLimit) / 2.0f + yLowerLimit;
+
+
+        if (xUpperLimit - xLowerLimit > size * 2f * aspectRatio)
+            size = (xUpperLimit - xLowerLimit) / (2f * aspectRatio);
         if (yUpperLimit - yLowerLimit > size * 2f)
             size = (yUpperLimit - yLowerLimit) / 2f;
 
@@ -110,9 +105,7 @@ public class CameraController : MonoBehaviour
 
 
         if (Level.currentLevel != null)
-        {
             Level.currentLevel.backgroundPosition = position;
-        }
 
         camera.orthographicSize = size;
         transform.position = position;
