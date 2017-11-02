@@ -13,8 +13,7 @@ public class GameLoop : MonoBehaviour {
     public GameObject ingameInterface;
     public GameObject pauseMenu;
     public GameObject levelCompleteMenu;
-
-    bool inGame = true; 
+    public GameObject gameOverMenu;
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
     {
@@ -40,35 +39,34 @@ public class GameLoop : MonoBehaviour {
     {
         gameState = GameState.LoggingIn; //initial game state
         previousGameState = GameState.LoggingIn;
-        lastGameState = GameState.LoggingIn;
+        lastGameState = GameState.Exit;
 
         while (gameState != GameState.Exit)
         {
-            if (gameState != lastGameState)
-            {
-                previousGameState = lastGameState;
-            }
-            lastGameState = gameState;
-
             try
             {
+                if (gameState != lastGameState)
+                {
+                    //set them all to false, then in the switch, set only the correct one to true
+                    loginMenu.SetActive(false);
+                    //createAccountMenu.SetActive(false);
+                    //mainMenu.SetActive(false);
+                    //newGameMenu.SetActive(false);
+                    //loadGameMenu.SetActive(false);
+                    ingameInterface.SetActive(false);
+                    levelCompleteMenu.SetActive(false);
+                    pauseMenu.SetActive(false);
+                    gameOverMenu.SetActive(false);
+                    //wonGameMenu.SetActive(false);
+                    //loadReplayMenu.SetActive(false);
+                    //optionsMenu.SetActive(false);
+                    //aboutMenu.SetActive(false);
+                    previousGameState = lastGameState;
+                }
+                lastGameState = gameState;
+
                 //set to 0, then set to 1 only when playing
                 Time.timeScale = 0;
-
-                //set them all to false, then in the switch, set only the correct one to true
-                loginMenu.SetActive(false);
-                //createAccountMenu.SetActive(false);
-                //mainMenu.SetActive(false);
-                //newGameMenu.SetActive(false);
-                //loadGameMenu.SetActive(false);
-                ingameInterface.SetActive(false);
-                levelCompleteMenu.SetActive(false);
-                pauseMenu.SetActive(false);
-                //lostGameMenu.SetActive(false);
-                //wonGameMenu.SetActive(false);
-                //loadReplayMenu.SetActive(false);
-                //optionsMenu.SetActive(false);
-                //aboutMenu.SetActive(false);
 
                 switch (gameState)
                 {
@@ -115,7 +113,7 @@ public class GameLoop : MonoBehaviour {
                         levelCompleteMenu.SetActive(true);
                         break;
                     case GameState.LostGame:
-                        //lostGameMenu.SetActive(true);
+                        gameOverMenu.SetActive(true);
                         break;
                     case GameState.WonGame:
                         //wonGameMenu.SetActive(true);
@@ -146,9 +144,7 @@ public class GameLoop : MonoBehaviour {
                         break;
                     default:
                         throw new Exception("Invalid GameState: " + gameState.ToString());
-                        break;
                 }
-
             }
             catch (Exception e)
             {

@@ -55,21 +55,6 @@ public class Player : DestructableObject
                 color = Color.grey;
                 break;
         }
-
-        if (level.levelNumber == 1)
-        {
-            LazerSword sword = (LazerSword)level.createObject("LazerSwordPF");
-            sword.pickup(this);
-
-            MultiShooter multiShot = (MultiShooter)level.createObject("MultiShotPF");
-            multiShot.pickup(this);
-
-            HomingMissiles homing = (HomingMissiles)level.createObject("HomingShooterPF");
-            homing.pickup(this);
-
-            HomingMines mines = (HomingMines)level.createObject("HomingMinesPF");
-            mines.pickup(this);
-        }
     }
 
     protected override void updateDestructableObject()
@@ -176,6 +161,8 @@ public class Player : DestructableObject
 
     public Player clone()
     {
-        return (Player)this.MemberwiseClone();
+        Player clone = (Player)this.MemberwiseClone();
+        clone.theItems = new Item[PlayerInput.NUM_ITEMS];
+        return clone;
     }
 }

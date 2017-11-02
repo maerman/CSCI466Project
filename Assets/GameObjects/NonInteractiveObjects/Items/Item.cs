@@ -13,7 +13,8 @@ public abstract class Item : NonInteractiveObject
 
     protected override void destroyNonInteractiveObject()
     {
-        drop();
+        dropItem();
+        holder = null;
     }
 
     protected override void startNonInteractiveObject()
@@ -31,7 +32,7 @@ public abstract class Item : NonInteractiveObject
     {
         if (holder != null)
         {
-            if (!itemUpdated || !holder.destroyed)
+            if (!itemUpdated || !holder.active)
             {
                 drop();
             }
@@ -85,7 +86,7 @@ public abstract class Item : NonInteractiveObject
             player.items[itemSlot] = this;
             holder = player;
             pickupItem();
-            enabled = false;
+            active = false;
             pickupDropTimer = pickupDropTime;
             return true;
         }
@@ -106,7 +107,7 @@ public abstract class Item : NonInteractiveObject
                 }
             }
             position = holder.position;
-            enabled = true;
+            active = true;
             pickupDropTimer = pickupDropTime;
             holder = null;
         }
@@ -119,7 +120,7 @@ public abstract class Item : NonInteractiveObject
         {
             throw new System.Exception("Item holder set to NULL in updateItem, call pickup() first");
         }
-        else if (!holder.destroyed)
+        else if (!holder.active)
         {
             drop();
         }

@@ -50,13 +50,14 @@ public class Message
 
 public class IngameInterface : MonoBehaviour
 {
+    public static float interfaceAlpha = 0.7f;
+
     //Initilzed in editor
     public Text durationText;
     public Text numberName;
     public Text progress;
     public Text messages;
     public List<GameObject> playerPanels;
-
 
     private static IngameInterface current;
     private List<Message> messageList = new List<Message>();
@@ -95,12 +96,14 @@ public class IngameInterface : MonoBehaviour
         {
             Level level = Level.currentLevel;
 
-            System.TimeSpan duration = level.duration;
-            durationText.text = duration.ToString(@"hh\:mm\:ss");
+            durationText.text = level.duration.ToString(@"hh\:mm\:ss");
+            durationText.applyAlpha(interfaceAlpha);
 
             numberName.text = level.levelNumber.ToString() + ":" + level.levelName;
+            numberName.applyAlpha(interfaceAlpha);
 
             progress.text = level.progress;
+            progress.applyAlpha(interfaceAlpha);
 
             string messageText = "";
             for (int i = messageList.Count - 1; i >= 0; i--)
@@ -121,10 +124,11 @@ public class IngameInterface : MonoBehaviour
                 }
             }
             messages.text = messageText;
+            messages.applyAlpha(interfaceAlpha);
 
             for (int i = 0; i < playerPanels.Count; i++)
             {
-                if (level.players.Count <= i || level.players[i] == null)
+                if (level.players.Length <= i || level.players[i] == null || !level.players[i].active)
                 {
                     playerPanels[i].SetActive(false);
                 }
@@ -132,6 +136,7 @@ public class IngameInterface : MonoBehaviour
                 {
                     playerPanels[i].SetActive(true);
                     playerPanels[i].GetComponent<PlayerPanel>().player = level.players[i];
+                    playerPanels[i].applyAlphaToChildren(interfaceAlpha);
                 }
             }
         }      

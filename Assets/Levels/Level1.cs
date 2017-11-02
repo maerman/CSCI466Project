@@ -29,9 +29,9 @@ public class Level1 : Level
 
         createObject("SpaceDustPF", gameBounds.center, 0);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 8; i++)
         {
-            //Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(20), random.Next(100));
         }
 
         for (int i = 0; i < 1; i++)
@@ -44,9 +44,9 @@ public class Level1 : Level
             //Blob current = (Blob)createObject("BlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 2; i++)
         {
-            //GravityWell current = (GravityWell)createObject("GravityWellPF", getRandomPosition(), getRandomAngle());
+            GravityWell current = (GravityWell)createObject("GravityWellPF", getRandomPosition(), getRandomAngle());
         }
 
         for (int i = 0; i < 1; i++)
@@ -66,7 +66,7 @@ public class Level1 : Level
 
         for (int i = 0; i < 2; i++)
         {
-            RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
+            //RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
         }
 
         for (int i = 0; i < 1; i++)
@@ -74,10 +74,15 @@ public class Level1 : Level
             //MineLayer current = (MineLayer)createObject("MineLayerPF", getRandomPosition(), getRandomAngle());
         }
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
-            //RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
+            RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
         }
+
+            LazerSword sword = (LazerSword)createObject("LazerSwordPF");
+            MultiShooter multiShot = (MultiShooter)createObject("MultiShotPF");
+            HomingMissiles homing = (HomingMissiles)createObject("HomingShooterPF");
+            HomingMines mines = (HomingMines)createObject("HomingMinesPF");
     }
 
     protected override void updateLevel()

@@ -7,8 +7,6 @@ public abstract class SpaceObject : MonoBehaviour
 {
     public float maxSpeed = 15;
 
-    public bool destroyed = true;
-
     public sbyte team = 0;
 
     public abstract Vector2 position { get; set; }
@@ -139,7 +137,7 @@ public abstract class SpaceObject : MonoBehaviour
         }
     }
 
-    public bool enabled
+    public virtual bool active
     {
         get
         {
@@ -294,17 +292,21 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (IEnumerable<T> item in objectLists)
         {
-            T temp = closestObject<T>(item);
+            if (item != null)
+            {
+                T temp = closestObject<T>(item);
 
-            if (temp != null )
-            { 
-                float tempDistance = distanceFromSquared(temp);
-
-                if (tempDistance < closestDistance)
+                if (temp != null)
                 {
-                    closest = temp;
+                    float tempDistance = distanceFromSquared(temp);
 
-                } closestDistance = tempDistance;
+                    if (tempDistance < closestDistance)
+                    {
+                        closest = temp;
+
+                    }
+                    closestDistance = tempDistance;
+                }
             }
         }
 
@@ -318,7 +320,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item.destroyed && item != this)
+            if (item != null && item.active && item != this)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -340,18 +342,21 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (IEnumerable<T> item in objectLists)
         {
-            T temp = closestObject<T>(item, sameTeam);
-
-            if (temp != null)
+            if (item != null)
             {
-                float tempDistance = distanceFromSquared(temp);
+                T temp = closestObject<T>(item, sameTeam);
 
-                if (tempDistance < closestDistance)
+                if (temp != null)
                 {
-                    closest = temp;
+                    float tempDistance = distanceFromSquared(temp);
 
+                    if (tempDistance < closestDistance)
+                    {
+                        closest = temp;
+
+                    }
+                    closestDistance = tempDistance;
                 }
-                closestDistance = tempDistance;
             }
         }
 
@@ -365,7 +370,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.destroyed)
+            if (item != null && ((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.active)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -386,18 +391,21 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (IEnumerable<T> item in objectLists)
         {
-            T temp = closestObjectInDirection<T>(item, direction);
-
-            if (temp != null)
+            if (item != null)
             {
-                float tempDistance = distanceFromSquared(temp);
+                T temp = closestObjectInDirection<T>(item, direction);
 
-                if (tempDistance < closestDistance)
+                if (temp != null)
                 {
-                    closest = temp;
+                    float tempDistance = distanceFromSquared(temp);
 
+                    if (tempDistance < closestDistance)
+                    {
+                        closest = temp;
+
+                    }
+                    closestDistance = tempDistance;
                 }
-                closestDistance = tempDistance;
             }
         }
 
@@ -413,7 +421,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (item.destroyed && item != this)
+            if (item != null && item.active && item != this)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -435,18 +443,21 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (IEnumerable<T> item in objectLists)
         {
-            T temp = closestObjectInDirection<T>(item, direction, sameTeam);
-
-            if (temp != null)
+            if (item != null)
             {
-                float tempDistance = distanceFromSquared(temp);
+                T temp = closestObjectInDirection<T>(item, direction, sameTeam);
 
-                if (tempDistance < closestDistance)
+                if (temp != null)
                 {
-                    closest = temp;
+                    float tempDistance = distanceFromSquared(temp);
 
+                    if (tempDistance < closestDistance)
+                    {
+                        closest = temp;
+
+                    }
+                    closestDistance = tempDistance;
                 }
-                closestDistance = tempDistance;
             }
         }
 
@@ -461,7 +472,7 @@ public abstract class SpaceObject : MonoBehaviour
 
         foreach (T item in objectList)
         {
-            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.destroyed)
+            if (item != null && ((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.active)
             {
                 float distance = this.distanceFromSquared(item);
 
@@ -658,8 +669,15 @@ public abstract class SpaceObject : MonoBehaviour
 
     public void destroyThis()
     {
-        destroyed = false;
-        Destroy(gameObject);
+        active = false;
+        if (GetType() == typeof(Player))
+        {
+            destroyObject();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     protected Level level
@@ -715,6 +733,5 @@ public abstract class SpaceObject : MonoBehaviour
     protected void OnDestroy()
     {
         destroyObject();
-        destroyed = false;
     }
 }

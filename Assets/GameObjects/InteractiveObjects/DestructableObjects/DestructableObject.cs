@@ -3,11 +3,23 @@ using System.Collections;
 
 public abstract class DestructableObject : InteractiveObject
 {
-    public float maxHealth = 1000;
+    private float theMaxHealth;
     public float health = 100;
     public float armor = 1;
 
     private GameObject healthBar;
+
+    public float maxHealth
+    {
+        get
+        {
+            return theMaxHealth;
+        }
+        set
+        {
+            maxHealth = value;
+        }
+    }
 
     public virtual void damageThis(float damage)
     {
@@ -26,7 +38,9 @@ public abstract class DestructableObject : InteractiveObject
             level.addToGame(this);
         }
 
-        healthBar = Instantiate(Resources.Load("HealthBarPF"), position, Quaternion.Euler(0, 0, 0)) as GameObject;
+        theMaxHealth = health;
+
+        healthBar = Instantiate(Resources.Load("HealthBarPF"), new Vector3(position.x, position.y, -5), Quaternion.Euler(0, 0, 0)) as GameObject;
         healthBar.GetComponent<HealthBar>().owner = this;
     }
 
@@ -37,29 +51,42 @@ public abstract class DestructableObject : InteractiveObject
 
         if (health <= 0)
         {
-            destroyThis();
+            if (this.GetType() == typeof(Player))
+            {
+                active = false;
+            }
+            else
+            {
+                destroyThis();
+            }
         }       
+    }
+
+    public override bool active
+    {
+        get
+        {
+            return gameObject.activeSelf;
+        }
+        set
+        {
+            gameObject.SetActive(value);
+            healthBar.SetActive(value);
+        }
     }
 
     protected abstract void destroyDestructableObject();
     protected override void destroyInteractiveObject()
     {
         destroyDestructableObject();
-        if (GetType() == typeof(Player))
-        {
-            if (level != null && level.players != null)
-            {
-                level.players.Remove((Player)this);
-            }
-        }
-        else
+        if (GetType() != typeof(Player))
         {
             if (level != null && level.destructables != null)
             {
                 level.removeFromGame(this);
             }
+            Destroy(healthBar);
         }
-        Destroy(healthBar);
     }
 
     void OnCollisionEnter2D(Collision2D collision)

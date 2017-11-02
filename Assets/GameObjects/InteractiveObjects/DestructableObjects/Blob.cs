@@ -26,6 +26,8 @@ public class Blob : DestructableObject
         angularVelocity = angularVelocity * portionThis + other.angularVelocity * portionOther;
         velocity = velocity * portionThis + other.velocity * portionOther;
 
+        maxHealth = health;
+
         other.destroyThis();
     }
 

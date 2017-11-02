@@ -48,7 +48,7 @@ public class Rammer : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (target == null || !target.destroyed)
+        if (target == null || !target.active)
         {
             IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
             targetList[0] = level.destructables;
