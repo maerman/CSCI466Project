@@ -40,21 +40,12 @@ public class GameLoop : MonoBehaviour {
     {
         gameState = GameState.LoggingIn; //initial game state
         previousGameState = GameState.LoggingIn;
-        lastGameState = GameState.LoggingIn;
+        lastGameState = GameState.Exit;
 
         while (gameState != GameState.Exit)
         {
             if (gameState != lastGameState)
             {
-                previousGameState = lastGameState;
-            }
-            lastGameState = gameState;
-
-            try
-            {
-                //set to 0, then set to 1 only when playing
-                Time.timeScale = 0;
-
                 //set them all to false, then in the switch, set only the correct one to true
                 loginMenu.SetActive(false);
                 //createAccountMenu.SetActive(false);
@@ -69,6 +60,14 @@ public class GameLoop : MonoBehaviour {
                 //loadReplayMenu.SetActive(false);
                 //optionsMenu.SetActive(false);
                 //aboutMenu.SetActive(false);
+                previousGameState = lastGameState;
+            }
+            lastGameState = gameState;
+
+            try
+            {
+                //set to 0, then set to 1 only when playing
+                Time.timeScale = 0;
 
                 switch (gameState)
                 {
