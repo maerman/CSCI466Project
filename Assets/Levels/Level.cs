@@ -258,9 +258,9 @@ public abstract class Level : MonoBehaviour
         addNonInteractives.Add(add);
     }
 
-    private List<Player> initialPlayers;
-    private List<Player> thePlayers = new List<Player>(Controls.MAX_PLAYERS);
-	public List<Player> players
+    private Player[] initialPlayers;
+    private Player[] thePlayers;
+	public Player[] players
 	{
 		get 
 		{
@@ -289,8 +289,8 @@ public abstract class Level : MonoBehaviour
         this.randomSeed = randomSeed;
         theRandom = new System.Random(randomSeed);
 
-        thePlayers = new List<Player>(numPlayers);
-        initialPlayers = new List<Player>(numPlayers);
+        thePlayers = new Player[numPlayers];
+        initialPlayers = new Player[numPlayers];
 
         for (int i = 0; i < numPlayers; i++)
         {
@@ -304,8 +304,8 @@ public abstract class Level : MonoBehaviour
             Player current = obj.GetComponent<Player>();
 
             current.playerNum = i;
-            thePlayers.Add(current);
-            initialPlayers.Add(current.clone());
+            thePlayers[i] = current;
+            initialPlayers[i] = current.clone();
         }
 
         foreach (PlayerControls item in Controls.get().players)
@@ -372,7 +372,17 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        if (players.Count == 0)
+        int playersRemaining = 0;
+
+        foreach (Player item in players)
+        {
+            if (item != null && item.enabled)
+            {
+                playersRemaining++;
+            }
+        }
+
+        if (playersRemaining == 0)
         {
             if (GameStates.gameState == GameStates.GameState.Replay)
             {
@@ -396,15 +406,31 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        if (!Controls.get().staticLevel)
+        if (Controls.get().players[0].PickupDrop)
+            Controls.get().staticLevel = !Controls.get().staticLevel;
+        
+        if (!Controls.get().staticLevel && playersRemaining > 0)
         {
-            Vector2 adveragePos = Vector2.zero;
-            foreach (Player item in players)
+            float xUpperLimit = theGameBounds.xMin;
+            float xLowerLimit = theGameBounds.xMax;
+            float yUpperLimit = theGameBounds.yMin;
+            float yLowerLimit = theGameBounds.yMax;
+
+            foreach (Player item in Level.currentLevel.players)
             {
-                adveragePos += item.position;
+                if (item != null && item.enabled)
+                {
+                    if (item.position.x > xUpperLimit)
+                        xUpperLimit = item.position.x;
+                    if (item.position.x < xLowerLimit)
+                        xLowerLimit = item.position.x;
+                    if (item.position.y > yUpperLimit)
+                        yUpperLimit = item.position.y;
+                    if (item.position.y < yLowerLimit)
+                        yLowerLimit = item.position.y;
+                }
             }
-            adveragePos /= players.Count;
-            theGameBounds.center = adveragePos;
+            theGameBounds.center = new Vector2((xUpperLimit - xLowerLimit) / 2.0f + xLowerLimit, (yUpperLimit - yLowerLimit) / 2.0f + yLowerLimit);
         }
 
         updateObjectLists();
@@ -503,7 +529,7 @@ public abstract class Level : MonoBehaviour
         {
             Destroy(item.gameObject);
         }
-        thePlayers.Clear();
+        thePlayers = new Player[Controls.MAX_PLAYERS];
 
         foreach (DestructableObject item in theDestructables)
         {
@@ -529,7 +555,7 @@ public abstract class Level : MonoBehaviour
         saveItems(save, thePlayers);
     }
 
-    private void saveItems(System.IO.StreamWriter save, List<Player> players)
+    private void saveItems(System.IO.StreamWriter save, Player[] players)
     {
         foreach (Player player in players)
         {
@@ -581,15 +607,15 @@ public abstract class Level : MonoBehaviour
 
         if (lvl != null)
         {
-            lvl.create(thePlayers.Count, theDifficulty, randomSeed);
+            lvl.create(thePlayers.Length, theDifficulty, randomSeed);
 
-            for (int i = 0; i < thePlayers.Count; i++)
+            for (int i = 0; i < thePlayers.Length; i++)
             {
                 for (int j = 0; j < thePlayers[i].items.Length; j++)
                 {
-                    if (thePlayers[i].items[j] != null)
+                    if (initialPlayers[i].items[j] != null)
                     {
-                        thePlayers[i].items[j].pickup(lvl.thePlayers[i], j);
+                        initialPlayers[i].items[j].pickup(lvl.thePlayers[i], j);
                         lvl.theNonInteractives.AddLast(lvl.thePlayers[i].items[j]);
                         theNonInteractives.Remove(lvl.thePlayers[i].items[j]);
                     }
@@ -618,9 +644,9 @@ public abstract class Level : MonoBehaviour
         {
             save();
 
-            lvl.create(thePlayers.Count, theDifficulty, theRandom.Next());
+            lvl.create(thePlayers.Length, theDifficulty, theRandom.Next());
 
-            for (int i = 0; i < thePlayers.Count; i++)
+            for (int i = 0; i < thePlayers.Length; i++)
             {
                 for (int j = 0; j < thePlayers[i].items.Length; j++)
                 {
@@ -671,7 +697,7 @@ public abstract class Level : MonoBehaviour
         }
 
         file.WriteLine(Convert.ToString(levelNumber + 1));
-        file.WriteLine(Convert.ToString(thePlayers.Count));
+        file.WriteLine(Convert.ToString(thePlayers.Length));
         file.WriteLine(Convert.ToString(theDifficulty));
         file.WriteLine(Convert.ToString(random.Next()));
 
@@ -699,7 +725,7 @@ public abstract class Level : MonoBehaviour
         System.IO.StreamWriter save = new System.IO.StreamWriter(SAVE_PATH + fileName + REPLAY_EXTENTION, false);
 
         save.WriteLine(Convert.ToString(levelNumber));
-        save.WriteLine(Convert.ToString(thePlayers.Count));
+        save.WriteLine(Convert.ToString(thePlayers.Length));
         save.WriteLine(Convert.ToString(theDifficulty));
         save.WriteLine(Convert.ToString(randomSeed));
 
@@ -796,8 +822,8 @@ public abstract class Level : MonoBehaviour
 
         lvl.loadItems(save);
 
-        lvl.initialPlayers = new List<Player>(lvl.players.Count);
-        for (int i = 0; i < lvl.thePlayers.Count; i++)
+        lvl.initialPlayers = new Player[lvl.players.Length];
+        for (int i = 0; i < lvl.thePlayers.Length; i++)
         {
             lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
         }
@@ -823,8 +849,8 @@ public abstract class Level : MonoBehaviour
 
         lvl.loadItems(replay);
 
-        lvl.initialPlayers = new List<Player>(lvl.players.Count);
-        for (int i = 0; i < lvl.thePlayers.Count; i++)
+        lvl.initialPlayers = new Player[lvl.players.Length];
+        for (int i = 0; i < lvl.thePlayers.Length; i++)
         {
             lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
         }

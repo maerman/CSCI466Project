@@ -7,8 +7,9 @@ using DG.Tweening;
 using static CRUD;
 using static User;
 using static GameStates;
+using static Delegates;
 
-public class Login : MonoBehaviour {
+public class Login : MonoBehaviour, IErrorPanel {
 
     public Button loginBtn;
     public InputField userName;
@@ -16,70 +17,71 @@ public class Login : MonoBehaviour {
     public GameObject errorPanel;
     public CanvasGroup canvasGroup;
     public Text errorText;
-    private enum LoginState { Login, CreateAccount, UserNotFound, CreationError }
-    private LoginState logState = new LoginState();
 
+    private void Start()
+    {
+        DOTween.SetTweensCapacity(5, 5);
+        loginActionComplete += loginComplete; //attach this to the Delegate loginActionComplete, which will get called from wherever
+    }
+ 
+    public void loginComplete() 
+    {
+        string ErrorMsg = "";
+            if (HasError())
+            {
+                switch(login)
+            {
+                case LoginErrors.UserNotFound:
+                    ErrorMsg = "Error! There was no user account found with the details entered!";
+                    break;
+                case LoginErrors.LoginError:
+                    ErrorMsg = "Error! There was a login error.  Please wait a few seconds and try again.";
+                    break;
+            }
+                showErrorMenu(ErrorMsg);
+                return;
+            }
+            Debug.Assert(user.username != null, "Player is not logged in!"); //player should be logged in here
+        gameState = GameState.Playing;
+    }
+
+    //User attempts to login to an existing account
     public void UserLogin()
     {
-        if (loginError(LoginState.Login)) {
+        gameState = GameState.LoggingIn;
+        if (HasError()) {
             showErrorMenu("Error! You must have a valid username and password to sign in!");
             return;
         };
-        crud.GetUser(userName.text, password.text); //log the user in
-        if (loginError(LoginState.UserNotFound))
-        {
-            showErrorMenu("Error! There was no user account found with the details entered!");
-            return;
-        }
-        //Debug.Assert(playerState == PlayerState.LoggedIn, "Player is not logged in!"); //player should be logged in here
-        gameState = GameState.Main;
 
+        crud.GetUser(userName.text, password.text);
     }
 
-    public void CreateAccount()
-    {
-        if (loginError(LoginState.CreateAccount))
-        {
-            showErrorMenu("Error! You must have a valid username and password to create an account!");
-            return;
-        }
-
-        crud.CreateNewUser(userName.text, password.text, null, false);
-
-        if (loginError(LoginState.CreationError))
-        {
-            showErrorMenu("Error! There was a problem creating your account! Please try again.");
-            return;
-        }
-        Debug.Assert(user.username != null, "The user was not created successfully!");
-        gameState = GameState.Main;
-
-    }
-
-    private Boolean loginError(LoginState loginState)
+    public bool HasError()
     {
         Boolean hasError = false;
-        switch(loginState)
-        {
 
-            case LoginState.CreateAccount:
-            case LoginState.Login:
-                if (userName.text == "" || password.text == "") hasError = true;
-                break;
-            case LoginState.CreationError:
-            case LoginState.UserNotFound:
-                if (user.username == null) hasError = true;
-                break;
-         
-        }
+        if (gameState == GameState.LoggingIn) hasError = userName.text == "" || password.text == "" ? true : false;
+        if (login == LoginErrors.UserNotFound) hasError = user.username == null ? true : false;
 
         return hasError;
     }
-    //we will show the error Menu and the appropriate text with it
-    private void showErrorMenu(string text)
+
+    public void showErrorMenu(string errorMsg)
     {
-        errorText.text = text;
-        errorPanel.SetActive(true);       
+        
+        errorText.text = errorMsg;
+        errorPanel.SetActive(true);
         canvasGroup.DOFade(1.0f, 2.0f);
+    }
+
+    public void PlayDemo()
+    {
+        Level lvl1 = Level.getLevel(1);
+        lvl1.create(3, 1, (int)System.DateTime.Now.Ticks);
+
+        User.user.isTrial = true;
+
+        gameState = GameState.Playing;
     }
 }

@@ -69,7 +69,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 15
-  inPlay: 1
   team: 0
   numberOfShots: 8
   damageEach: 10
@@ -77,7 +76,7 @@ MonoBehaviour:
   shotLifeSecs: 3
   offset: {x: 0, y: 2}
   shotTimeSecs: 2
-  spreadStart: 30
+  spreadStart: 10
   spreadMax: 180
   spreadSpeed: 2
 --- !u!212 &212537576892652056

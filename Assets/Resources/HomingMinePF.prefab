@@ -90,8 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 20
-  inPlay: 1
-  enemy: 1
+  team: 0
   maxHealth: 50
   health: 15
   armor: 1

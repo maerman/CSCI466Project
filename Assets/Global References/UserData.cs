@@ -7,16 +7,16 @@ public class UserData : MonoBehaviour {
 
     public static UserData userData;
 
-    int id { get; set; }
-    int accountId { get; set; }
-    DateTime dateTimeAdded { get; set; }
-    int score { get; set; }
-    int enemiesKilled { get; set; }
-    int highestLevel { get; set; }
-    int timeAlive { get; set; }
-    int timesDied { get; set; }
-    string playerMode { get; set; }
-    string difficulty { get; set; }
+    public int id { get; set; }
+    public int accountId { get; set; }
+    public DateTime dateTimeAdded { get; set; }
+    public int score { get; set; }
+    public int enemiesKilled { get; set; }
+    public int currentLevel { get; set; }
+    public int timeAlive { get; set; }
+    public int timesDied { get; set; }
+    public string playerMode { get; set; }
+    public string difficulty { get; set; }
 
     private void Awake()
     {

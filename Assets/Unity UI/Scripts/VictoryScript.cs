@@ -5,16 +5,19 @@ using UnityEngine;
 public class VictoryScript : MonoBehaviour {
 	public GameObject canvas;
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		canvas.SetActive(false);
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		
 	}
 
-	public void Exit() {
-		Application.LoadLevel (1);
+	public void Exit()
+    {
+        GameStates.gameState = GameStates.GameState.Main;
 	}
 }
