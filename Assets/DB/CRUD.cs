@@ -40,12 +40,12 @@ public class CRUD : MonoBehaviour {
         {
             
             StopCoroutine("WaitForRequest");
-            playerState = PlayerState.NotLoggedIn;
+            gameState = GameState.LoggingIn;
             if(string.IsNullOrEmpty(www.error)) //we check for the www.to be done and that it hasn't returned an error
             {
                 if (www.text.Contains("null")) //no user was found
                 {
-                    loginState = LoginState.UserNotFound; //no user was found;
+                    login = LoginErrors.UserNotFound; //no user was found;
                 }
                 else
                 {             
@@ -57,10 +57,10 @@ public class CRUD : MonoBehaviour {
                         user.username = myObj[1];
                         user.password = myObj[2];
                         user.email = myObj[3];
-                        user.isTrial = int.Parse(myObj[4]); //convert to an int
+                        user.isTrial = myObj[4]; //convert to an int
 
-                        playerState = PlayerState.LoggedIn; //change the game state to LoggedIn
-                        loginState = LoginState.Success;
+                        gameState = GameState.Main; //change the game state to Main
+                        login = LoginErrors.LoginSuccess;
                         Debug.Log("Successfully Logged In as " + user.username);
                     }
                     catch (Exception e)
@@ -72,11 +72,11 @@ public class CRUD : MonoBehaviour {
             }
             else if(www.error == "null")
             {
-                loginState = LoginState.UserNotFound; //no user was found;
+                login = LoginErrors.UserNotFound; //no user was found;
             }
             else
             {
-                loginState = LoginState.LoginError;
+                login = LoginErrors.LoginError;
             }
             loginActionComplete(); //fire the delegate!          
             return;
@@ -85,7 +85,7 @@ public class CRUD : MonoBehaviour {
        // return complete;
     }
     //POST -Creates a new user
-    public void CreateNewUser(string username, string password, string email, int isTrial) //user object should already be populated with values
+    public void CreateNewUser(string username, string password, string email, bool isTrial) //user object should already be populated with values
     {
         string url = baseUrl + "createUser.php?username=" + username + "&password=" + password + "&email=" + email + "&isTrial=" + isTrial;
         WWW www = new WWW(url);
@@ -98,7 +98,7 @@ public class CRUD : MonoBehaviour {
             StopCoroutine("WaitForRequest");
             if (www.text.Contains("Duplicate"))
             {
-                loginState = LoginState.Duplicate;
+                login = LoginErrors.Duplicate;
             }
             else
             {
@@ -111,14 +111,14 @@ public class CRUD : MonoBehaviour {
                         user.password = password;
                         user.email = email;
                         user.isTrial = isTrial;
-                        loginState = LoginState.Success;
+                        login = LoginErrors.LoginSuccess;
                     }
                     else if(www.error.Contains("Duplicate"))
                         {
-                        loginState = LoginState.Duplicate;
+                        login = LoginErrors.Duplicate;
                         }
                     else {
-                        loginState = LoginState.CreationError;
+                        login = LoginErrors.CreationError;
                     }
                 }
                 catch (Exception e)
@@ -148,7 +148,7 @@ public class CRUD : MonoBehaviour {
             StopCoroutine("WaitForRequest");
             if (www.text.Contains("Duplicate"))
             {
-                loginState = LoginState.Duplicate;
+                login = LoginErrors.Duplicate;
             }
             else
             {
@@ -160,11 +160,11 @@ public class CRUD : MonoBehaviour {
                     }
                     else if (www.error.Contains("Duplicate"))
                     {
-                        loginState = LoginState.Duplicate;
+                        login = LoginErrors.Duplicate;
                     }
                     else
                     {
-                        loginState = LoginState.CreationError;
+                        login = LoginErrors.CreationError;
                     }
                 }
                 catch (Exception e)

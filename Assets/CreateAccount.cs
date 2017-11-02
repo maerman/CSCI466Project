@@ -20,21 +20,21 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
 
     private void Start()
     {
-            
-            creationActionComplete += CreationComplete; //attach this to the Delegate loginActionComplete, which will get called from wherever  
+        DOTween.SetTweensCapacity(5, 5);
+        creationActionComplete += CreationComplete; //attach this to the Delegate loginActionComplete, which will get called from wherever  
     }
 
     //User attempts to create a new account
     public void CreateUser()
     {
-        loginState = LoginState.CreateAccount;
+        gameState = GameState.LoggingIn;
         if (HasError())
         {
             showErrorMenu("Error! You must have a valid username and password to sign in!");
             return;
         };
 
-        crud.CreateNewUser(userName.text, password.text, null, 0);
+        crud.CreateNewUser(userName.text, password.text, null, false);
     }
 
     public void CreationComplete()
@@ -42,12 +42,12 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
         string ErrorMsg = "";
         if (HasError())
         {
-            switch(loginState)
+            switch(login)
             {
-                case LoginState.CreationError:
+                case LoginErrors.CreationError:
                     ErrorMsg = "Error! There was a problem creating your account! Please try again.";
                     break;
-                case LoginState.Duplicate:
+                case LoginErrors.Duplicate:
                     ErrorMsg = "Error! This username already exists.  Please choose a unique username and try again.";
                     break;
             }
@@ -55,22 +55,24 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
             return;
         }
         Debug.Assert(user.username != null, "The user was not created successfully!");
-        gameState = GameState.PlayingFull;
+        gameState = GameState.Playing;
     }
 
     //Implement Error Panel interfaces from IErrorPanel below
     public Boolean HasError()
     {
         Boolean hasError = false;
-        switch (loginState)
+
+        if (gameState == GameState.LoggingIn)
+        hasError = userName.text == "" || password.text == "" ? true : false; 
+        
+        switch (login)
         {
-            case LoginState.CreateAccount:
-                if (userName.text == "" || password.text == "") hasError = true;
-                break;
-            case LoginState.CreationError:
+
+            case LoginErrors.CreationError:
                 if (user.username == null) hasError = true;
                 break;
-            case LoginState.Duplicate:
+            case LoginErrors.Duplicate:
                 hasError = true;
                 break;
         }
@@ -82,6 +84,7 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
     {
         errorText.text = errorMsg;
         errorPanel.SetActive(true);
+       
         canvasGroup.DOFade(1.0f, 2.0f);
     }
 

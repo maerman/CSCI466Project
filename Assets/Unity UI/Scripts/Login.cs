@@ -19,7 +19,8 @@ public class Login : MonoBehaviour, IErrorPanel {
     public Text errorText;
 
     private void Start()
-    {      
+    {
+        DOTween.SetTweensCapacity(5, 5);
         loginActionComplete += loginComplete; //attach this to the Delegate loginActionComplete, which will get called from wherever
     }
  
@@ -28,12 +29,12 @@ public class Login : MonoBehaviour, IErrorPanel {
         string ErrorMsg = "";
             if (HasError())
             {
-                switch(loginState)
+                switch(login)
             {
-                case LoginState.UserNotFound:
+                case LoginErrors.UserNotFound:
                     ErrorMsg = "Error! There was no user account found with the details entered!";
                     break;
-                case LoginState.LoginError:
+                case LoginErrors.LoginError:
                     ErrorMsg = "Error! There was a login error.  Please wait a few seconds and try again.";
                     break;
             }
@@ -41,13 +42,13 @@ public class Login : MonoBehaviour, IErrorPanel {
                 return;
             }
             Debug.Assert(user.username != null, "Player is not logged in!"); //player should be logged in here
-            gameState = GameState.PlayingFull;
+        gameState = GameState.Playing;
     }
 
     //User attempts to login to an existing account
     public void UserLogin()
     {
-        loginState = LoginState.Login;
+        gameState = GameState.LoggingIn;
         if (HasError()) {
             showErrorMenu("Error! You must have a valid username and password to sign in!");
             return;
@@ -59,20 +60,16 @@ public class Login : MonoBehaviour, IErrorPanel {
     public bool HasError()
     {
         Boolean hasError = false;
-        switch (loginState)
-        {
-            case LoginState.Login:
-                if (userName.text == "" || password.text == "") hasError = true;
-                break;
-            case LoginState.UserNotFound:
-                if (user.username == null) hasError = true;
-                break;
-        }
+
+        if (gameState == GameState.LoggingIn) hasError = userName.text == "" || password.text == "" ? true : false;
+        if (login == LoginErrors.UserNotFound) hasError = user.username == null ? true : false;
+
         return hasError;
     }
 
     public void showErrorMenu(string errorMsg)
     {
+        
         errorText.text = errorMsg;
         errorPanel.SetActive(true);
         canvasGroup.DOFade(1.0f, 2.0f);
