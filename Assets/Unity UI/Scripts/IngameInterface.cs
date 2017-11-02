@@ -50,13 +50,14 @@ public class Message
 
 public class IngameInterface : MonoBehaviour
 {
+    public static float interfaceAlpha = 0.7f;
+
     //Initilzed in editor
     public Text durationText;
     public Text numberName;
     public Text progress;
     public Text messages;
     public List<GameObject> playerPanels;
-
 
     private static IngameInterface current;
     private List<Message> messageList = new List<Message>();
@@ -93,6 +94,7 @@ public class IngameInterface : MonoBehaviour
          
         if (Level.currentLevel != null)
         {
+            Color color;
             Level level = Level.currentLevel;
 
             System.TimeSpan duration = level.duration;

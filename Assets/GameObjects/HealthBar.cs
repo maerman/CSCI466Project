@@ -3,7 +3,6 @@ using System.Collections;
 
 public class HealthBar : MonoBehaviour
 {
-    public static bool showHealth = true;
     public static float frontAlpha = 0.7f;
     public static float backAlpha = 0.5f;
 
@@ -27,7 +26,7 @@ public class HealthBar : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
-        else if (!owner.enabled || !owner.gameObject.activeInHierarchy || !showHealth)
+        else if (!owner.enabled || !owner.gameObject.activeInHierarchy)
         {
             Vector3 scale = transform.localScale;
             scale.x = 0;
