@@ -74,4 +74,14 @@ public class Login : MonoBehaviour, IErrorPanel {
         errorPanel.SetActive(true);
         canvasGroup.DOFade(1.0f, 2.0f);
     }
+
+    public void PlayDemo()
+    {
+        Level lvl1 = Level.getLevel(1);
+        lvl1.create(2, 1, (int)System.DateTime.Now.Ticks);
+
+        User.user.isTrial = true;
+
+        gameState = GameState.Playing;
+    }
 }

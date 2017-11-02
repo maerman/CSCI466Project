@@ -4234,6 +4234,7 @@ GameObject:
   - component: {fileID: 575981435}
   - component: {fileID: 575981434}
   - component: {fileID: 575981433}
+  - component: {fileID: 575981432}
   m_Layer: 5
   m_Name: Login_Canvas 1
   m_TagString: Untagged
@@ -4261,6 +4262,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &575981432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 575981430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b1e45f16eb04b489ab034b62734b08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loginBtn: {fileID: 633468663}
+  userName: {fileID: 1642908758}
+  password: {fileID: 87040380}
+  errorPanel: {fileID: 1246862915}
+  canvasGroup: {fileID: 0}
+  errorText: {fileID: 2065367234}
 --- !u!114 &575981433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7479,7 +7497,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1160447044}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 575981432}
+        m_MethodName: PlayDemo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1160447044
@@ -12981,7 +13010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab45c437f0a6264babe0a2ce3d19808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
+  canvas: {fileID: 1996708681}
 --- !u!114 &1996708684
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,7 +13,8 @@ public abstract class Item : NonInteractiveObject
 
     protected override void destroyNonInteractiveObject()
     {
-        drop();
+        dropItem();
+        holder = null;
     }
 
     protected override void startNonInteractiveObject()

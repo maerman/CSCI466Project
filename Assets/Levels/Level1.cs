@@ -78,6 +78,11 @@ public class Level1 : Level
         {
             //RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
         }
+
+            LazerSword sword = (LazerSword)createObject("LazerSwordPF");
+            MultiShooter multiShot = (MultiShooter)createObject("MultiShotPF");
+            HomingMissiles homing = (HomingMissiles)createObject("HomingShooterPF");
+            HomingMines mines = (HomingMines)createObject("HomingMinesPF");
     }
 
     protected override void updateLevel()
