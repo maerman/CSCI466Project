@@ -25,7 +25,7 @@ public class HomingMine : DestructableObject
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
     {
-        
+        //ScoreScript.ScoreValue += 10;
     }
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
@@ -37,6 +37,7 @@ public class HomingMine : DestructableObject
     {
         other.damageThis(damage);
         destroyThis();
+        //ScoreScript.ScoreValue += -50;
     }
 
     protected override void startDestructableObject()
@@ -51,7 +52,7 @@ public class HomingMine : DestructableObject
             target = null;
         }
 
-        if (target == null || !target.inPlay)
+        if (target == null || !target.destroyed)
         {
             IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
             targetList[0] = level.destructables;
@@ -59,14 +60,14 @@ public class HomingMine : DestructableObject
 
             target = closestObject<DestructableObject>(targetList, false);
 
-            if (distanceFrom(target) > targetFindProximity)
+            if (target != null && distanceFrom(target) > targetFindProximity)
             {
                 target = null;
             }
         }
 
 
-        if (target == null || !target.inPlay)
+        if (target == null || !target.destroyed)
         {
             if (speed > acceleration)
             {

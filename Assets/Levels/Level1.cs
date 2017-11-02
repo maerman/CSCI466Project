@@ -15,7 +15,15 @@ public class Level1 : Level
         }
     }
 
-    protected override void initilizeLevel()
+    public override string levelName
+    {
+        get
+        {
+            return "One";
+        }
+    }
+
+    protected override void createLevel()
     {
         //levelSize = new Vector2(80, 60); //set the level size
 
@@ -23,7 +31,7 @@ public class Level1 : Level
 
         for (int i = 0; i < 3; i++)
         {
-            Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            //Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
         for (int i = 0; i < 1; i++)
@@ -56,9 +64,9 @@ public class Level1 : Level
             //LazerShooter current = (LazerShooter)createObject("LazerShooterPF", getRandomPosition(), getRandomAngle());
         }
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 2; i++)
         {
-            //RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
+            RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
         }
 
         for (int i = 0; i < 1; i++)
@@ -77,6 +85,18 @@ public class Level1 : Level
         
     }
 
+    /*
+    public override string progress
+    {
+        get
+        {
+            //return a string representing the progress though the level here
+            //default is stating how many enemies are remaining in the level
+
+            return "";
+        }
+    }
+    */
     /*
     protected override bool won()
     {

@@ -456,7 +456,7 @@ public class PlayerControls
 
 public class Controls
 {
-    public const int MAX_PLAYERS = 2;
+    public const int MAX_PLAYERS = 4;
     public const string CONTROLS_FILE = "\\Controls.options";
 
     public bool staticLevel = false;

@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 using static User;
-using static GameStates;
 
 public abstract class Level : MonoBehaviour
 {
@@ -13,9 +12,12 @@ public abstract class Level : MonoBehaviour
     public const string SAVE_EXTENTION = ".nebula";
     public const string REPLAY_EXTENTION = ".replay";
     public const int MAX_AUTOSAVES = 20;
+    public const int TRIAL_LEVELS = 5;
 
-    private bool isReplay = false;
     private System.IO.StreamReader updateFile;
+
+    public abstract int levelNumber { get; }
+    public abstract string levelName { get; }
 
     private Rect theGameBounds = new Rect(Vector2.zero, new Vector2(80, 60));
     public Rect gameBounds
@@ -36,8 +38,6 @@ public abstract class Level : MonoBehaviour
             theGameBounds.size = value;
         }
     }
-
-    public abstract int levelNumber{ get; }
 
     private static Level theCurrentLevel;
     public static Level currentLevel
@@ -61,20 +61,12 @@ public abstract class Level : MonoBehaviour
         }
     }
 
-    private DateTime theStartTime;
-    public DateTime startTime
-    {
-        get
-        {
-            return theStartTime;
-        }
-    }
-
+    private float theDuration = 0;
     public TimeSpan duration
     {
         get
         {
-            return System.DateTime.Now - startTime;
+            return new TimeSpan(0, 0, (int)theDuration);
         }
     }
 
@@ -203,23 +195,6 @@ public abstract class Level : MonoBehaviour
         return current;
     }
 
-    /*
-    protected Text addTextToCanvas(string textToAdd, Vector2 position)
-    {
-        if (canvas == null)
-        {
-            canvas = FindObjectOfType<Canvas>();
-        }
-        GameObject obj = Instantiate(Resources.Load("TextPF"), Vector2.zero, Quaternion.identity) as GameObject;
-        //obj.transform.SetParent(canvas.transform);
-        Text text = obj.GetComponent<Text>();
-        text.text = textToAdd;
-        text.transform.position = position;
-        return text;
-    }
-    */
-
-
     private List<DestructableObject> removeDestructables = new List<DestructableObject>();
     private List<DestructableObject> addDestructables = new List<DestructableObject>();
     private LinkedList<DestructableObject> theDestructables = new LinkedList<DestructableObject>();
@@ -298,16 +273,24 @@ public abstract class Level : MonoBehaviour
         background = GetComponent<SpriteRenderer>();
     }
 
-    protected abstract void initilizeLevel();
+    protected abstract void createLevel();
 
-    public void initilize(int numPlayers, int difficulty, int randomSeed)
+    public void create(int numPlayers, int difficulty, int randomSeed)
     {
+        if (numPlayers > Controls.MAX_PLAYERS)
+        {
+            throw new Exception("Too manp players given to Level.create(): " + numPlayers.ToString() + " players given.");
+        }
+
+        theCurrentLevel = this;
+
         background = GetComponent<SpriteRenderer>();
 
         this.randomSeed = randomSeed;
         theRandom = new System.Random(randomSeed);
 
         thePlayers = new List<Player>(numPlayers);
+        initialPlayers = new List<Player>(numPlayers);
 
         for (int i = 0; i < numPlayers; i++)
         {
@@ -319,15 +302,10 @@ public abstract class Level : MonoBehaviour
             UnityEngine.GameObject obj = Instantiate(Resources.Load("PlayerPF"), 
                 new Vector2(gameBounds.center.x - (numPlayers - 1) * 2 + i * 4, gameBounds.center.y) , Quaternion.identity) as GameObject;
             Player current = obj.GetComponent<Player>();
-            if(current != null)
-            {
-                current.playerNum = i;
-                players.Add(current);
-            }
-            else
-            {
-                Debug.Log("There is a null reference for the current object!!");
-            }
+
+            current.playerNum = i;
+            thePlayers.Add(current);
+            initialPlayers.Add(current.clone());
         }
 
         foreach (PlayerControls item in Controls.get().players)
@@ -335,9 +313,7 @@ public abstract class Level : MonoBehaviour
             item.clearInputs();
         }
 
-        isReplay = false;
-
-        initilizeLevel();
+        createLevel();
 
         backgroundPosition = gameBounds.center;
         transform.localScale = Vector3.one;
@@ -353,15 +329,23 @@ public abstract class Level : MonoBehaviour
             transform.localScale = new Vector3(scale, scale, 1);
         }
 
-        theStartTime = DateTime.Now;
-        theCurrentLevel = this;
+        GameStates.gameState = GameStates.GameState.Playing;
     }
 
     protected abstract void updateLevel();
     
     public void FixedUpdate()
     {
-        if (isReplay)
+        if (currentLevel != this)
+        {
+            clearLevel();
+            Destroy(this.gameObject);
+            return;
+        }
+
+        theDuration += UnityEngine.Time.fixedDeltaTime;
+
+        if (GameStates.gameState == GameStates.GameState.Replay)
         {
             Controls.get().updateFromFile(updateFile);
         }
@@ -372,28 +356,42 @@ public abstract class Level : MonoBehaviour
 
         if (won() && duration.TotalSeconds > 2 && theCurrentLevel == this)
         {
-            if (isReplay)
+            if (GameStates.gameState == GameStates.GameState.Replay)
             {
-
+                GameStates.gameState = GameStates.GameState.LoadReplay;
+            }
+            else if (User.user.isTrial && levelNumber >= TRIAL_LEVELS || !levelExists(levelNumber + 1))
+            {
+                GameStates.gameState = GameStates.GameState.WonGame;
             }
             else
             {
-                gameState = GameState.LevelComplete;
-                nextLevel();
+                GameStates.gameState = GameStates.GameState.LevelComplete;
             }
         }
 
-        for (int i = 0; i < players.Count; i++)
+        if (players.Count == 0)
         {
-            if (players[i] == null || !players[i].inPlay || players[i].health < 0)
+            if (GameStates.gameState == GameStates.GameState.Replay)
             {
-                //game over
+                GameStates.gameState = GameStates.GameState.LoadReplay;
+            }
+            else
+            {
+                GameStates.gameState = GameStates.GameState.LostGame;
             }
         }
 
         if (lost())
         {
-            //game over
+            if (GameStates.gameState == GameStates.GameState.Replay)
+            {
+                GameStates.gameState = GameStates.GameState.LoadReplay;
+            }
+            else
+            {
+                GameStates.gameState = GameStates.GameState.LostGame;
+            }
         }
 
         if (Controls.get().players[0].PickupDrop)
@@ -411,6 +409,24 @@ public abstract class Level : MonoBehaviour
         }
 
         updateObjectLists();
+    }
+
+    public virtual string progress
+    {
+        get
+        {
+            int remaining = 0;
+
+            foreach (DestructableObject item in destructables)
+            {
+                if (item.team <= 0)
+                {
+                    remaining++;
+                }
+            }
+
+            return remaining.ToString() + " enemies remaining.";
+        }
     }
 
     protected virtual bool won()
@@ -501,10 +517,7 @@ public abstract class Level : MonoBehaviour
 
         foreach (NonInteractiveObject item in theNonInteractives)
         {
-            if (!item.GetType().IsSubclassOf(typeof(Item)))
-            {
-                Destroy(item.gameObject);
-            }
+            Destroy(item.gameObject);
         }
         theNonInteractives.Clear();
     }
@@ -560,21 +573,33 @@ public abstract class Level : MonoBehaviour
         }
     }
 
-    public void restartLevel()
+    public Level restartLevel()
     {
-        int numPlayers = thePlayers.Count;
+        Level lvl = getLevel(levelNumber);
 
-        clearLevel();
-
-        initilize(numPlayers, theDifficulty, randomSeed);
-
-        for (int i = 0; i < initialPlayers.Count; i++)
+        if (lvl != null)
         {
-            for (int j = 0; j < thePlayers[i].items.Length; j++)
+            lvl.create(thePlayers.Count, theDifficulty, randomSeed);
+
+            for (int i = 0; i < thePlayers.Count; i++)
             {
-                thePlayers[i].items[j] = initialPlayers[i].items[j];
+                for (int j = 0; j < thePlayers[i].items.Length; j++)
+                {
+                    if (thePlayers[i].items[j] != null)
+                    {
+                        thePlayers[i].items[j].pickup(lvl.thePlayers[i], j);
+                        lvl.theNonInteractives.AddLast(lvl.thePlayers[i].items[j]);
+                        theNonInteractives.Remove(lvl.thePlayers[i].items[j]);
+                    }
+                }
+                lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
             }
+
+            clearLevel();
+            Destroy(this.gameObject);
         }
+
+        return lvl;
     }
     
     /// <summary>
@@ -587,28 +612,27 @@ public abstract class Level : MonoBehaviour
     {
         Level lvl = getLevel(levelNumber + 1);
 
-        if (lvl == null)
-        {
-            //show victory screen, the game has been beat
-            restartLevel();
-        }
-        else
+        if (lvl != null)
         {
             save();
 
-            lvl.initilize(thePlayers.Count, theDifficulty, theRandom.Next());
-
-            lvl.initialPlayers = new List<Player>(lvl.players.Count);
+            lvl.create(thePlayers.Count, theDifficulty, theRandom.Next());
 
             for (int i = 0; i < thePlayers.Count; i++)
             {
                 for (int j = 0; j < thePlayers[i].items.Length; j++)
                 {
-                    lvl.thePlayers[i].items[j] = thePlayers[i].items[j];
+                    if (thePlayers[i].items[j] != null)
+                    {
+                        thePlayers[i].items[j].pickup(lvl.thePlayers[i], j);
+                        lvl.theNonInteractives.AddLast(lvl.thePlayers[i].items[j]);
+                        theNonInteractives.Remove(lvl.thePlayers[i].items[j]);
+                    }
                 }
-                lvl.initialPlayers.Add(lvl.thePlayers[i].clone());
+                lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
             }
 
+            clearLevel();
             Destroy(this.gameObject);
         }
 
@@ -686,6 +710,21 @@ public abstract class Level : MonoBehaviour
         return true;
     }
 
+    public static bool levelExists(int levelNum)
+    {
+        Level lvl = getLevel(levelNum);
+
+        if (lvl == null)
+        {
+            return false;
+        }
+        else
+        {
+            Destroy(lvl.gameObject);
+            return true;
+        }
+    }
+
     public static Level getLevel(int levelNum)
     {
         UnityEngine.GameObject obj;
@@ -751,7 +790,7 @@ public abstract class Level : MonoBehaviour
         int difficulty = Convert.ToInt32(save.ReadLine());
         int randomSeed = Convert.ToInt32(save.ReadLine());
 
-        lvl.initilize(players, difficulty, randomSeed);
+        lvl.create(players, difficulty, randomSeed);
 
         lvl.loadItems(save);
 
@@ -762,6 +801,8 @@ public abstract class Level : MonoBehaviour
         }
 
         save.Close();
+
+        GameStates.gameState = GameStates.GameState.Playing;
 
         return lvl;
     }
@@ -776,7 +817,7 @@ public abstract class Level : MonoBehaviour
         int players = Convert.ToInt32(replay.ReadLine());
         int difficulty = Convert.ToInt32(replay.ReadLine());
         int randomSeed = Convert.ToInt32(replay.ReadLine());
-        lvl.initilize(players, difficulty, randomSeed);
+        lvl.create(players, difficulty, randomSeed);
 
         lvl.loadItems(replay);
 
@@ -786,9 +827,9 @@ public abstract class Level : MonoBehaviour
             lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
         }
         
-
         lvl.updateFile = replay;
-        lvl.isReplay = true;
+
+        GameStates.gameState = GameStates.GameState.Replay;
 
         replay.Close();
 

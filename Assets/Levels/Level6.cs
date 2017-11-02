@@ -15,7 +15,15 @@ public class Level6 : Level
         }
     }
 
-    protected override void initilizeLevel()
+    public override string levelName
+    {
+        get
+        {
+            return "Six";
+        }
+    }
+
+    protected override void createLevel()
     {
         createObject("SpaceDustPF", gameBounds.center, 0);
 
@@ -30,6 +38,18 @@ public class Level6 : Level
         
     }
 
+    /*
+    public override string progress
+    {
+        get
+        {
+            //return a string representing the progress though the level here
+            //default is stating how many enemies are remaining in the level
+
+            return "";
+        }
+    }
+    */
     /*
     protected override bool won()
     {

@@ -56,8 +56,20 @@ public class Player : DestructableObject
                 break;
         }
 
-        LazerSword sword = (LazerSword)level.createObject("LazerSwordPF");
-        sword.pickup(this);
+        if (level.levelNumber == 1)
+        {
+            LazerSword sword = (LazerSword)level.createObject("LazerSwordPF");
+            sword.pickup(this);
+
+            MultiShooter multiShot = (MultiShooter)level.createObject("MultiShotPF");
+            multiShot.pickup(this);
+
+            HomingMissiles homing = (HomingMissiles)level.createObject("HomingShooterPF");
+            homing.pickup(this);
+
+            HomingMines mines = (HomingMines)level.createObject("HomingMinesPF");
+            mines.pickup(this);
+        }
     }
 
     protected override void updateDestructableObject()
@@ -110,11 +122,11 @@ public class Player : DestructableObject
         {
             if (theItems[i] != null)
             {
+                theItems[i].holding(input.items(i));
                 if (input.pickupDrop && input.items(i))
                 {
                     theItems[i].drop();
                 }
-                theItems[i].holding(input.items(i));
             }
         }
     }

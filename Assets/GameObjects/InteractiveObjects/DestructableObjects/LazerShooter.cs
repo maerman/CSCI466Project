@@ -49,7 +49,7 @@ class LazerShooter : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (target == null || !target.inPlay)
+        if (target == null || !target.destroyed)
         {
             IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
             targetList[0] = level.destructables;
@@ -85,7 +85,7 @@ class LazerShooter : DestructableObject
                     shot.maxSpeed = shotSpeed;
                     shot.speed = shotSpeed;
                     shot.color = Color.red;
-                    shot.updatesToLive = (int)(maxShotLiveSecs * level.updatesPerSec + 1);
+                    shot.timeToLiveSecs = (int)(maxShotLiveSecs * level.updatesPerSec + 1);
                     shot.damage = damage;
                 }
             }

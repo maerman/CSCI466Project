@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public abstract class InteractiveObject : SpaceObject
 {
-    public byte team = 0;
-
     public override Vector2 position
     {
         get
@@ -84,52 +82,6 @@ public abstract class InteractiveObject : SpaceObject
         {
             GetComponent<Collider2D>().enabled = value;
         }
-    }
-
-    public T closestObject<T>(IEnumerable<IEnumerable<T>> objectLists, bool sameTeam) where T : InteractiveObject
-    {
-        T closest = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (IEnumerable<T> item in objectLists)
-        {
-            T temp = closestObject<T>(item, sameTeam);
-
-            if (temp != null)
-            {
-                float tempDistance = distanceFrom(temp);
-
-                if (tempDistance < closestDistance)
-                {
-                    closest = temp;
-
-                }
-                closestDistance = tempDistance;
-            }
-        }
-
-        return closest;
-    }
-
-    public T closestObject<T>(IEnumerable<T> objectList, bool sameTeam) where T : InteractiveObject
-    {
-        T closest = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (T item in objectList)
-        {
-            if (((sameTeam && item.team == team) || (!sameTeam && item.team != team)) && item != this && item.inPlay)
-            {
-                float distance = this.distanceFrom(item);
-
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closest = item;
-                }
-            }
-        }
-        return closest;
     }
 
     protected abstract void startInteractiveObject();

@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using static GameStates;
-using static User;
-using static Login;
 using UnityEngine;
 using System;
 
 public class GameLoop : MonoBehaviour {
-    private GameLoop gameLoop;
-    //public GameObject Level1;     //you can get the current Level from Level.currentLevel but it might be null if the game is not currently being played
-    public Canvas LoginMenu; //initilzed in editor
-    public Canvas LevelCompleteMenu;
-    public Canvas PauseMenu;
-    //public Canvas GameOverMenu;
+    private static GameLoop gameLoop;
+    private GameState lastGameState;
+
+    //initilzed in editor
+    public GameObject loginMenu;
+    public GameObject ingameInterface;
+    public GameObject pauseMenu;
+    public GameObject levelCompleteMenu;
 
     bool inGame = true; 
 
@@ -25,67 +25,130 @@ public class GameLoop : MonoBehaviour {
         }
         else
         {
-            Destroy(gameLoop); //destroy if another one is attempted to be created.
+            Destroy(this); //destroy if another one is attempted to be created.
         }
     }
     // Use this for initialization
     //start the state machine
-    void Start() {
+    void Start()
+    {
        
         StartCoroutine("StateMachine"); //Start the GameLoop
     }
 
     IEnumerator StateMachine()
     {
-        gameState = GameState.Loading; //initial game state
-        //Level1.SetActive(false); //disable Level1 Menu
-        LoginMenu.enabled = true; //enable the main menu
+        gameState = GameState.LoggingIn; //initial game state
+        previousGameState = GameState.LoggingIn;
+        lastGameState = GameState.LoggingIn;
 
-        playerState = PlayerState.NotLoggedIn; //initial player state
-
-            while (inGame)
+        while (gameState != GameState.Exit)
+        {
+            if (gameState != lastGameState)
             {
+                previousGameState = lastGameState;
+            }
+            lastGameState = gameState;
+
             try
             {
+                //set to 0, then set to 1 only when playing
+                Time.timeScale = 0;
+
+                //set them all to false, then in the switch, set only the correct one to true
+                loginMenu.SetActive(false);
+                //createAccountMenu.SetActive(false);
+                //mainMenu.SetActive(false);
+                //newGameMenu.SetActive(false);
+                //loadGameMenu.SetActive(false);
+                ingameInterface.SetActive(false);
+                levelCompleteMenu.SetActive(false);
+                pauseMenu.SetActive(false);
+                //lostGameMenu.SetActive(false);
+                //wonGameMenu.SetActive(false);
+                //loadReplayMenu.SetActive(false);
+                //optionsMenu.SetActive(false);
+                //aboutMenu.SetActive(false);
+
                 switch (gameState)
                 {
-                    case (GameState.Loading):
+                    case GameState.LoggingIn:
+                        loginMenu.SetActive(true);
                         break;
-                    case (GameState.PlayingDemo):
-                        LoginMenu.enabled = false;
-                        LevelCompleteMenu.enabled = false;
-                        //Level.SetActive(true);
+                    case GameState.CreatAccount:
+                        //createAccountMenu.SetActive(true);
                         break;
-                    case GameState.PlayingFull:
-                        LoginMenu.enabled = false;
-                        LevelCompleteMenu.enabled = false;
-                        //Level1.SetActive(true);
+                    case GameState.Main:
+                        //mainMenu.SetActive(true);
                         break;
-                    case GameState.LevelComplete:
-                        LevelCompleteMenu.enabled = true;                      
+                    case GameState.NewGame:
+                        //newGameMenu.SetActive(true);
+                        break;
+                    case GameState.LoadGame:
+                        //loadGameMenu.SetActive(true);
+                        break;
+                    case GameState.Playing:
+                        ingameInterface.SetActive(true);
+                        Time.timeScale = 1;
+                        foreach (PlayerControls item in Controls.get().players)
+                        {
+                            if (item.Pause)
+                            {
+                                gameState = GameState.Paused;
+                                break;
+                            }
+                        }
                         break;
                     case GameState.Paused:
+                        ingameInterface.SetActive(true);
+                        pauseMenu.SetActive(true);
+                        foreach (PlayerControls item in Controls.get().players)
+                        {
+                            if (item.Pause)
+                            {
+                                gameState = previousGameState;
+                                break;
+                            }
+                        }
                         break;
-                    case GameState.GameOver:
-                        if (playerState == PlayerState.Killed)
+                    case GameState.LevelComplete:
+                        levelCompleteMenu.SetActive(true);
+                        break;
+                    case GameState.LostGame:
+                        //lostGameMenu.SetActive(true);
+                        break;
+                    case GameState.WonGame:
+                        //wonGameMenu.SetActive(true);
+                        break;
+                    case GameState.LoadReplay:
+                        //loadReplayMenu.SetActive(true);
+                        break;
+                    case GameState.Replay:
+                        ingameInterface.SetActive(true);
+                        Time.timeScale = 1;
+                        foreach (PlayerControls item in Controls.get().players)
                         {
-
+                            if (item.Pause)
+                            {
+                                gameState = GameState.Paused;
+                                break;
+                            }
                         }
-                        else if (playerState == PlayerState.Victorious)
-                        {
-
-                        }
-                        else
-                        {
-                            Debug.Log("gameState is GameOver but the playerState is NOT in an appropriate state! " +
-                                "playerState should either be 'Killed or 'Victorious' but is currently '" + playerState.ToString() + "'");
-                        }
+                        break;
+                    case GameState.Options:
+                        //optionsMenu.SetActive(true);
+                        break;
+                    case GameState.About:
+                        //aboutMenu.SetActive(true);
                         break;
                     case GameState.Exit:
                         Application.Quit();
                         break;
+                    default:
+                        throw new Exception("Invalid GameState: " + gameState.ToString());
+                        break;
                 }
-                        
+
             }
             catch (Exception e)
             {
@@ -94,7 +157,7 @@ public class GameLoop : MonoBehaviour {
             }
             yield return null; //return null to allow other things to continue
         }
-
+        Application.Quit();
     }
 }
         

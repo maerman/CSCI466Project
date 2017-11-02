@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MineLayer : DestructableObject
 {
-    LinkedList<HomingMine> mines = new LinkedList<HomingMine>();
+    private LinkedList<HomingMine> mines = new LinkedList<HomingMine>();
     public int maxMines = 10;
     public float mineLayWaitSecs = 4;
     private int updatesUntilNextMine = 0;
@@ -48,7 +48,7 @@ public class MineLayer : DestructableObject
         List<HomingMine> remove = new List<HomingMine>();
         foreach (HomingMine item in mines)
         {
-            if (item == null || !item.inPlay)
+            if (item == null || !item.destroyed)
             {
                 remove.Add(item);
             }

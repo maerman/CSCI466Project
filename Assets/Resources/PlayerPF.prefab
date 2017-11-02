@@ -23,10 +23,9 @@ GameObject:
   - component: {fileID: 50544024577484308}
   - component: {fileID: 114869602761910620}
   - component: {fileID: 60156857458914370}
-  - component: {fileID: 114136741344667294}
   m_Layer: 0
   m_Name: PlayerPF
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -97,19 +96,6 @@ PolygonCollider2D:
       - {x: -2.4007993, y: -2.255001}
       - {x: -2.3654513, y: -1.2956426}
       - {x: -1.0687734, y: -0.19417748}
---- !u!114 &114136741344667294
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1174544039362310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df37c380a49bb6f4f89c0716b63005dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  explosion: {fileID: 194756, guid: e7689eda2701749d7a99e4809a453717, type: 2}
-  playerExplosion: {fileID: 190680, guid: f503d0eb2fa71a9478eb7c5bee4dd261, type: 2}
 --- !u!114 &114869602761910620
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -124,7 +110,7 @@ MonoBehaviour:
   maxSpeed: 15
   inPlay: 1
   team: 0
-  maxHealth: 1000
+  maxHealth: 100
   health: 100
   armor: 1
   playerNum: 0

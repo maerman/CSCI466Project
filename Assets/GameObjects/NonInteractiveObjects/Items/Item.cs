@@ -4,7 +4,7 @@ using System.Collections;
 public abstract class Item : NonInteractiveObject
 {
     private bool previousUse;
-    private bool itemUpdated;
+    private bool itemUpdated = true;
     protected Player holder;
     private int pickupDropTime = 100;
     private int pickupDropTimer;
@@ -31,10 +31,9 @@ public abstract class Item : NonInteractiveObject
     {
         if (holder != null)
         {
-            if (!itemUpdated || !holder.inPlay)
+            if (!itemUpdated || !holder.destroyed)
             {
                 drop();
-                holder = null;
             }
         }
         itemUpdated = false;
@@ -60,8 +59,13 @@ public abstract class Item : NonInteractiveObject
                 { 
                     return pickup(player, i);
                 }
+                else if (player.items[i] == this)
+                {
+                    break;
+                }
             }     
         }
+
         return false;
     }
 
@@ -77,10 +81,11 @@ public abstract class Item : NonInteractiveObject
         }
         else if (pickupDropTimer <= 0)
         {
+            dropItem();
             player.items[itemSlot] = this;
             holder = player;
             pickupItem();
-            //remove item from level
+            enabled = false;
             pickupDropTimer = pickupDropTime;
             return true;
         }
@@ -101,6 +106,7 @@ public abstract class Item : NonInteractiveObject
                 }
             }
             position = holder.position;
+            enabled = true;
             pickupDropTimer = pickupDropTime;
             holder = null;
         }
@@ -113,7 +119,7 @@ public abstract class Item : NonInteractiveObject
         {
             throw new System.Exception("Item holder set to NULL in updateItem, call pickup() first");
         }
-        else if (!holder.inPlay)
+        else if (!holder.destroyed)
         {
             drop();
         }
@@ -146,6 +152,12 @@ public abstract class Item : NonInteractiveObject
             }
 
             holdingItem(use, start, end, dbl);
+        }
+
+
+        if (pickupDropTimer > 0)
+        {
+            pickupDropTimer--;
         }
 
         previousUse = use;

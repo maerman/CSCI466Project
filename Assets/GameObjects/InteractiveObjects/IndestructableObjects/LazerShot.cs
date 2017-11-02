@@ -5,25 +5,26 @@ public class LazerShot : IndestructableObject
 {
     public float damage = 10;
     private int timeAlive = 0;
-    public int updatesToLive = 50;
-
-    protected override void destroyIndestructableObject()
-    {
-
-    }
+    public float timeToLiveSecs = 2;
 
     protected override void startIndestructableObject()
     {
-
+        
     }
 
     protected override void updateIndestructableObject()
     {
         timeAlive++;
-        if (timeAlive > updatesToLive)
+        if (timeAlive > timeToLiveSecs * level.updatesPerSec)
         {
             destroyThis();
         }
+    }
+
+
+    protected override void destroyIndestructableObject()
+    {
+
     }
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
