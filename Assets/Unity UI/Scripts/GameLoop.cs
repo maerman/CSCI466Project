@@ -74,7 +74,7 @@ public class GameLoop : MonoBehaviour {
                     case GameState.LoggingIn:
                         loginMenu.SetActive(true);
                         break;
-                    case GameState.CreatAccount:
+                    case GameState.CreateAccount:
                         //createAccountMenu.SetActive(true);
                         break;
                     case GameState.Main:
