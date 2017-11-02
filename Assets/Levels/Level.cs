@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 using static User;
+using static GameStates;
 
 public abstract class Level : MonoBehaviour
 {
@@ -377,6 +378,7 @@ public abstract class Level : MonoBehaviour
             }
             else
             {
+                gameState = GameState.LevelComplete;
                 nextLevel();
             }
         }

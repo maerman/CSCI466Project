@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using static GameStates;
 using static User;
+using static Login;
 using UnityEngine;
 using System;
 
 public class GameLoop : MonoBehaviour {
     private GameLoop gameLoop;
     //public GameObject Level1;     //you can get the current Level from Level.currentLevel but it might be null if the game is not currently being played
-    public Canvas Menu; //initilzed in editor
+    public Canvas LoginMenu; //initilzed in editor
+    public Canvas LevelCompleteMenu;
+    public Canvas PauseMenu;
+    //public Canvas GameOverMenu;
+
     bool inGame = true; 
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
@@ -34,7 +39,7 @@ public class GameLoop : MonoBehaviour {
     {
         gameState = GameState.Loading; //initial game state
         //Level1.SetActive(false); //disable Level1 Menu
-        Menu.enabled = true; //enable the main menu
+        LoginMenu.enabled = true; //enable the main menu
 
         playerState = PlayerState.NotLoggedIn; //initial player state
 
@@ -47,12 +52,17 @@ public class GameLoop : MonoBehaviour {
                     case (GameState.Loading):
                         break;
                     case (GameState.PlayingDemo):
-                        Menu.enabled = false;
+                        LoginMenu.enabled = false;
+                        LevelCompleteMenu.enabled = false;
                         //Level.SetActive(true);
                         break;
                     case GameState.PlayingFull:
-                        Menu.enabled = false;
+                        LoginMenu.enabled = false;
+                        LevelCompleteMenu.enabled = false;
                         //Level1.SetActive(true);
+                        break;
+                    case GameState.LevelComplete:
+                        LevelCompleteMenu.enabled = true;                      
                         break;
                     case GameState.Paused:
                         break;
