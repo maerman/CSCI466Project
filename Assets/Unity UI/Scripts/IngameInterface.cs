@@ -74,11 +74,6 @@ public class IngameInterface : MonoBehaviour
         }
     }
 
-    public static void displayMessage(string message, int durationFrames)
-    {
-        displayMessage(new Message(message, durationFrames));
-    }
-
     public static void displayMessage(string message, float durationSecs)
     {
         displayMessage(new Message(message, durationSecs));

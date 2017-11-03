@@ -492,28 +492,28 @@ public class Controls
     {     
         players[0].forwardKey = new Key(KeyCode.W);
         players[0].backwardKey = new Key(KeyCode.S);
-        players[0].straifLKey = new Key(KeyCode.LeftArrow);
-        players[0].straifRKey = new Key(KeyCode.RightArrow);
-        players[0].turnUpKey = new Key(KeyCode.UpArrow);
-        players[0].turnDownKey = new Key(KeyCode.DownArrow);
-        players[0].turnLKey = new Key(KeyCode.A);
-        players[0].turnRKey = new Key(KeyCode.D);
-        players[0].itemKeys[0] = new Key(KeyCode.Alpha1);
-        players[0].itemKeys[1] = new Key(KeyCode.Alpha2);
-        players[0].itemKeys[2] = new Key(KeyCode.Alpha3);
-        players[0].itemKeys[3] = new Key(KeyCode.Alpha4);
-        players[0].itemKeys[4] = new Key(KeyCode.Alpha5);
-        players[0].itemKeys[5] = new Key(KeyCode.Alpha6);
-        players[0].itemKeys[6] = new Key(KeyCode.Alpha7);
-        players[0].itemKeys[7] = new Key(KeyCode.Alpha8);
-        players[0].itemKeys[8] = new Key(KeyCode.Alpha9);
-        players[0].itemKeys[9] = new Key(KeyCode.Alpha0);
-        players[0].pickupDropKey = new Key(KeyCode.Tab);
+        players[0].straifLKey = new Key(KeyCode.A);
+        players[0].straifRKey = new Key(KeyCode.D);
+        players[0].turnUpKey = new Key(KeyCode.P);
+        players[0].turnDownKey = new Key(KeyCode.Semicolon);
+        players[0].turnLKey = new Key(KeyCode.L);
+        players[0].turnRKey = new Key(KeyCode.Quote);
+        players[0].itemKeys[0] = new Key(KeyCode.E);
+        players[0].itemKeys[1] = new Key(KeyCode.O);
+        players[0].itemKeys[2] = new Key(KeyCode.R);
+        players[0].itemKeys[3] = new Key(KeyCode.I);
+        players[0].itemKeys[4] = new Key(KeyCode.F);
+        players[0].itemKeys[5] = new Key(KeyCode.K);
+        players[0].itemKeys[6] = new Key(KeyCode.G);
+        players[0].itemKeys[7] = new Key(KeyCode.J);
+        players[0].itemKeys[8] = new Key(KeyCode.C);
+        players[0].itemKeys[9] = new Key(KeyCode.Comma);
+        players[0].pickupDropKey = new Key(KeyCode.RightShift);
         players[0].shootKey = new Key(KeyCode.Space);
         players[0].pauseKey = new Key(KeyCode.Escape);
         players[0].zoomInKey = new Key(KeyCode.LeftShift);
         players[0].zoomOutKey = new Key(KeyCode.LeftControl);
-        players[0].setRelativeMovement(true);
+        players[0].setRelativeMovement(false);
         players[0].setTurns(true);
 
         if (MAX_PLAYERS > 1)
@@ -666,6 +666,14 @@ public class Controls
         }
 
         file.Close();
+    }
+
+    public void clearInputs()
+    {
+        foreach (PlayerControls item in thePlayers)
+        {
+            item.clearInputs();
+        }
     }
 
     private static Controls singleton;
