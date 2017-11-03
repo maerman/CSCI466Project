@@ -26,6 +26,10 @@ public class GameOver : MonoBehaviour {
 
 	public void Exit()
     {
+        if (Level.currentLevel != null)
+        {
+            Destroy(Level.currentLevel);
+        }
         GameStates.gameState = GameStates.GameState.Main;
 	}
 }

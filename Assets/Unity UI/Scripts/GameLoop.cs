@@ -10,6 +10,7 @@ public class GameLoop : MonoBehaviour {
 
     //initilzed in editor
     public GameObject loginMenu;
+    public GameObject mainMenu;
     public GameObject ingameInterface;
     public GameObject pauseMenu;
     public GameObject levelCompleteMenu;
@@ -50,7 +51,7 @@ public class GameLoop : MonoBehaviour {
                     //set them all to false, then in the switch, set only the correct one to true
                     loginMenu.SetActive(false);
                     //createAccountMenu.SetActive(false);
-                    //mainMenu.SetActive(false);
+                    mainMenu.SetActive(false);
                     //newGameMenu.SetActive(false);
                     //loadGameMenu.SetActive(false);
                     ingameInterface.SetActive(false);
@@ -77,7 +78,7 @@ public class GameLoop : MonoBehaviour {
                         //createAccountMenu.SetActive(true);
                         break;
                     case GameState.Main:
-                        //mainMenu.SetActive(true);
+                        mainMenu.SetActive(true);
                         break;
                     case GameState.NewGame:
                         //newGameMenu.SetActive(true);
