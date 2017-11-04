@@ -333,11 +333,6 @@ public abstract class Level : MonoBehaviour
 			return thePlayers;
 		}
 	}
-    
-    public void Start()
-    {
-        background = GetComponent<SpriteRenderer>();
-    }
 
     protected abstract void createLevel();
 
@@ -430,7 +425,17 @@ public abstract class Level : MonoBehaviour
             Controls.get().updateFromInput();
         }
 
-        if (won() && duration.TotalSeconds > 2 && theCurrentLevel == this)
+        int playersRemaining = 0;
+
+        foreach (Player item in players)
+        {
+            if (item != null && item.active)
+            {
+                playersRemaining++;
+            }
+        }
+
+        if (won() && (!pvp || pvp && playersRemaining == 1) && duration.TotalSeconds > 2 && theCurrentLevel == this)
         {
             if (GameStates.gameState == GameStates.GameState.Replay)
             {
@@ -443,16 +448,6 @@ public abstract class Level : MonoBehaviour
             else
             {
                 GameStates.gameState = GameStates.GameState.LevelComplete;
-            }
-        }
-
-        int playersRemaining = 0;
-
-        foreach (Player item in players)
-        {
-            if (item != null && item.active)
-            {
-                playersRemaining++;
             }
         }
 
