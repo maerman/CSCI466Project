@@ -157,7 +157,7 @@ public abstract class Level : MonoBehaviour
 
     public SpaceObject createObject(string namePF, Vector2 position, float angle)
     {
-        UnityEngine.GameObject obj = Instantiate(Resources.Load(namePF), Vector3.zero, Quaternion.Euler(0, 0, angle)) as GameObject;
+        UnityEngine.GameObject obj = Instantiate(Resources.Load(namePF), position, Quaternion.Euler(0, 0, angle)) as GameObject;
         return obj.GetComponent<SpaceObject>();
     }
 
@@ -343,8 +343,6 @@ public abstract class Level : MonoBehaviour
 
     public void create(int numPlayers, int difficulty, int randomSeed, bool pvp)
     {
-        thePvp = pvp;
-
         if (numPlayers > Controls.MAX_PLAYERS)
         {
             throw new Exception("Too manp players given to Level.create(): " + numPlayers.ToString() + " players given.");
@@ -355,6 +353,8 @@ public abstract class Level : MonoBehaviour
 
         background = GetComponent<SpriteRenderer>();
 
+        theDifficulty = difficulty;
+        thePvp = pvp;
         this.randomSeed = randomSeed;
         theRandom = new System.Random(randomSeed);
 

@@ -161,6 +161,11 @@ public class Key
     {
         string toReturn = ToString();
 
+        if (toReturn.Equals("LeftArrow"))
+            return "Left";
+        else if (toReturn.Equals("RightArrow"))
+            return "Right";
+
         toReturn = toReturn.Replace("Backspace", "BckSp");
         toReturn = toReturn.Replace("Delete", "Del");
         toReturn = toReturn.Replace("Escape", "Esc");
@@ -202,11 +207,6 @@ public class Key
         toReturn = toReturn.Replace("Command", "Com");
         toReturn = toReturn.Replace("Apple", "Apl");
         toReturn = toReturn.Replace("Windows", "Win");
-
-        if (toReturn.Equals("L"))
-            toReturn = "Left";
-        else if (toReturn.Equals("R"))
-            toReturn = "Right";
 
         if (XBoxControllerNames)
         {
