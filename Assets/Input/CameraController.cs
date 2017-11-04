@@ -4,9 +4,9 @@ using System.Collections;
 public class CameraController : MonoBehaviour
 {
     public static float edgeBufferSize = 10;
+    public static float zoomSpeed = 0.02f;
 
     public Camera gameCamera;
-    public float zoomSpeed = 0.02f;
     public Rect defaultScreenSize = new Rect(Vector2.zero, new Vector2(40, 30));
     private float preferedSize;
 

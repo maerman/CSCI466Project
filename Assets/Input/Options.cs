@@ -10,7 +10,8 @@ class Options
     //effects volume
     //music volume
     //resolution
-
+    //CameraController.edgeBufferSize;
+    //CameraController.zoomSpeed;
 
     public static void updateOptions()
     {

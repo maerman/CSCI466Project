@@ -94,6 +94,15 @@ public abstract class Level : MonoBehaviour
         }
     }
 
+    private bool thePvp = false;
+    public bool pvp
+    {
+        get
+        {
+            return thePvp;
+        }
+    }
+
     private int randomSeed;
     private System.Random theRandom;
     public System.Random random
@@ -148,7 +157,7 @@ public abstract class Level : MonoBehaviour
 
     public SpaceObject createObject(string namePF, Vector2 position, float angle)
     {
-        UnityEngine.GameObject obj = Instantiate(Resources.Load(namePF), position, Quaternion.Euler(0, 0, angle)) as GameObject;
+        UnityEngine.GameObject obj = Instantiate(Resources.Load(namePF), Vector3.zero, Quaternion.Euler(0, 0, angle)) as GameObject;
         return obj.GetComponent<SpaceObject>();
     }
 
@@ -274,8 +283,10 @@ public abstract class Level : MonoBehaviour
 
     protected abstract void createLevel();
 
-    public void create(int numPlayers, int difficulty, int randomSeed)
+    public void create(int numPlayers, int difficulty, int randomSeed, bool pvp)
     {
+        thePvp = pvp;
+
         if (numPlayers > Controls.MAX_PLAYERS)
         {
             throw new Exception("Too manp players given to Level.create(): " + numPlayers.ToString() + " players given.");
@@ -294,17 +305,22 @@ public abstract class Level : MonoBehaviour
         for (int i = 0; i < numPlayers; i++)
         {
             if (i >= Controls.MAX_PLAYERS)
-            {
                 break;
-            }
 
             UnityEngine.GameObject obj = Instantiate(Resources.Load("PlayerPF"), 
                 new Vector2(gameBounds.center.x - (numPlayers - 1) * 2 + i * 4, gameBounds.center.y) , Quaternion.identity) as GameObject;
             Player current = obj.GetComponent<Player>();
 
             current.playerNum = i;
+            if (pvp)
+                current.team = (sbyte)(i + 1);
+            else
+                current.team = 1;
+
             thePlayers[i] = current;
             initialPlayers[i] = current.clone();
+
+
         }
 
         foreach (PlayerControls item in Controls.get().players)
@@ -603,7 +619,7 @@ public abstract class Level : MonoBehaviour
 
         if (lvl != null)
         {
-            lvl.create(thePlayers.Length, theDifficulty, randomSeed);
+            lvl.create(thePlayers.Length, theDifficulty, randomSeed, thePvp);
 
             for (int i = 0; i < thePlayers.Length; i++)
             {
@@ -640,7 +656,7 @@ public abstract class Level : MonoBehaviour
         {
             save();
 
-            lvl.create(thePlayers.Length, theDifficulty, theRandom.Next());
+            lvl.create(thePlayers.Length, theDifficulty, theRandom.Next(), thePvp);
 
             for (int i = 0; i < thePlayers.Length; i++)
             {
@@ -696,6 +712,7 @@ public abstract class Level : MonoBehaviour
         file.WriteLine(Convert.ToString(thePlayers.Length));
         file.WriteLine(Convert.ToString(theDifficulty));
         file.WriteLine(Convert.ToString(random.Next()));
+        file.WriteLine(Convert.ToString(thePvp));
 
         saveItems(file);
 
@@ -724,6 +741,7 @@ public abstract class Level : MonoBehaviour
         save.WriteLine(Convert.ToString(thePlayers.Length));
         save.WriteLine(Convert.ToString(theDifficulty));
         save.WriteLine(Convert.ToString(randomSeed));
+        save.WriteLine(Convert.ToString(thePvp));
 
         saveItems(save, initialPlayers);
 
@@ -813,8 +831,9 @@ public abstract class Level : MonoBehaviour
         int players = Convert.ToInt32(save.ReadLine());
         int difficulty = Convert.ToInt32(save.ReadLine());
         int randomSeed = Convert.ToInt32(save.ReadLine());
+        bool pvp = Convert.ToBoolean(save.ReadLine());
 
-        lvl.create(players, difficulty, randomSeed);
+        lvl.create(players, difficulty, randomSeed, pvp);
 
         lvl.loadItems(save);
 
@@ -841,7 +860,8 @@ public abstract class Level : MonoBehaviour
         int players = Convert.ToInt32(replay.ReadLine());
         int difficulty = Convert.ToInt32(replay.ReadLine());
         int randomSeed = Convert.ToInt32(replay.ReadLine());
-        lvl.create(players, difficulty, randomSeed);
+        bool pvp = Convert.ToBoolean(replay.ReadLine());
+        lvl.create(players, difficulty, randomSeed, pvp);
 
         lvl.loadItems(replay);
 
