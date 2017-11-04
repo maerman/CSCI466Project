@@ -85,8 +85,8 @@ public abstract class Level : MonoBehaviour
         }
     }
 
-    private int theDifficulty = 1;
-    public int difficulty
+    private float theDifficulty = 1;
+    public float difficulty
     {
         get
         {
@@ -336,7 +336,7 @@ public abstract class Level : MonoBehaviour
 
     protected abstract void createLevel();
 
-    public void create(int numPlayers, int difficulty, int randomSeed, bool pvp)
+    public void create(int numPlayers, float difficulty, int randomSeed, bool pvp)
     {
         if (numPlayers > Controls.MAX_PLAYERS)
         {
@@ -441,7 +441,7 @@ public abstract class Level : MonoBehaviour
             {
                 GameStates.gameState = GameStates.GameState.LoadReplay;
             }
-            else if (User.user.isTrial && levelNumber >= TRIAL_LEVELS || !levelExists(levelNumber + 1))
+            else if (GameStates.isDemo && levelNumber >= TRIAL_LEVELS || !levelExists(levelNumber + 1))
             {
                 GameStates.gameState = GameStates.GameState.WonGame;
             }
@@ -451,19 +451,7 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        if (playersRemaining == 0)
-        {
-            if (GameStates.gameState == GameStates.GameState.Replay)
-            {
-                GameStates.gameState = GameStates.GameState.LoadReplay;
-            }
-            else
-            {
-                GameStates.gameState = GameStates.GameState.LostGame;
-            }
-        }
-
-        if (lost())
+        if (lost() || playersRemaining == 0)
         {
             if (GameStates.gameState == GameStates.GameState.Replay)
             {

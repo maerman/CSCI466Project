@@ -4,6 +4,9 @@ using static GameStates;
 
 public class MainMenu : MonoBehaviour
 {
+    //initilized in editor
+    public UnityEngine.UI.Button loadGame;
+    public UnityEngine.UI.Button watchReplay;
 
     void Start()
     {
@@ -12,7 +15,16 @@ public class MainMenu : MonoBehaviour
 
     void Update()
     {
-
+        if (GameStates.isDemo)
+        {
+            loadGame.interactable = false;
+            watchReplay.interactable = false;
+        }
+        else
+        {
+            loadGame.interactable = true;
+            watchReplay.interactable = true;
+        }
     }
 
     public void NewGame()

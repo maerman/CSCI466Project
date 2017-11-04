@@ -642,7 +642,7 @@ GameObject:
   - component: {fileID: 222987297912171922}
   - component: {fileID: 114958178447753334}
   m_Layer: 0
-  m_Name: Gamemode_Panel
+  m_Name: NewGame_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -727,9 +727,9 @@ GameObject:
   - component: {fileID: 223822356743741670}
   - component: {fileID: 114839060365628982}
   - component: {fileID: 114048980728988582}
-  - component: {fileID: 114038618997796288}
+  - component: {fileID: 114856847549626386}
   m_Layer: 0
-  m_Name: Gamemode_Canvas 1
+  m_Name: CreateLevel_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -839,17 +839,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114038618997796288
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1924242820910046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e8b7cabce9efb54e883db275b4bd4b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114048980728988582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -937,7 +926,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114067408504852858
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1060,7 +1049,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114143781272915416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1237,7 +1226,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114228348667382114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1693,7 +1682,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114569175349185488
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1870,7 +1859,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114663051546438578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1909,7 +1898,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114687223576956540}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114856847549626386}
+        m_MethodName: start
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114687223576956540
@@ -2043,16 +2043,36 @@ MonoBehaviour:
   m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114856847549626386
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1924242820910046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3eac7db8c3937644ab2350cba86a85a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  singlePlayer: {fileID: 114158835964380460}
+  cooperative: {fileID: 114225144752447852}
+  competative: {fileID: 114065815583518992}
+  campaign: {fileID: 114458566445183284}
+  practice: {fileID: 114568591296189110}
+  survival: {fileID: 114127902842864328}
+  easy: {fileID: 114867809937329624}
+  medium: {fileID: 114067408504852858}
+  hard: {fileID: 114660157283385016}
 --- !u!114 &114867809937329624
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2097,7 +2117,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &114875428626792554
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2157,7 +2177,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 0
     m_MaxSize: 94
-    m_Alignment: 1
+    m_Alignment: 4
     m_AlignByGeometry: 1
     m_RichText: 1
     m_HorizontalOverflow: 1
@@ -2256,7 +2276,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114778464824489664}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114856847549626386}
+        m_MethodName: back
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114958178447753334
@@ -3276,11 +3307,11 @@ RectTransform:
   m_Father: {fileID: 224136208948009426}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.25, y: -46665244}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: -1555500}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 150}
+  m_SizeDelta: {x: 442.8, y: 59.6}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224842704056514534
 RectTransform:
   m_ObjectHideFlags: 1

@@ -77,11 +77,8 @@ public class Login : MonoBehaviour, IErrorPanel {
 
     public void PlayDemo()
     {
-        Level lvl1 = Level.getLevel(1);
-        lvl1.create(2, 1, (int)System.DateTime.Now.Ticks, false);
+        isDemo = true;
 
-        User.user.isTrial = true;
-
-        gameState = GameState.Playing;
+        gameState = GameState.Main;
     }
 }

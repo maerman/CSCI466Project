@@ -11,6 +11,7 @@ public class GameLoop : MonoBehaviour {
     //initilzed in editor
     public GameObject loginMenu;
     public GameObject mainMenu;
+    public GameObject newGameMenu;
     public GameObject ingameInterface;
     public GameObject pauseMenu;
     public GameObject levelCompleteMenu;
@@ -52,7 +53,7 @@ public class GameLoop : MonoBehaviour {
                     loginMenu.SetActive(false);
                     //createAccountMenu.SetActive(false);
                     mainMenu.SetActive(false);
-                    //newGameMenu.SetActive(false);
+                    newGameMenu.SetActive(false);
                     //loadGameMenu.SetActive(false);
                     ingameInterface.SetActive(false);
                     levelCompleteMenu.SetActive(false);
@@ -81,7 +82,7 @@ public class GameLoop : MonoBehaviour {
                         mainMenu.SetActive(true);
                         break;
                     case GameState.NewGame:
-                        //newGameMenu.SetActive(true);
+                        newGameMenu.SetActive(true);
                         break;
                     case GameState.LoadGame:
                         //loadGameMenu.SetActive(true);
