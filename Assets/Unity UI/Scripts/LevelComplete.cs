@@ -113,6 +113,10 @@ public class LevelComplete : MonoBehaviour
 
     public void quit()
     {
+        if (Level.currentLevel != null)
+        {
+            Destroy(Level.currentLevel);
+        }
         GameStates.gameState = GameStates.GameState.Main;
     }
 }

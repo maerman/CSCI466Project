@@ -236,6 +236,64 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
+    public List<IEnumerable<SpaceObject>> getTypes(bool players, bool destructables, bool indestructables, bool nonInteractives)
+    {
+        List<IEnumerable<SpaceObject>> objects = new List<IEnumerable<SpaceObject>>();
+
+        if (players)
+            objects.Add(thePlayers);
+        if (destructables)
+            objects.Add(theDestructables);
+        if (indestructables)
+            objects.Add(theIndestructables);
+        if (nonInteractives)
+            objects.Add(theNonInteractives);
+
+        return objects;
+    }
+
+    /*
+    public List<IEnumerable<T>> getTypes<T>() where T : SpaceObject
+    {
+        if (typeof(T) == typeof(SpaceObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, true, true, true);
+        }
+        else if (typeof(T) == typeof(NonInteractiveObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(false, false, false, true);
+        }
+        else if (typeof(T) == typeof(InteractiveObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, true, true, false);
+        }
+        else if (typeof(T) == typeof(DestructableObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, true, false, false);
+        }
+        else if (typeof(T) == typeof(IndestructableObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(false, false, true, false);
+        }
+        else if (typeof(T) == typeof(Player))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, false, false, false);
+        }
+        else if (typeof(T).IsSubclassOf(typeof(NonInteractiveObject))
+        {
+            List<IEnumerable<T>> items = new List<IEnumerable<T>>();
+            foreach (T item in theNonInteractives)
+            {
+                if (item.GetType().IsSubclassOf(typeof(T)) || item.GetType() == typeof(T))
+                {
+                    items[0].Add(item);
+                }
+            }
+            return items;
+        }
+    }
+    */
+
     public void removeFromGame(DestructableObject remove)
     {
         removeDestructables.Add(remove);
@@ -266,8 +324,8 @@ public abstract class Level : MonoBehaviour
         addNonInteractives.Add(add);
     }
 
-    private Player[] initialPlayers;
-    private Player[] thePlayers;
+    private Player[] initialPlayers = new Player[Controls.MAX_PLAYERS];
+    private Player[] thePlayers = new Player[Controls.MAX_PLAYERS];
 	public Player[] players
 	{
 		get 
@@ -292,6 +350,7 @@ public abstract class Level : MonoBehaviour
             throw new Exception("Too manp players given to Level.create(): " + numPlayers.ToString() + " players given.");
         }
 
+        Controls.get().clearInputs();
         theCurrentLevel = this;
 
         background = GetComponent<SpriteRenderer>();
@@ -539,7 +598,10 @@ public abstract class Level : MonoBehaviour
 
         foreach (Player item in thePlayers)
         {
-            Destroy(item.gameObject);
+            if (item != null)
+            {
+                Destroy(item.gameObject);
+            }
         }
         thePlayers = new Player[Controls.MAX_PLAYERS];
 

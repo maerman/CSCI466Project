@@ -10,6 +10,8 @@ class Options
     //effects volume
     //music volume
     //resolution
+    //Key activation threshold
+    //Key deadzone
     //CameraController.edgeBufferSize;
     //CameraController.zoomSpeed;
 
