@@ -85,12 +85,21 @@ public abstract class Level : MonoBehaviour
         }
     }
 
-    private int theDifficulty = 1;
-    public int difficulty
+    private float theDifficulty = 1;
+    public float difficulty
     {
         get
         {
             return theDifficulty;
+        }
+    }
+
+    private bool thePvp = false;
+    public bool pvp
+    {
+        get
+        {
+            return thePvp;
         }
     }
 
@@ -227,6 +236,64 @@ public abstract class Level : MonoBehaviour
 		}
 	}
 
+    public List<IEnumerable<SpaceObject>> getTypes(bool players, bool destructables, bool indestructables, bool nonInteractives)
+    {
+        List<IEnumerable<SpaceObject>> objects = new List<IEnumerable<SpaceObject>>();
+
+        if (players)
+            objects.Add(thePlayers);
+        if (destructables)
+            objects.Add(theDestructables);
+        if (indestructables)
+            objects.Add(theIndestructables);
+        if (nonInteractives)
+            objects.Add(theNonInteractives);
+
+        return objects;
+    }
+
+    /*
+    public List<IEnumerable<T>> getTypes<T>() where T : SpaceObject
+    {
+        if (typeof(T) == typeof(SpaceObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, true, true, true);
+        }
+        else if (typeof(T) == typeof(NonInteractiveObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(false, false, false, true);
+        }
+        else if (typeof(T) == typeof(InteractiveObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, true, true, false);
+        }
+        else if (typeof(T) == typeof(DestructableObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, true, false, false);
+        }
+        else if (typeof(T) == typeof(IndestructableObject))
+        {
+            return (List<IEnumerable<T>>)getTypes(false, false, true, false);
+        }
+        else if (typeof(T) == typeof(Player))
+        {
+            return (List<IEnumerable<T>>)getTypes(true, false, false, false);
+        }
+        else if (typeof(T).IsSubclassOf(typeof(NonInteractiveObject))
+        {
+            List<IEnumerable<T>> items = new List<IEnumerable<T>>();
+            foreach (T item in theNonInteractives)
+            {
+                if (item.GetType().IsSubclassOf(typeof(T)) || item.GetType() == typeof(T))
+                {
+                    items[0].Add(item);
+                }
+            }
+            return items;
+        }
+    }
+    */
+
     public void removeFromGame(DestructableObject remove)
     {
         removeDestructables.Add(remove);
@@ -257,8 +324,8 @@ public abstract class Level : MonoBehaviour
         addNonInteractives.Add(add);
     }
 
-    private Player[] initialPlayers;
-    private Player[] thePlayers;
+    private Player[] initialPlayers = new Player[Controls.MAX_PLAYERS];
+    private Player[] thePlayers = new Player[Controls.MAX_PLAYERS];
 	public Player[] players
 	{
 		get 
@@ -266,25 +333,23 @@ public abstract class Level : MonoBehaviour
 			return thePlayers;
 		}
 	}
-    
-    public void Start()
-    {
-        background = GetComponent<SpriteRenderer>();
-    }
 
     protected abstract void createLevel();
 
-    public void create(int numPlayers, int difficulty, int randomSeed)
+    public void create(int numPlayers, float difficulty, int randomSeed, bool pvp)
     {
         if (numPlayers > Controls.MAX_PLAYERS)
         {
             throw new Exception("Too manp players given to Level.create(): " + numPlayers.ToString() + " players given.");
         }
 
+        Controls.get().clearInputs();
         theCurrentLevel = this;
 
         background = GetComponent<SpriteRenderer>();
 
+        theDifficulty = difficulty;
+        thePvp = pvp;
         this.randomSeed = randomSeed;
         theRandom = new System.Random(randomSeed);
 
@@ -294,17 +359,22 @@ public abstract class Level : MonoBehaviour
         for (int i = 0; i < numPlayers; i++)
         {
             if (i >= Controls.MAX_PLAYERS)
-            {
                 break;
-            }
 
             UnityEngine.GameObject obj = Instantiate(Resources.Load("PlayerPF"), 
                 new Vector2(gameBounds.center.x - (numPlayers - 1) * 2 + i * 4, gameBounds.center.y) , Quaternion.identity) as GameObject;
             Player current = obj.GetComponent<Player>();
 
             current.playerNum = i;
+            if (pvp)
+                current.team = (sbyte)(i + 1);
+            else
+                current.team = 1;
+
             thePlayers[i] = current;
             initialPlayers[i] = current.clone();
+
+
         }
 
         foreach (PlayerControls item in Controls.get().players)
@@ -355,22 +425,6 @@ public abstract class Level : MonoBehaviour
             Controls.get().updateFromInput();
         }
 
-        if (won() && duration.TotalSeconds > 2 && theCurrentLevel == this)
-        {
-            if (GameStates.gameState == GameStates.GameState.Replay)
-            {
-                GameStates.gameState = GameStates.GameState.LoadReplay;
-            }
-            else if (User.user.isTrial && levelNumber >= TRIAL_LEVELS || !levelExists(levelNumber + 1))
-            {
-                GameStates.gameState = GameStates.GameState.WonGame;
-            }
-            else
-            {
-                GameStates.gameState = GameStates.GameState.LevelComplete;
-            }
-        }
-
         int playersRemaining = 0;
 
         foreach (Player item in players)
@@ -381,19 +435,23 @@ public abstract class Level : MonoBehaviour
             }
         }
 
-        if (playersRemaining == 0)
+        if (won() && (!pvp || pvp && playersRemaining == 1) && duration.TotalSeconds > 2 && theCurrentLevel == this)
         {
             if (GameStates.gameState == GameStates.GameState.Replay)
             {
                 GameStates.gameState = GameStates.GameState.LoadReplay;
             }
+            else if (GameStates.isDemo && levelNumber >= TRIAL_LEVELS || !levelExists(levelNumber + 1))
+            {
+                GameStates.gameState = GameStates.GameState.WonGame;
+            }
             else
             {
-                GameStates.gameState = GameStates.GameState.LostGame;
+                GameStates.gameState = GameStates.GameState.LevelComplete;
             }
         }
 
-        if (lost())
+        if (lost() || playersRemaining == 0)
         {
             if (GameStates.gameState == GameStates.GameState.Replay)
             {
@@ -523,7 +581,10 @@ public abstract class Level : MonoBehaviour
 
         foreach (Player item in thePlayers)
         {
-            Destroy(item.gameObject);
+            if (item != null)
+            {
+                Destroy(item.gameObject);
+            }
         }
         thePlayers = new Player[Controls.MAX_PLAYERS];
 
@@ -603,7 +664,7 @@ public abstract class Level : MonoBehaviour
 
         if (lvl != null)
         {
-            lvl.create(thePlayers.Length, theDifficulty, randomSeed);
+            lvl.create(thePlayers.Length, theDifficulty, randomSeed, thePvp);
 
             for (int i = 0; i < thePlayers.Length; i++)
             {
@@ -640,7 +701,7 @@ public abstract class Level : MonoBehaviour
         {
             save();
 
-            lvl.create(thePlayers.Length, theDifficulty, theRandom.Next());
+            lvl.create(thePlayers.Length, theDifficulty, theRandom.Next(), thePvp);
 
             for (int i = 0; i < thePlayers.Length; i++)
             {
@@ -696,6 +757,7 @@ public abstract class Level : MonoBehaviour
         file.WriteLine(Convert.ToString(thePlayers.Length));
         file.WriteLine(Convert.ToString(theDifficulty));
         file.WriteLine(Convert.ToString(random.Next()));
+        file.WriteLine(Convert.ToString(thePvp));
 
         saveItems(file);
 
@@ -724,6 +786,7 @@ public abstract class Level : MonoBehaviour
         save.WriteLine(Convert.ToString(thePlayers.Length));
         save.WriteLine(Convert.ToString(theDifficulty));
         save.WriteLine(Convert.ToString(randomSeed));
+        save.WriteLine(Convert.ToString(thePvp));
 
         saveItems(save, initialPlayers);
 
@@ -813,8 +876,9 @@ public abstract class Level : MonoBehaviour
         int players = Convert.ToInt32(save.ReadLine());
         int difficulty = Convert.ToInt32(save.ReadLine());
         int randomSeed = Convert.ToInt32(save.ReadLine());
+        bool pvp = Convert.ToBoolean(save.ReadLine());
 
-        lvl.create(players, difficulty, randomSeed);
+        lvl.create(players, difficulty, randomSeed, pvp);
 
         lvl.loadItems(save);
 
@@ -841,7 +905,8 @@ public abstract class Level : MonoBehaviour
         int players = Convert.ToInt32(replay.ReadLine());
         int difficulty = Convert.ToInt32(replay.ReadLine());
         int randomSeed = Convert.ToInt32(replay.ReadLine());
-        lvl.create(players, difficulty, randomSeed);
+        bool pvp = Convert.ToBoolean(replay.ReadLine());
+        lvl.create(players, difficulty, randomSeed, pvp);
 
         lvl.loadItems(replay);
 

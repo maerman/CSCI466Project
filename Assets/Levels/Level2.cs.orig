@@ -1,0 +1,34 @@
+﻿using UnityEngine;
+using System.Collections;
+using System;
+using static User;
+<<<<<<< HEAD
+using static CRUD;
+=======
+using static getUser;
+>>>>>>> a572064ef3e775b636a5a318378f1d6ff8eaed04
+using static GameStates;
+
+public class Level2 : Level
+{
+    public override int levelNumber
+    {
+        get
+        {
+            return 2;
+        }
+    }
+
+    protected override void initilizeLevel()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+             HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+        }
+    }
+
+    protected override void updateLevel()
+    {
+        
+    }
+}
