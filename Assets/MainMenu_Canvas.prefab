@@ -239,7 +239,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1713449818743686
 GameObject:
   m_ObjectHideFlags: 1
@@ -1085,6 +1085,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba67f5959a825fd428c6dcf618b1c60d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadGame: {fileID: 114577341036348018}
+  watchReplay: {fileID: 114507988124158690}
 --- !u!114 &114942000733372076
 MonoBehaviour:
   m_ObjectHideFlags: 1
