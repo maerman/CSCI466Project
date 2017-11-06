@@ -27,7 +27,7 @@ public class Login : MonoBehaviour, IErrorPanel {
     public void loginComplete() 
     {
         string ErrorMsg = "";
-            if (HasError())
+            if (HasError()) //calls method to determine if credentials are invalid
             {
                 switch(login)
             {
@@ -57,7 +57,7 @@ public class Login : MonoBehaviour, IErrorPanel {
         crud.GetUser(userName.text, password.text);
     }
 
-    public bool HasError()
+    public bool HasError() //determines if input fields are invalid
     {
         Boolean hasError = false;
 
@@ -67,7 +67,7 @@ public class Login : MonoBehaviour, IErrorPanel {
         return hasError;
     }
 
-    public void showErrorMenu(string errorMsg)
+    public void showErrorMenu(string errorMsg) //displays error message
     {
         
         errorText.text = errorMsg;
@@ -75,7 +75,7 @@ public class Login : MonoBehaviour, IErrorPanel {
         canvasGroup.DOFade(1.0f, 2.0f);
     }
 
-    public void PlayDemo()
+    public void PlayDemo() //sets gamestate to the main menu and variable that signifies demo version use to true
     {
         isDemo = true;
 
