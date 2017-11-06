@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using static User;
 using static UserData;
-using SimpleJSON;
+using static JSONObject;
 using System;
 using static GameStates;
 using static Delegates;
@@ -30,38 +30,55 @@ public class CRUD : MonoBehaviour {
     //GET ---gets a user who is logging in
     public void GetUser(string username, string password)
     {
+        Debug.Log("Getting User information");
         //var complete = false; //return complete to the calling function
         string url = baseUrl + "getUser.php?username=" + username + "&password=" + password;
         WWW www = new WWW(url);
-       
-        StartCoroutine(WaitForRequest(www));
 
-        if(www.isDone)
+        StartCoroutine(WaitForRequest(www));
+        Debug.Log("Request not complete yet");
+        while(!www.isDone)
         {
-            
-            StopCoroutine("WaitForRequest");
-            gameState = GameState.LoggingIn;
-            if(string.IsNullOrEmpty(www.error)) //we check for the www.to be done and that it hasn't returned an error
+            new WaitForSeconds(0.5f);
+        }
+
+        //StopCoroutine("WaitForRequest");
+        //gameState = GameState.LoggingIn;
+        if (www.isDone)
+        {
+            Debug.Log("DB call completed");
+            //Debug.Log(www.text);
+            if (string.IsNullOrEmpty(www.error)) //we check for the www.to be done and that it hasn't returned an error
             {
                 if (www.text.Contains("null")) //no user was found
                 {
                     login = LoginErrors.UserNotFound; //no user was found;
                 }
                 else
-                {             
+                {
                     try
                     {
+                       // myText = myText.Contains("\n") ? myText.Remove( : myText;
+                        Debug.Log("Data returned successfully!");
                         //TODO figure out why this is mapping to a dictionary and not a class
-                        var myObj = JSON.Parse(www.text); //parse the JSON and update the user record
-                        user.id = int.Parse(myObj[0]); //convert to an int
-                        user.username = myObj[1];
-                        user.password = myObj[2];
-                        user.email = myObj[3];
-                        user.isTrial = myObj[4]; //convert to an int
-
+                        //var myarr = www.text.Split('\n');
+                        //Debug.Log(myarr);
+                        var myObj = new JSONObject(www.text); //parse the JSON and update the user record
+                        //JsonUtility.FromJsonOverwrite(www.text, user);
+                        user.id = int.Parse(myObj.list[0].ToString().Replace("\"", "")); //convert to an int
+                        userData.accountId = user.id;
+                        user.username = myObj.list[1].ToString();
+                        user.password = myObj.list[2].ToString();
+                        user.email = myObj.list[3].ToString();
+                        user.isTrial = myObj.list[4]; //convert to an int
+                        Debug.Log("Successfully Logged In as " + user.username);
+                        Debug.Log("Id: " + user.id);
+                        Debug.Log("password" + user.password);
+                        Debug.Log("email:" + user.email);
+                        Debug.Log("Is Trial?:"  + user.isTrial);
                         gameState = GameState.Main; //change the game state to Main
                         login = LoginErrors.LoginSuccess;
-                        Debug.Log("Successfully Logged In as " + user.username);
+                        
                     }
                     catch (Exception e)
                     {
@@ -70,7 +87,7 @@ public class CRUD : MonoBehaviour {
                     }
                 }
             }
-            else if(www.error == "null")
+            else if (www.error == "null")
             {
                 login = LoginErrors.UserNotFound; //no user was found;
             }
@@ -78,10 +95,12 @@ public class CRUD : MonoBehaviour {
             {
                 login = LoginErrors.LoginError;
             }
+            Debug.Log("Calling Login Delegate");
             loginActionComplete(); //fire the delegate!          
             return;
-            
         }
+
+            
        // return complete;
     }
     //POST -Creates a new user
@@ -92,6 +111,10 @@ public class CRUD : MonoBehaviour {
 
         StartCoroutine(WaitForRequest(www));
         Debug.Log("Create User CoRoutine started");
+        while(!www.isDone)
+        {
+            new WaitForSeconds(0.5f);
+        }
         if(www.isDone)
         {
             Debug.Log("Create User www complete");
@@ -110,7 +133,7 @@ public class CRUD : MonoBehaviour {
                         user.username = username;
                         user.password = password;
                         user.email = email;
-                        user.isTrial = isTrial;
+                        user.isTrial = false;
                         login = LoginErrors.LoginSuccess;
                     }
                     else if(www.error.Contains("Duplicate"))
@@ -141,6 +164,11 @@ public class CRUD : MonoBehaviour {
 
         WWW www = new WWW(url);
         StartCoroutine(WaitForRequest(www));
+
+        while(!www.isDone)
+        {
+            new WaitForSeconds(0.5f);
+        }
 
         if (www.isDone)
         {
@@ -177,12 +205,13 @@ public class CRUD : MonoBehaviour {
             return;
         }
 
-
     }
 
     //Waits for www to return
     private IEnumerator WaitForRequest(WWW www)
     {
+
+        Debug.Log("Waiting for DB request to complete");
 
         if (www.isDone && !string.IsNullOrEmpty(www.error)) //if it's finished and there is an error
         {
@@ -190,7 +219,7 @@ public class CRUD : MonoBehaviour {
             throw new Exception("There was an error logging into your account! " + www.error);
         }
 
-        yield return www; //return the www object
+        yield return new WaitForSeconds(0.5f);
 
     }   
 

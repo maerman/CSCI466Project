@@ -27,13 +27,14 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
     //User attempts to create a new account
     public void CreateUser()
     {
+        login = LoginErrors.PreLogin;
         gameState = GameState.LoggingIn;
         if (HasError())
         {
-            showErrorMenu("Error! You must have a valid username and password to sign in!");
+            showErrorMenu("Error! You must have a valid username and password to create an account!");
             return;
         };
-
+       
         crud.CreateNewUser(userName.text, password.text, null, false);
     }
 
@@ -53,9 +54,10 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
             }
             showErrorMenu(ErrorMsg);
             return;
-        }
+        }       
         Debug.Assert(user.username != null, "The user was not created successfully!");
-        gameState = GameState.Playing;
+        showErrorMenu("Account has been created successfully!");
+        gameState = GameState.Main;
     }
 
     //Implement Error Panel interfaces from IErrorPanel below
