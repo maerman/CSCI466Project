@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Gamestates;
 
 public class NewGame : MonoBehaviour
 {
@@ -25,15 +26,15 @@ public class NewGame : MonoBehaviour
 
 	void Update ()
     {
-		if (GameStates.isDemo)
+		if (GameStates.isDemo) //determines if the user is playing without an account i.e. playing the demo version
         {
-            cooperative.interactable = false;
+            cooperative.interactable = false; //if they are then the following features are disabled for them
             competative.interactable = false;
             practice.interactable = false;
             survival.interactable = false;
             hard.interactable = false;
         }
-        else
+        else //else they can use these features on the new game menu
         {
             cooperative.interactable = true;
             competative.interactable = true;
@@ -49,17 +50,17 @@ public class NewGame : MonoBehaviour
         bool pvp = false;
         float difficulty = 2;
 
-        if (singlePlayer.isOn)
+        if (singlePlayer.isOn) //if singleplayer is toggled, set players to 1
         {
             players = 1;
             pvp = false;
         }
-        else if (cooperative.isOn)
+        else if (cooperative.isOn) //if cooperative is toggled, set players to 2
         {
             players = 2;
             pvp = false;
         }
-        else if (competative.isOn)
+        else if (competative.isOn) //if competitive is toggled, set players to 2
         {
             players = 2;
             pvp = false;
@@ -69,15 +70,15 @@ public class NewGame : MonoBehaviour
             throw new System.Exception("No player setting was selected when trying to start a new game.");
         }
 
-        if (easy.isOn)
+        if (easy.isOn) //if easy is toggled, set difficulty to 1
         {
             difficulty = 1;
         }
-        else if (medium.isOn)
+        else if (medium.isOn) //if medium is toggled, set difficulty to 2
         {
             difficulty = 2;
         }
-        else if (hard.isOn)
+        else if (hard.isOn) //if hard is toggled, set difficulty to 3
         {
             difficulty = 3;
         }
@@ -86,7 +87,7 @@ public class NewGame : MonoBehaviour
             throw new System.Exception("No difficulty setting was selected when trying to start a new game.");
         }
 
-        if (campaign.isOn)
+        if (campaign.isOn) //if campaign is toggled, set level to level 1
         {
             Level level1 = Level.getLevel(1);
             level1.create(players, difficulty, (int)System.DateTime.Now.Ticks, pvp);
@@ -104,11 +105,11 @@ public class NewGame : MonoBehaviour
             throw new System.Exception("No game type was selected when trying to start a new game.");
         }
 
-        GameStates.gameState = GameStates.GameState.Playing;
+        gamestate = Gamestate.Playing;
     }
 
-    public void back()
+    public void back() //method used by the new game menu to go back to the main menu
     {
-        GameStates.gameState = GameStates.GameState.Main;
+        gamestate = Gamestate.Main;
     }
 }
