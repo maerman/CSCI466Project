@@ -81,4 +81,9 @@ public class Login : MonoBehaviour, IErrorPanel {
 
         gameState = GameState.Main;
     }
+
+    public void Quit()
+    {
+        gameState = GameState.Exit;
+    }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static Gamestates;
 
 public class NewGame : MonoBehaviour
 {
@@ -105,11 +104,11 @@ public class NewGame : MonoBehaviour
             throw new System.Exception("No game type was selected when trying to start a new game.");
         }
 
-        gamestate = Gamestate.Playing;
+        GameStates.gameState = GameStates.GameState.Playing;
     }
 
     public void back() //method used by the new game menu to go back to the main menu
     {
-        gamestate = Gamestate.Main;
+        GameStates.gameState = GameStates.GameState.Main;
     }
 }

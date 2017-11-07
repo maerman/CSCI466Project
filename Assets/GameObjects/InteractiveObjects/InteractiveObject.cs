@@ -36,7 +36,7 @@ public abstract class InteractiveObject : SpaceObject
         }
         set
         {
-            GetComponent<Rigidbody2D>().MoveRotation(value);
+            GetComponent<Rigidbody2D>().rotation = value;
         }
     }
 

@@ -100,6 +100,7 @@ public class PlayerControls
     public Key pauseKey;
     public Key zoomInKey;
     public Key zoomOutKey;
+    public bool mouseTurn = false;
 
     private bool previousPause;
     private bool previousZoomIn;
@@ -360,10 +361,56 @@ public class PlayerControls
         current.backward = backwardKey.getAxis();
         current.straifL = straifLKey.getAxis();
         current.straifR = straifRKey.getAxis();
-        current.turnUp = turnUpKey.getAxis();
-        current.turnDown = turnDownKey.getAxis();
-        current.turnL = turnLKey.getAxis();
-        current.turnR = turnRKey.getAxis();
+
+        if (mouseTurn)
+        {
+            Vector2 mousePos = Input.mousePosition;
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            Vector2 playerPos = Vector2.zero;
+
+            if (Level.currentLevel != null)
+            {
+                for (int i = Controls.get().players.Length - 1; i >= 0; i--)
+                {
+                    PlayerControls current = Controls.get().players[i];
+                    if (current == this)
+                    {
+                        playerPos = Level.currentLevel.players[i].position;
+                    }
+                }
+            }
+
+            mousePos = playerPos - mousePos;
+
+            if (mousePos.x > 0)
+            {
+                current.turnL = mousePos.x;
+                current.turnR = 0;
+            }
+            else
+            {
+                current.turnL = 0;
+                current.turnR = -mousePos.x;
+            }
+
+            if (mousePos.y > 0)
+            {
+                current.turnDown = mousePos.y;
+                current.turnUp = 0;
+            }
+            else
+            {
+                current.turnDown = 0;
+                current.turnUp = -mousePos.y;
+            }
+        }
+        else
+        {
+            current.turnUp = turnUpKey.getAxis();
+            current.turnDown = turnDownKey.getAxis();
+            current.turnL = turnLKey.getAxis();
+            current.turnR = turnRKey.getAxis();
+        }
 
         for (int i = 0; i < PlayerInput.NUM_ITEMS; i++)
         {
@@ -373,7 +420,15 @@ public class PlayerControls
         current.shoot = shootKey.isPressed();
 
         current.relativeMovement = theRelativeMovement;
-        current.turns = theTurns;
+
+        if (mouseTurn)
+        {
+            current.turns = false;
+        }
+        else
+        {
+            current.turns = theTurns;
+        }
 
         inputs.Add(current);
     }
@@ -400,7 +455,7 @@ public class PlayerControls
 
         string[] parts = settings.Split(seperators);
 
-        if (parts.Length == 23)
+        if (parts.Length == 26)
         {
             forwardKey = new Key(System.Convert.ToInt32(parts[0]));
             backwardKey = new Key(System.Convert.ToInt32(parts[1]));
@@ -419,8 +474,11 @@ public class PlayerControls
             pickupDropKey = new Key(System.Convert.ToInt32(parts[18]));
             shootKey = new Key(System.Convert.ToInt32(parts[19]));
             pauseKey = new Key(System.Convert.ToInt32(parts[20]));
-            theRelativeMovement = System.Convert.ToBoolean(parts[21]);
-            theTurns = System.Convert.ToBoolean(parts[22]);
+            zoomInKey = new Key(System.Convert.ToInt32(parts[21]));
+            zoomOutKey = new Key(System.Convert.ToInt32(parts[22]));
+            theRelativeMovement = System.Convert.ToBoolean(parts[23]);
+            theTurns = System.Convert.ToBoolean(parts[24]);
+            mouseTurn = System.Convert.ToBoolean(parts[25]);
         }
         else
         {
@@ -447,8 +505,11 @@ public class PlayerControls
         toReturn += pickupDropKey.getValue() + " ";
         toReturn += shootKey.getValue() + " ";
         toReturn += pauseKey.getValue() + " ";
+        toReturn += zoomInKey.getValue() + " ";
+        toReturn += zoomOutKey.getValue() + " ";
         toReturn += theRelativeMovement.ToString() + " ";
         toReturn += theTurns.ToString() + " ";
+        toReturn += mouseTurn.ToString();
 
         return toReturn;
     }
@@ -457,7 +518,7 @@ public class PlayerControls
 public class Controls
 {
     public const int MAX_PLAYERS = 4;
-    public const string CONTROLS_FILE = "\\Controls.options";
+    public const string CONTROLS_FILE = "Controls.options";
 
     public bool staticLevel = false;
 
@@ -489,32 +550,35 @@ public class Controls
     }
 
     public void setDefaultControls()
-    {     
+    {
+        Debug.Log("Setting default controls");
+
         players[0].forwardKey = new Key(KeyCode.W);
         players[0].backwardKey = new Key(KeyCode.S);
         players[0].straifLKey = new Key(KeyCode.A);
         players[0].straifRKey = new Key(KeyCode.D);
-        players[0].turnUpKey = new Key(KeyCode.P);
-        players[0].turnDownKey = new Key(KeyCode.Semicolon);
-        players[0].turnLKey = new Key(KeyCode.L);
-        players[0].turnRKey = new Key(KeyCode.Quote);
-        players[0].itemKeys[0] = new Key(KeyCode.E);
-        players[0].itemKeys[1] = new Key(KeyCode.O);
-        players[0].itemKeys[2] = new Key(KeyCode.R);
-        players[0].itemKeys[3] = new Key(KeyCode.I);
-        players[0].itemKeys[4] = new Key(KeyCode.F);
-        players[0].itemKeys[5] = new Key(KeyCode.K);
-        players[0].itemKeys[6] = new Key(KeyCode.G);
-        players[0].itemKeys[7] = new Key(KeyCode.J);
-        players[0].itemKeys[8] = new Key(KeyCode.C);
-        players[0].itemKeys[9] = new Key(KeyCode.Comma);
-        players[0].pickupDropKey = new Key(KeyCode.RightShift);
-        players[0].shootKey = new Key(KeyCode.Space);
+        players[0].turnUpKey = new Key(KeyCode.UpArrow);
+        players[0].turnDownKey = new Key(KeyCode.DownArrow);
+        players[0].turnLKey = new Key(KeyCode.LeftArrow);
+        players[0].turnRKey = new Key(KeyCode.RightArrow);
+        players[0].itemKeys[0] = new Key(KeyCode.Mouse1);
+        players[0].itemKeys[1] = new Key(KeyCode.Mouse2);
+        players[0].itemKeys[2] = new Key(KeyCode.Mouse3);
+        players[0].itemKeys[3] = new Key(KeyCode.Mouse4);
+        players[0].itemKeys[4] = new Key(KeyCode.E);
+        players[0].itemKeys[5] = new Key(KeyCode.R);
+        players[0].itemKeys[6] = new Key(KeyCode.T);
+        players[0].itemKeys[7] = new Key(KeyCode.F);
+        players[0].itemKeys[8] = new Key(KeyCode.G);
+        players[0].itemKeys[9] = new Key(KeyCode.C);
+        players[0].pickupDropKey = new Key(KeyCode.Space);
+        players[0].shootKey = new Key(KeyCode.Mouse0);
         players[0].pauseKey = new Key(KeyCode.Escape);
         players[0].zoomInKey = new Key(KeyCode.LeftShift);
         players[0].zoomOutKey = new Key(KeyCode.LeftControl);
         players[0].setRelativeMovement(false);
         players[0].setTurns(true);
+        players[0].mouseTurn = true;
 
         if (MAX_PLAYERS > 1)
         {
@@ -543,6 +607,7 @@ public class Controls
             players[1].zoomOutKey = new Key(KeyCode.Joystick1Button5);
             players[1].setRelativeMovement(false);
             players[1].setTurns(false);
+            players[1].mouseTurn = false;
         }
         if (MAX_PLAYERS > 2)
         {
@@ -571,6 +636,7 @@ public class Controls
             players[2].zoomOutKey = new Key(KeyCode.Joystick2Button5);
             players[2].setRelativeMovement(false);
             players[2].setTurns(false);
+            players[2].mouseTurn = false;
         }
         if (MAX_PLAYERS > 3)
         {
@@ -599,6 +665,7 @@ public class Controls
             players[3].zoomOutKey = new Key(KeyCode.Joystick3Button5);
             players[3].setRelativeMovement(false);
             players[3].setTurns(false);
+            players[3].mouseTurn = false;
         }
     }
 
@@ -641,14 +708,27 @@ public class Controls
 
     public void setControlsFromFile(string fileName)
     {
-        System.IO.StreamReader file = new System.IO.StreamReader(fileName);
-
-        foreach (PlayerControls item in thePlayers)
+        System.IO.StreamReader file = null;
+        try
         {
-            item.setFromString(file.ReadLine());
-        }
+            file = new System.IO.StreamReader(fileName);
 
-        file.Close();
+            foreach (PlayerControls item in thePlayers)
+            {
+                item.setFromString(file.ReadLine());
+            }
+        }
+        catch (System.Exception e)
+        {
+            throw new System.Exception("Probelm loading controls from file.", e);
+        }
+        finally
+        {
+            if (file != null)
+            {
+                file.Close();
+            }
+        }
     }
 
     public void saveControlsToFile()
@@ -658,14 +738,29 @@ public class Controls
 
     public void saveControlsToFile(string fileName)
     {
-        System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, false);
-
-        foreach (PlayerControls item in thePlayers)
+        System.IO.StreamWriter file = null;
+        try
         {
-            file.WriteLine(item.ToString());
-        }
+            file = new System.IO.StreamWriter(fileName, false);
 
-        file.Close();
+            foreach (PlayerControls item in thePlayers)
+            {
+                file.WriteLine(item.ToString());
+            }
+
+            file.Close();
+        }
+        catch (System.Exception e)
+        {
+            throw new System.Exception("Probelm saving controls to file.", e);
+        }
+        finally
+        {
+            if (file != null)
+            {
+                file.Close();
+            }
+        }
     }
 
     public void clearInputs()

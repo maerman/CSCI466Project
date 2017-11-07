@@ -25,6 +25,11 @@ public class MultiShooter : Item
 
     private void shoot()
     {
+        if (spread < spreadStart)
+        {
+            spread = spreadStart;
+        }
+
         float currentAngle = 0;
 
         for (int i = 0; i < numberOfShots; i++)
@@ -41,6 +46,7 @@ public class MultiShooter : Item
 
         shotCooldown = (int)(shotTimeSecs * level.updatesPerSec);
         shotTimer = 0;
+        spread = 0;
     }
 
     protected override void holdingItem(bool use, bool startUse, bool endUse, bool doubleUse)

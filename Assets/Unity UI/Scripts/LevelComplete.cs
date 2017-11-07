@@ -22,14 +22,13 @@ public class LevelComplete : MonoBehaviour
 
     public void conntiue() // method used by the level complete menu to load the gamestate for next level
     {
-        if (Level.currentLevel == null) /if there is an error with the current level then throw an exception and an error message is displayed
+        if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
         {
             throw new System.Exception("CurrentLevel is null when trying to go to next Level");
         }
         else //else call the gamestate to set it to the next level
         {
             if (Level.currentLevel.nextLevel() == null) //if next level cannot be loaded then throw an exception and display an error message
-            {
             {
                 throw new System.Exception("Problem loading next Level");
             }

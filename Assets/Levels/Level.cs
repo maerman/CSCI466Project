@@ -136,6 +136,26 @@ public abstract class Level : MonoBehaviour
             random.Next((int)(gameBounds.height * PRECISION)) / PRECISION) + gameBounds.min;
     }
 
+    public Vector2 getRandomGameEdge()
+    {
+        int edge = random.Next(3);
+
+        switch (edge)
+        {
+            case 0:
+                return new Vector2(gameBounds.xMax, random.Next((int)gameBounds.height) + gameBounds.yMin);
+            case 1:
+                return new Vector2(gameBounds.xMin, random.Next((int)gameBounds.height) + gameBounds.yMin);
+            case 2:
+                return new Vector2(random.Next((int)gameBounds.width) + gameBounds.xMin, gameBounds.yMax);
+            case 3:
+                return new Vector2(random.Next((int)gameBounds.width) + gameBounds.xMin, gameBounds.yMin);
+            default:
+                throw new Exception("I have no idea how this was called.");
+        }
+
+    }
+
     public Vector2 getRandomVelocity(float maxSpeed)
     {
         float angle = getRandomAngle() * Mathf.Deg2Rad;
@@ -416,7 +436,7 @@ public abstract class Level : MonoBehaviour
 
         theDuration += UnityEngine.Time.fixedDeltaTime;
 
-        if (GameStates.gameState == GameStates.GameState.Replay)
+        if (GameStates.gameState == GameStates.GameState.Replay && updateFile != null)
         {
             Controls.get().updateFromFile(updateFile);
         }
@@ -470,7 +490,7 @@ public abstract class Level : MonoBehaviour
             float yUpperLimit = theGameBounds.yMin;
             float yLowerLimit = theGameBounds.yMax;
 
-            foreach (Player item in Level.currentLevel.players)
+            foreach (Player item in players)
             {
                 if (item != null && item.active)
                 {

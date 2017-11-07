@@ -27,7 +27,7 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
     //User attempts to create a new account
     public void CreateUser()
     {
-        login = LoginErrors.PreLogin;
+        //login = LoginErrors.PreLogin;
         gameState = GameState.LoggingIn;
         if (HasError())
         {

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Player : DestructableObject
 {
+    public const float INVULNERABLE_SECS = 2.0f;
+
     public int playerNum = 0;
     public float acceleration = 0.4f;
     public float turnSpeed = 100;
@@ -157,6 +159,12 @@ public class Player : DestructableObject
     protected override void playerCollision(Player other, Collision2D collision)
     {
         
+    }
+
+    public override void damageThis(float damage)
+    {
+        if (level.duration.Seconds > INVULNERABLE_SECS) 
+            base.damageThis(damage);
     }
 
     public Player clone()
