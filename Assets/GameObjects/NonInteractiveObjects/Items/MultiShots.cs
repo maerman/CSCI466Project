@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MultiShooter : Item
+public class MultiShots : Item
 {
     public float numberOfShots = 8f;
     public float damageEach = 10f;
-    public float shotSpeed = 15f;
+    public float shotSpeed = 20f;
     public float shotLifeSecs = 3f;
-    public Vector2 offset = new Vector2(0, 2);
+    public Vector2 offset = new Vector2(0, 2f);
+    public Vector2 shotScale = new Vector2(0.25f, 0.025f);
 
     public float shotTimeSecs = 2f;
     private int shotTimer = 0;
@@ -15,7 +16,7 @@ public class MultiShooter : Item
 
     public float spreadStart = 30f;
     public float spreadMax = 180f;
-    public float spreadSpeed = 2f;
+    private float spreadSpeed;
     private float spread;
 
     protected override void dropItem()
@@ -91,6 +92,6 @@ public class MultiShooter : Item
 
     protected override void pickupItem()
     {
-        
+        spreadSpeed = (spreadMax - spreadStart) / (shotTimeSecs * level.updatesPerSec);
     }
 }

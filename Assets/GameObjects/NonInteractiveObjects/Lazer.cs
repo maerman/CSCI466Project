@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LazerBeam : NonInteractiveObject
+public class Lazer : NonInteractiveObject
 {
     public float damage = 2;
     public float extendSpeed = 0.1f;
-    public float length = 8f;
+    public float maxLength = 8f;
 
-    public Vector2 attachPoint = new Vector2(0, 1f);
+    public Vector2 attachPoint = new Vector2(0, 0);
     public float attachAngle = 0;
     public SpaceObject attachedTo;
 
@@ -23,6 +23,7 @@ public class LazerBeam : NonInteractiveObject
         if (other != attachedTo)
         {
             other.damageThis(damage);
+            scale = new Vector2(scale.x, distanceFrom(other) / originalLength);
         }
     }
 
@@ -36,6 +37,7 @@ public class LazerBeam : NonInteractiveObject
         if (other != attachedTo)
         {
             other.damageThis(damage);
+            scale = new Vector2(scale.x, distanceFrom(other) / originalLength);
         }
     }
 
@@ -43,6 +45,7 @@ public class LazerBeam : NonInteractiveObject
     {
         angle = 0;
         originalLength = gameObject.GetComponent<Collider2D>().bounds.size.y / scale.y;
+        angle = attachedTo.angle + attachAngle;
     }
 
     protected override void updateNonInteractiveObject()
@@ -50,15 +53,13 @@ public class LazerBeam : NonInteractiveObject
         if (attachedTo != null && attachedTo.active)
         {
             float currentLenght = originalLength * scale.y;
-            if (currentLenght < length)
-            {
-                float targetLength = currentLenght + extendSpeed;
-                scale = new Vector2(scale.x, scale.y * targetLength / currentLenght);
-            }
+            currentLenght += extendSpeed;
+
+            if (currentLenght < maxLength)
+                scale = new Vector2(scale.x, currentLenght / originalLength);
 
             angle = attachedTo.angle + attachAngle;
             Vector2 toRotate = attachPoint;
-            toRotate.y += currentLenght * 0.5f;
 
             position = attachedTo.position + toRotate.rotate(angle);
 

@@ -7,12 +7,12 @@ public class LazerSword : Item
     private int turnTimer;
     public float turnSpeed = 1;
 
-    public int swordLength = 5;
-    public int swordDamge = 5;
+    public float swordLength = 5;
+    public float swordDamge = 5;
 
     public Vector2 offset = new Vector2(0, 1);
 
-    private LazerBeam sword;
+    private Lazer sword;
 
     protected override void pickupItem()
     {
@@ -39,10 +39,10 @@ public class LazerSword : Item
         {
             if (sword == null)
             {
-                sword = (LazerBeam)level.createObject("LazerBeamPF");
+                sword = (Lazer)level.createObject("LazerPF");
                 sword.attachedTo = holder;
                 sword.damage = swordDamge;
-                sword.length = swordLength;
+                sword.maxLength = swordLength;
                 sword.color = color;
                 sword.attachPoint = offset;
             }

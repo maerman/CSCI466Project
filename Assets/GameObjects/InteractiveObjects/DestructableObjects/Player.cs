@@ -101,7 +101,9 @@ public class Player : DestructableObject
         if (input.shoot && shootNextUpdates <= 0)
         {
             shootNextUpdates = shootTimeSecs * level.updatesPerSec;
-            SpaceObject shot = level.createObject("LazerShotPF", new Vector2(0, 2).rotate(angle) + position, angle, shotSpeed + speed);
+            SpaceObject shot = level.createObject("LazerShotPF", new Vector2(0, 2).rotate(angle) + position, angle);
+            shot.velocity = velocity;
+            shot.moveForward(shotSpeed);
             shot.color = color;
         }
 

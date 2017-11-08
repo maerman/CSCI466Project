@@ -22,7 +22,8 @@ public class HomingMines : Item
     {
         foreach (HomingMine item in mines)
         {
-            item.destroyThis();
+            if (item != null)
+                item.destroyThis();
         }
 
         mines.Clear();
