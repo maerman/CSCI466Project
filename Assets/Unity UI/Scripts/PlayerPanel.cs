@@ -38,7 +38,7 @@ public class PlayerPanel : MonoBehaviour
         {
             PlayerControls controls = Controls.get().players[player.playerNum];
 
-            healthText.text = player.health.ToString() + " / " + player.maxHealth.ToString();
+            healthText.text = System.Math.Round(player.health, 2).ToString() + " / " + player.maxHealth.ToString();
 
             armorText.text = player.armor.ToString();
 

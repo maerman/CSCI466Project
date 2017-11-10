@@ -7,8 +7,8 @@ public class Player : DestructableObject
     public const float INVULNERABLE_SECS = 2.0f;
 
     public int playerNum = 0;
-    public float acceleration = 0.4f;
-    public float turnSpeed = 100;
+    public float accelerationPerSec = 20f;
+    public float turnSpeed = 100f;
 
     private float shootNextUpdates = 0;
     public float shootTimeSecs = 0.5f;
@@ -71,7 +71,7 @@ public class Player : DestructableObject
         move.x += input.straifR;
 
         move.Normalize();
-        move *= acceleration;
+        move *= accelerationPerSec * level.secsPerUpdate;
 
         if (input.relativeMovement)
         {

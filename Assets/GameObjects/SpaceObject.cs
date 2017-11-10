@@ -654,8 +654,7 @@ public abstract class SpaceObject : MonoBehaviour
             }
         }
 
-        mirror = new Vector2(time * intersect.velocity.x + mirror.x,
-                time * intersect.velocity.y + mirror.y);
+        
 
         if (time < 0 || time > 10)
         {
@@ -663,6 +662,10 @@ public abstract class SpaceObject : MonoBehaviour
         }
         else
         {
+
+            mirror = new Vector2(time * intersect.velocity.x + mirror.x,
+                time * intersect.velocity.y + mirror.y);
+
             return new Vector3(mirror.x, mirror.y, time);
         }
     }

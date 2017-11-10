@@ -87,6 +87,10 @@ public class Level1 : Level
         ChargedShots charged = (ChargedShots)createObject("ChargedShotPF");
         RapidShots rapid = (RapidShots)createObject("RapidShotsPF");
         LazerBeam beam = (LazerBeam)createObject("LazerBeamPF");
+        Armor armor = (Armor)createObject("ArmorPF");
+        Accelerant accelerant = (Accelerant)createObject("AccelerantFP");
+        Heal heal = (Heal)createObject("HealPF");
+        Shield shield = (Shield)createObject("ShieldPF");
     }
 
     protected override void updateLevel()
