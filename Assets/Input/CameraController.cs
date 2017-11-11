@@ -10,24 +10,22 @@ public class CameraController : MonoBehaviour
     public Rect defaultScreenSize = new Rect(Vector2.zero, new Vector2(40, 30));
     private float preferedSize;
 
-    // Use this for initialization
     void Start()
     {
         gameCamera = GetComponent<Camera>();
         preferedSize = gameCamera.orthographicSize;
     }
 
-    // Update is called once per frame
     void Update()
     {
         float aspectRatio = gameCamera.aspect;
 
         Vector3 position = transform.position;
         Rect gameBounds;
-        float xUpperLimit = position.x;
-        float xLowerLimit = position.x;
-        float yUpperLimit = position.y;
-        float yLowerLimit = position.y;
+        float xUpperLimit = float.MinValue;
+        float xLowerLimit = float.MaxValue;
+        float yUpperLimit = float.MinValue;
+        float yLowerLimit = float.MaxValue;
         float size;
 
         if (Level.currentLevel != null)
@@ -60,6 +58,14 @@ public class CameraController : MonoBehaviour
         else
         {
             gameBounds = defaultScreenSize;
+        }
+
+        if (xUpperLimit == float.MinValue)
+        {
+            xUpperLimit = position.x;
+            xLowerLimit = position.x;
+            yUpperLimit = position.y;
+            yLowerLimit = position.y;
         }
 
         if (2f * preferedSize > gameBounds.height)

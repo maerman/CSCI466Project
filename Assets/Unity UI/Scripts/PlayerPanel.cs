@@ -7,6 +7,7 @@ public class PlayerPanel : MonoBehaviour
 {
     //Initilize in editor
     public Text healthText;
+    public Text armorText;
     public Image healthBar;
     public Image backHealthBar;
     public List<Image> items;
@@ -37,7 +38,9 @@ public class PlayerPanel : MonoBehaviour
         {
             PlayerControls controls = Controls.get().players[player.playerNum];
 
-            healthText.text = player.health.ToString() + " / " + player.maxHealth.ToString();
+            healthText.text = System.Math.Round(player.health, 2).ToString() + " / " + player.maxHealth.ToString();
+
+            armorText.text = player.armor.ToString();
 
             Vector3 scale = healthBar.transform.localScale;
             scale.x = player.health / player.maxHealth;

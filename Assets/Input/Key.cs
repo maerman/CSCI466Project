@@ -7,6 +7,9 @@ public class Key
 
     public const float ACTIVATION_THRESHOLD = 0.5f;
     public const float DEAD_ZONE = 0.1f;
+    public const string MOUSE_WHEEL_NAME = "MouseWheel";
+    public const int MOUSE_WHEEL_UP = 1022;
+    public const int MOUSE_WHELL_DOWN = 1023; 
     public const int START_AXIS = 1024;
     public const int NUM_AXIS = 20;
     public const int NUM_CONTROLLERS = 4;
@@ -38,6 +41,14 @@ public class Key
         {
             throw new System.Exception("There is no " + axis.ToString() + " axis on controller " + controller.ToString());
         }
+    }
+
+    public Key(bool mouseWheelUp)
+    {
+        if (mouseWheelUp)
+            value = MOUSE_WHEEL_UP;
+        else
+            value = MOUSE_WHELL_DOWN;
     }
 
     public Key(int key)
@@ -75,7 +86,25 @@ public class Key
     {
         try
         {
-            if (value >= START_AXIS)
+            if (value == MOUSE_WHEEL_UP)
+            {
+                float axisValue = Input.GetAxis(MOUSE_WHEEL_NAME);
+
+                if (axisValue > 0)
+                    return true;
+                else
+                    return false;
+            }
+            else if (value == MOUSE_WHELL_DOWN)
+            {
+                float axisValue = Input.GetAxis(MOUSE_WHEEL_NAME);
+
+                if (axisValue < 0)
+                    return true;
+                else
+                    return false;
+            }
+            else if (value >= START_AXIS)
             {
                 string name = ToString();
 
@@ -107,7 +136,25 @@ public class Key
     {
         try
         {
-            if (value >= START_AXIS)
+            if (value == MOUSE_WHEEL_UP)
+            {
+                float axisValue = Input.GetAxis(MOUSE_WHEEL_NAME);
+
+                if (axisValue > 0)
+                    return axisValue;
+                else
+                    return 0;
+            }
+            else if (value == MOUSE_WHELL_DOWN)
+            {
+                float axisValue = Input.GetAxis(MOUSE_WHEEL_NAME);
+
+                if (axisValue < 0)
+                    return -axisValue;
+                else
+                    return 0;
+            }
+            else if (value >= START_AXIS)
             {
                 string name = ToString();
                 float axisValue = Input.GetAxis(name.Substring(1));
@@ -159,9 +206,15 @@ public class Key
 
     public string toShortString()
     {
+        //should use switch on the value
+
         string toReturn = ToString();
 
-        if (toReturn.Equals("LeftArrow"))
+        if (value == MOUSE_WHEEL_UP)
+            return "WhlUp";
+        else if (value == MOUSE_WHELL_DOWN)
+            return "WhlDn";
+        else if (toReturn.Equals("LeftArrow"))
             return "Left";
         else if (toReturn.Equals("RightArrow"))
             return "Right";
@@ -207,6 +260,11 @@ public class Key
         toReturn = toReturn.Replace("Command", "Com");
         toReturn = toReturn.Replace("Apple", "Apl");
         toReturn = toReturn.Replace("Windows", "Win");
+        toReturn = toReturn.Replace("Mouse0", "LClk");
+        toReturn = toReturn.Replace("Mouse1", "RClk");
+        toReturn = toReturn.Replace("Mouse2", "MClk");
+        toReturn = toReturn.Replace("Mouse3", "FWrd");
+        toReturn = toReturn.Replace("Mouse4", "BWrd");
 
         if (XBoxControllerNames)
         {
@@ -281,7 +339,15 @@ public class Key
     {
         try
         {
-            if (value >= START_AXIS)
+            if (value == MOUSE_WHEEL_UP)
+            {
+                return "Mouse Wheel Up";
+            }
+            else if (value == MOUSE_WHELL_DOWN)
+            {
+                return "Mouse Whell Down";
+            }
+            else if (value >= START_AXIS)
             {
                 int tempValue = value - START_AXIS;
 
@@ -330,11 +396,13 @@ public class Key
             }
         }
 
+        float axisValue;
+
         for (int i = 0; i < NUM_CONTROLLERS; i++)
         {
             for (int j = 0; j < NUM_AXIS; j++)
             {
-                float axisValue = Input.GetAxis(getAxisString(i, j));
+                axisValue = Input.GetAxis(getAxisString(i, j));
                 if (System.Math.Abs(axisValue) > ACTIVATION_THRESHOLD)
                 {
                     if (axisValue > 0)
@@ -348,6 +416,13 @@ public class Key
                 }
             }
         }
+
+        axisValue = Input.GetAxis(MOUSE_WHEEL_NAME);
+
+        if (axisValue > 0)
+            return new Key(true);
+        else if (axisValue < 0)
+            return new Key(false);
 
         return null;
     }

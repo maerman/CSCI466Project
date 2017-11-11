@@ -68,17 +68,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0882713627c068b4b928466c729ae81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 15
+  maxSpeed: 20
   team: 0
   numberOfShots: 8
   damageEach: 10
-  shotSpeed: 15
-  shotLifeSecs: 3
+  shotSpeed: 20
+  shotLifeSecs: 2
   offset: {x: 0, y: 2}
-  shotTimeSecs: 2
+  shotTimeSecs: 1
   spreadStart: 10
   spreadMax: 180
-  spreadSpeed: 2
 --- !u!212 &212537576892652056
 SpriteRenderer:
   m_ObjectHideFlags: 1

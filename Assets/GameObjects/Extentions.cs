@@ -63,6 +63,16 @@ public static class GameObjectExtentions
 
 public static class VectorExtentions
 {
+    public static Vector2 add(this Vector2 dividend, float toAdd)
+    {
+        return new Vector2(dividend.x + toAdd, dividend.y + toAdd);
+    }
+
+    public static Vector2 sub(this Vector2 dividend, float toAdd)
+    {
+        return new Vector2(dividend.x + toAdd, dividend.y + toAdd);
+    }
+
     public static Vector2 mod(this Vector2 dividend, Vector2 divisor)
     {
         return new Vector2(dividend.x % divisor.x, dividend.y % divisor.y);
@@ -133,10 +143,10 @@ public static class VectorExtentions
             {
                 return 180f;
             }
-            //at origin, no input
+            //at origin, default angle of zero
             else
             {
-                return float.NaN;
+                return 0f;
             }
         }
         else if (angleFrom.y == 0f)

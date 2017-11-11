@@ -7,8 +7,9 @@ using UnityEngine;
 
 class GravityWell : IndestructableObject
 {
+    public float scaleMultipleOfGravity = 1f/8f;
     public float gravity = 1f;
-    public float damage = 10;
+    public float damage = 10f;
 
     protected override void destroyIndestructableObject()
     {
@@ -39,11 +40,18 @@ class GravityWell : IndestructableObject
 
     protected override void startIndestructableObject()
     {
-        mass = 1000;
+        mass = 1000 * gravity;
     }
 
     protected override void updateIndestructableObject()
     {
+        float targetScale = scaleMultipleOfGravity * gravity;
+        if (scale.x != scaleMultipleOfGravity)
+        {
+            scale = new Vector2(targetScale, targetScale);
+        }
+
+
         foreach (Player item in level.players)
         {
             Vector2 pull = gravity / (float)Math.Pow(distanceFrom(item), 2) * -vector2From(item).normalized;

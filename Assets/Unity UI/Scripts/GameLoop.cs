@@ -17,6 +17,7 @@ public class GameLoop : MonoBehaviour {
     public GameObject pauseMenu;
     public GameObject levelCompleteMenu;
     public GameObject gameOverMenu;
+    public GameObject gameCompleteMenu;
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
     {
@@ -60,7 +61,7 @@ public class GameLoop : MonoBehaviour {
                     levelCompleteMenu.SetActive(false);
                     pauseMenu.SetActive(false);
                     gameOverMenu.SetActive(false);
-                    //wonGameMenu.SetActive(false);
+                    gameCompleteMenu.SetActive(false);
                     //loadReplayMenu.SetActive(false);
                     //optionsMenu.SetActive(false);
                     //aboutMenu.SetActive(false);
@@ -121,7 +122,7 @@ public class GameLoop : MonoBehaviour {
                         gameOverMenu.SetActive(true);
                         break;
                     case GameState.WonGame:
-                        //wonGameMenu.SetActive(true);
+                        gameCompleteMenu.SetActive(true);
                         break;
                     case GameState.LoadReplay:
                         //loadReplayMenu.SetActive(true);
@@ -145,7 +146,6 @@ public class GameLoop : MonoBehaviour {
                         //aboutMenu.SetActive(true);
                         break;
                     case GameState.Exit:
-                        Application.Quit();
                         break;
                     default:
                         throw new Exception("Invalid GameState: " + gameState.ToString());
@@ -158,7 +158,17 @@ public class GameLoop : MonoBehaviour {
             }
             yield return null; //return null to allow other things to continue
         }
-        Application.Quit();
+
+        Controls.get().saveControlsToFile();
+
+        #if UNITY_EDITOR
+        // Application.Quit() does not work in the editor so
+        // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+
     }
 }
         

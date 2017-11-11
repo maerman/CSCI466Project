@@ -5,12 +5,19 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class GameOver : MonoBehaviour, IErrorPanel
+public class GameOver : MonoBehaviour
 {
-    public InputField replayNameInputField; //initilized in editor
-    public GameObject errorPanel;
-    public CanvasGroup canvasGroup;
-    public Text errorText;
+    public UnityEngine.UI.InputField replayNameInputField; //initilized in editor
+
+    void Start ()
+    {
+		
+	}
+	
+	void Update ()
+    {
+		
+	}
 
 	public void restart() // method used by the restart button on the gameover menu to set level to its beginning
     {
@@ -23,6 +30,62 @@ public class GameOver : MonoBehaviour, IErrorPanel
             Level.currentLevel.restartLevel();
             GameStates.gameState = GameStates.GameState.Playing;
         }
+	}
+
+    public void saveReplay() // method used by the Gameover menu to create a save file
+    {
+        if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
+        {
+            throw new System.Exception("CurrentLevel is null when trying to saveReplay");
+        }
+        else if (replayNameInputField == null || replayNameInputField.text == null) //if there is an error with the replay file name then throw an exception and display an error message
+        {
+            throw new System.Exception("Problem with replayName InputField");
+        }
+        else if (replayNameInputField.text == "") //if user does not enter name in input field
+        {
+            //display error that need a name to save replay
+        }
+        else //else create replay recording on user's hardrive using the input field text
+        {
+            if (Level.currentLevel.saveReplay(replayNameInputField.text))
+            {
+                //display that replay was saved
+            }
+            else
+            {
+                //display that there was a problem saving the replay
+            }
+        }
+    }
+
+    public void quit() // method used by the gameover menu to set gamestate to main menu
+    {
+        if (Level.currentLevel != null)
+        {
+            Destroy(Level.currentLevel);
+        }
+        GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
+	}
+
+    public bool HasError()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void showErrorMenu(string errorMsg)
+    {
+        errorText.text = errorMsg;
+        errorPanel.SetActive(true);
+        canvasGroup.DOFade(1.0f, 2.0f);
+    }
+}
+
+public class GameOver : MonoBehaviour, IErrorPanel
+    public InputField replayNameInputField; //initilized in editor
+    public GameObject errorPanel;
+    public CanvasGroup canvasGroup;
+    public Text errorText;
 	}
 
     public void saveReplay() // method used by the Gameover menu to create a save file
@@ -51,25 +114,3 @@ public class GameOver : MonoBehaviour, IErrorPanel
             }
         }
     }
-
-    public void quit() // method used by the gameover menu to set gamestate to main menu
-    {
-        if (Level.currentLevel != null)
-        {
-            Destroy(Level.currentLevel);
-        }
-        GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
-	}
-
-    public bool HasError()
-    {
-        throw new NotImplementedException();
-    }
-
-    public void showErrorMenu(string errorMsg)
-    {
-        errorText.text = errorMsg;
-        errorPanel.SetActive(true);
-        canvasGroup.DOFade(1.0f, 2.0f);
-    }
-}

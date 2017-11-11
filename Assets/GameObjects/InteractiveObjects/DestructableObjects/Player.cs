@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 public class Player : DestructableObject
 {
+    public const float INVULNERABLE_SECS = 2.0f;
+
     public int playerNum = 0;
-    public float acceleration = 0.4f;
-    public float turnSpeed = 100;
+    public float accelerationPerSec = 20f;
+    public float turnSpeed = 100f;
 
     private float shootNextUpdates = 0;
     public float shootTimeSecs = 0.5f;
@@ -69,7 +71,7 @@ public class Player : DestructableObject
         move.x += input.straifR;
 
         move.Normalize();
-        move *= acceleration;
+        move *= accelerationPerSec * level.secsPerUpdate;
 
         if (input.relativeMovement)
         {
@@ -99,7 +101,9 @@ public class Player : DestructableObject
         if (input.shoot && shootNextUpdates <= 0)
         {
             shootNextUpdates = shootTimeSecs * level.updatesPerSec;
-            SpaceObject shot = level.createObject("LazerShotPF", new Vector2(0, 2).rotate(angle) + position, angle, shotSpeed + speed);
+            SpaceObject shot = level.createObject("LazerShotPF", new Vector2(0, 2).rotate(angle) + position, angle);
+            shot.velocity = velocity;
+            shot.moveForward(shotSpeed);
             shot.color = color;
         }
 
@@ -157,6 +161,12 @@ public class Player : DestructableObject
     protected override void playerCollision(Player other, Collision2D collision)
     {
         
+    }
+
+    public override void damageThis(float damage)
+    {
+        if (level.duration.Seconds > INVULNERABLE_SECS) 
+            base.damageThis(damage);
     }
 
     public Player clone()
