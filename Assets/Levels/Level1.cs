@@ -7,6 +7,9 @@ using static GameStates;
 
 public class Level1 : Level
 {
+    private GameObject music;
+    private AudioSource level1Music;
+
     public override int levelNumber
     {
         get
@@ -25,8 +28,12 @@ public class Level1 : Level
 
     protected override void createLevel()
     {
+        music = GameObject.Find("Level 1");
+        level1Music = music.GetComponent<AudioSource>();
+        level1Music.Play();
+  
         //levelSize = new Vector2(80, 60); //set the level size
-
+        
         createObject("SpaceDustPF", gameBounds.center, 0);
 
         for (int i = 0; i < 8; i++)

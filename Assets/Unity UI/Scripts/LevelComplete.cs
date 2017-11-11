@@ -1,14 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
+using static CRUD;
+using static UserData;
 
-public class LevelComplete : MonoBehaviour
+public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel interface to dislpay error messages and implement it's methods
 {
     public UnityEngine.UI.InputField saveNameInputField; //initilzied in editor
     public UnityEngine.UI.InputField replayNameInputField; //initilized in editor
     private bool addedToLeaderboard = false;
+    public GameObject errorPanel;
+    public CanvasGroup canvasGroup;
+    public Text errorText;
 
-	void Start ()
+    void Start ()
     {
         
 	}
@@ -22,47 +30,36 @@ public class LevelComplete : MonoBehaviour
 
     public void conntiue() // method used by the level complete menu to load the gamestate for next level
     {
-        if (Level.currentLevel == null) /if there is an error with the current level then throw an exception and an error message is displayed
-        {
-            throw new System.Exception("CurrentLevel is null when trying to go to next Level");
-        }
-        else //else call the gamestate to set it to the next level
-        {
-            if (Level.currentLevel.nextLevel() == null) //if next level cannot be loaded then throw an exception and display an error message
-            {
-            {
-                throw new System.Exception("Problem loading next Level");
-            }
-            else //else set gamestate to the next level
-            {
-                GameStates.gameState = GameStates.GameState.Playing;
-            }
-        }
+        //if there is an error with the current level then throw an exception and an error message is displayed
+        if(Level.currentLevel == null)  showErrorMenu("CurrentLevel is null when trying to go to next Level");
+        //if next level cannot be loaded then throw an exception and display an error message
+        if (Level.currentLevel.nextLevel() == null) showErrorMenu("Problem loading next Level");
+            
+        GameStates.gameState = GameStates.GameState.Playing;
+        
     }
 
     public void saveGame() // method used by the level complete menu to take user input from input field and create save file on user's device
     {
-        if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
+        if (Level.currentLevel == null) showErrorMenu("CurrentLevel is null when trying to save"); //if there is an error with the current level then throw an exception and an error message is displayed
+
+        if (saveNameInputField == null || saveNameInputField.text == null)
         {
-            throw new System.Exception("CurrentLevel is null when trying to save");
+            showErrorMenu("Problem with SaveName InputField"); //if there is an error with the save file name then throw an exception and display an error message
         }
-        else if (saveNameInputField == null || saveNameInputField.text == null) //if there is an error with the save file name then throw an exception and display an error message
+        else if (saveNameInputField.text == "")
         {
-            throw new System.Exception("Problem with SaveName InputField");
-        }
-        else if (saveNameInputField.text == "") //if user does not enter name in input field display message
-        {
-            //display error that need a name to save
+            showErrorMenu("You must enter a name to create a save game"); //if user does not enter name in input field display message display error that need a name to save
         }
         else //else create save file on user's hardrive using input field text
         {
-            if (Level.currentLevel.save(saveNameInputField.text)) 
+            if (Level.currentLevel.save(saveNameInputField.text))
             {
-                //display that game was saved successfuly
+                showErrorMenu("Save game created successfully!");
             }
-            else 
+            else
             {
-                //display that there was a problem saving the game
+                showErrorMenu("There was an error creating the save game...");
             }
 
         }
@@ -72,15 +69,23 @@ public class LevelComplete : MonoBehaviour
     {
         if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
         {
-            throw new System.Exception("CurrentLevel is null when trying to go to addToLeaderboard");
+            showErrorMenu("CurrentLevel is null when trying to go to addToLeaderboard");
         }
         else if (addedToLeaderboard) //if score is already on the database
         {
-            //display error that it was already added to leaderbaord
+            showErrorMenu("CurrentLevel was already added to the leaderboard");
         }
         else //else save the score to the database
         {
+            userData.currentLevel = Level.currentLevel.levelNumber;
+            userData.timeAlive = (int)Level.currentLevel.duration.TotalMilliseconds; //convert from double to int
+            userData.difficulty = Level.currentLevel.difficulty;
+            
+            //userData.enemiesKilled = Level.currentLevel.
+           
+
             //add to leaderboard
+            crud.SaveUserData(); //save it to the backend DB...all of the data should already be stored in the userData class object.
             addedToLeaderboard = true;
         }
     }
@@ -89,25 +94,25 @@ public class LevelComplete : MonoBehaviour
     {
         if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
         {
-            throw new System.Exception("CurrentLevel is null when trying to saveReplay");
+            showErrorMenu("CurrentLevel is null when trying to saveReplay");
         }
         else if (replayNameInputField == null || replayNameInputField.text == null) //if there is an error with the replay file name then throw an exception and display an error message
         {
-            throw new System.Exception("Problem with replayName InputField");
+            showErrorMenu("Problem with replayName InputField");
         }
         else if (replayNameInputField.text == "") //if user does not enter name in input field display message
         {
-            //display error that need a name to save replay
+            showErrorMenu("You must enter a name to save a replay.");
         }
         else //else create replay recording on user's hardrive using the input field text
         {
             if (Level.currentLevel.saveReplay(replayNameInputField.text))
             {
-                //display that replay was saved
+                showErrorMenu("Replay created successfully!");
             }
             else
             {
-                //display that there was a problem saving the replay
+                showErrorMenu("There was an error creating the replay...");
             }
         }
     }
@@ -119,5 +124,20 @@ public class LevelComplete : MonoBehaviour
             Destroy(Level.currentLevel);
         }
         GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
+    }
+
+    public bool HasError()
+    {
+        Boolean hasError = false;
+
+
+        return hasError;
+    }
+
+    public void showErrorMenu(string errorMsg)
+    {
+        errorText.text = errorMsg;
+        errorPanel.SetActive(true);
+        canvasGroup.DOFade(1.0f, 2.0f);
     }
 }

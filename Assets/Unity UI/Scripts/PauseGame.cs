@@ -1,21 +1,17 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
-public class PauseGame : MonoBehaviour {
+public class PauseGame : MonoBehaviour, IErrorPanel {
 	public bool paused = false; //set pause menu to false so it does not appear by default
+    public GameObject errorPanel;
+    public CanvasGroup canvasGroup;
+    public Text errorText;
 
-    void Start ()
-    {
-        
-	}
-
-	void Update()
-    {
-        
-	}
-
-	public void Unpause() // method used by the resume button on the pause menu to dismiss the menu and continue playing
+    public void Unpause() // method used by the resume button on the pause menu to dismiss the menu and continue playing
     {
         GameStates.gameState = GameStates.previousGameState; //set gamestate to last gamestate, which removes pause interface
 	}
@@ -24,7 +20,7 @@ public class PauseGame : MonoBehaviour {
     {
         if (Level.currentLevel == null) //if there is an error with the current level, throw exception and display error message
         {
-            throw new System.Exception("Current Level is null, can't restart");
+            showErrorMenu("Current Level is null, can't restart");
         }
         else //else set level to the beginning state and call the unpause method to remove the interface 
         {
@@ -45,5 +41,17 @@ public class PauseGame : MonoBehaviour {
             Destroy(Level.currentLevel);
         }
         GameStates.gameState = GameStates.GameState.Main; // sets gamestate back to main menu
+    }
+
+    public bool HasError()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void showErrorMenu(string errorMsg)
+    {
+        errorText.text = errorMsg;
+        errorPanel.SetActive(true);
+        canvasGroup.DOFade(1.0f, 2.0f);
     }
 }

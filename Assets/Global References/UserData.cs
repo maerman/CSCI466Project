@@ -15,8 +15,9 @@ public class UserData : MonoBehaviour {
     public int currentLevel { get; set; }
     public int timeAlive { get; set; }
     public int timesDied { get; set; }
-    public string playerMode { get; set; }
-    public string difficulty { get; set; }
+    public int playerMode { get; set; }
+    public float difficulty { get; set; }
+    public bool isTrial { get; set; }
 
     private void Awake()
     {

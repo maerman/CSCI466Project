@@ -7,6 +7,7 @@ using System;
 public class GameLoop : MonoBehaviour {
     private static GameLoop gameLoop;
     private GameState lastGameState;
+    
 
     //initilzed in editor
     public GameObject loginMenu;
@@ -88,6 +89,7 @@ public class GameLoop : MonoBehaviour {
                         //loadGameMenu.SetActive(true);
                         break;
                     case GameState.Playing:
+                        loginMenu.SetActive(false);
                         ingameInterface.SetActive(true);
                         Time.timeScale = 1;
                         foreach (PlayerControls item in Controls.get().players)
@@ -98,6 +100,7 @@ public class GameLoop : MonoBehaviour {
                                 break;
                             }
                         }
+
                         break;
                     case GameState.Paused:
                         ingameInterface.SetActive(true);

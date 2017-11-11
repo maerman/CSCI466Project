@@ -78,7 +78,6 @@ public class Login : MonoBehaviour, IErrorPanel {
     public void PlayDemo() //sets gamestate to the main menu and variable that signifies demo version use to true
     {
         isDemo = true;
-
         gameState = GameState.Main;
     }
 }

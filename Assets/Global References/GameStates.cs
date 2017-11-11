@@ -13,6 +13,6 @@ public class GameStates : MonoBehaviour {
     public enum GameState { LoggingIn, CreateAccount, Main, NewGame, LoadGame, Playing, Paused,
         LevelComplete, LostGame, WonGame, LoadReplay, Options, Replay, About, Exit} //this will be used to control the state of the game we are in.
 
-    public enum LoginErrors{ UserNotFound, LoginError, LoginSuccess, Duplicate, CreationError}
+    public enum LoginErrors{ UserNotFound, PreLogin, LoginError, LoginSuccess, Duplicate, CreationError}
     
 }
