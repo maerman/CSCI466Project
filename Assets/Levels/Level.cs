@@ -393,8 +393,6 @@ public abstract class Level : MonoBehaviour
 
             thePlayers[i] = current;
             initialPlayers[i] = current.clone();
-
-
         }
 
         foreach (PlayerControls item in Controls.get().players)
@@ -461,13 +459,19 @@ public abstract class Level : MonoBehaviour
             {
                 GameStates.gameState = GameStates.GameState.LoadReplay;
             }
-            else if (GameStates.isDemo && levelNumber >= TRIAL_LEVELS || !levelExists(levelNumber + 1))
+            else if (User.user.isTrial && levelNumber >= TRIAL_LEVELS || !levelExists(levelNumber + 1))
             {
                 GameStates.gameState = GameStates.GameState.WonGame;
+
+                if (!User.user.isTrial)
+                    saveToLeaderboard();
             }
             else
             {
                 GameStates.gameState = GameStates.GameState.LevelComplete;
+
+                if (!User.user.isTrial)
+                    saveToLeaderboard();
             }
         }
 
@@ -508,6 +512,15 @@ public abstract class Level : MonoBehaviour
         }
 
         updateObjectLists();
+    }
+
+    private void saveToLeaderboard()
+    {
+        int score = 0;
+
+        score = -(int)duration.TotalMilliseconds;
+
+        CRUD.crud.SaveUserData(score, levelNumber, (int)duration.TotalMilliseconds, players.Length, (float)Math.Round(difficulty, 2), pvp);
     }
 
     public virtual string progress
