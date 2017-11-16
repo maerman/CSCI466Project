@@ -157,10 +157,10 @@ public class CRUD : MonoBehaviour {
         
     }
 
-    public void SaveUserData()
+    public void SaveUserData(int score, int levelNumber, int duration, int numberOfPlayers, float difficulty, bool pvp)
     {
-        string url = baseUrl + "saveData.php?accountId=" + userData.accountId + "&score=" + userData.score + "&enemiesKilled=" + userData.enemiesKilled + "&level=" + userData.currentLevel + "&timeAlive=" + userData.timeAlive + 
-            "&timesDied=" + userData.timesDied + "&playerMode=" + userData.playerMode + "&difficulty=" + userData.difficulty;
+        string url = baseUrl + "saveData.php?accountId=" + userData.accountId + "&score=" + score + "&level=" + levelNumber + "&timeAlive=" + duration + 
+             "&playerMode=" + numberOfPlayers + "&difficulty=" + difficulty + "&pvp=" + pvp;
 
         WWW www = new WWW(url);
         StartCoroutine(WaitForRequest(www));

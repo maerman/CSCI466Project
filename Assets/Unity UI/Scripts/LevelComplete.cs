@@ -11,7 +11,6 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
 {
     public UnityEngine.UI.InputField saveNameInputField; //initilzied in editor
     public UnityEngine.UI.InputField replayNameInputField; //initilized in editor
-    private bool addedToLeaderboard = false;
     public GameObject errorPanel;
     public CanvasGroup canvasGroup;
     public Text errorText;
@@ -65,6 +64,7 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
         }
     }
 
+    /* Not using, saving to leadboard automatically in Level.cs when the Level is completed. 
     public void addToLeaderboard() // method used by the level complete menu to take user input from input field and create recording file on user's device
     {
         if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
@@ -89,6 +89,7 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
             addedToLeaderboard = true;
         }
     }
+    */
 
     public void saveReplay() // method used by the level complete menu to create a save file
     {

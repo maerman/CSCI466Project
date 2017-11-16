@@ -26,7 +26,7 @@ public class NewGame : MonoBehaviour
 
 	void Update ()
     {
-		if (GameStates.isDemo) //determines if the user is playing without an account i.e. playing the demo version
+		if (User.user.isTrial) //determines if the user is playing without an account i.e. playing the demo version
         {
             cooperative.interactable = false; //if they are then the following features are disabled for them
             competative.interactable = false;
