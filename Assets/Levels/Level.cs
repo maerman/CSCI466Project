@@ -468,6 +468,7 @@ public abstract class Level : MonoBehaviour
             }
             else
             {
+                save();
                 GameStates.gameState = GameStates.GameState.LevelComplete;
 
                 if (!User.user.isTrial)
@@ -660,7 +661,7 @@ public abstract class Level : MonoBehaviour
                 {
                     string name = item.ToString();
 
-                    name = name.Substring(0, name.IndexOf('(') + 1);
+                    name = name.Substring(0, name.IndexOf('('));
                     save.WriteLine(name);
                     save.WriteLine(item.getValues());
                 }
@@ -732,8 +733,6 @@ public abstract class Level : MonoBehaviour
 
         if (lvl != null)
         {
-            save();
-
             lvl.create(thePlayers.Length, theDifficulty, theRandom.Next(), thePvp);
 
             for (int i = 0; i < thePlayers.Length; i++)
@@ -789,8 +788,8 @@ public abstract class Level : MonoBehaviour
         file.WriteLine(Convert.ToString(levelNumber + 1));
         file.WriteLine(Convert.ToString(thePlayers.Length));
         file.WriteLine(Convert.ToString(theDifficulty));
-        file.WriteLine(Convert.ToString(random.Next()));
         file.WriteLine(Convert.ToString(thePvp));
+        file.WriteLine(Convert.ToString(random.Next()));
 
         saveItems(file);
 
@@ -818,8 +817,8 @@ public abstract class Level : MonoBehaviour
         save.WriteLine(Convert.ToString(levelNumber));
         save.WriteLine(Convert.ToString(thePlayers.Length));
         save.WriteLine(Convert.ToString(theDifficulty));
-        save.WriteLine(Convert.ToString(randomSeed));
         save.WriteLine(Convert.ToString(thePvp));
+        save.WriteLine(Convert.ToString(randomSeed));
 
         saveItems(save, initialPlayers);
 
@@ -906,24 +905,29 @@ public abstract class Level : MonoBehaviour
 
         Level lvl = getLevel(Convert.ToInt32(save.ReadLine()));
 
-        int players = Convert.ToInt32(save.ReadLine());
-        int difficulty = Convert.ToInt32(save.ReadLine());
-        int randomSeed = Convert.ToInt32(save.ReadLine());
-        bool pvp = Convert.ToBoolean(save.ReadLine());
-
-        lvl.create(players, difficulty, randomSeed, pvp);
-
-        lvl.loadItems(save);
-
-        lvl.initialPlayers = new Player[lvl.players.Length];
-        for (int i = 0; i < lvl.thePlayers.Length; i++)
+        if (lvl != null)
         {
-            lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
+
+            int players = Convert.ToInt32(save.ReadLine());
+            int difficulty = Convert.ToInt32(save.ReadLine());
+            bool pvp = Convert.ToBoolean(save.ReadLine());
+            int randomSeed = Convert.ToInt32(save.ReadLine());
+
+            lvl.create(players, difficulty, randomSeed, pvp);
+
+            lvl.loadItems(save);
+
+            lvl.initialPlayers = new Player[lvl.players.Length];
+            for (int i = 0; i < lvl.thePlayers.Length; i++)
+            {
+                lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
+            }
+
+            save.Close();
+
+            GameStates.gameState = GameStates.GameState.Playing;
+
         }
-
-        save.Close();
-
-        GameStates.gameState = GameStates.GameState.Playing;
 
         return lvl;
     }

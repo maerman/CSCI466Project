@@ -81,7 +81,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1434254348977852
 GameObject:
   m_ObjectHideFlags: 1
@@ -133,7 +133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1686187725472534
 GameObject:
   m_ObjectHideFlags: 1
@@ -730,6 +730,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   replayNameInputField: {fileID: 114946382735714660}
+  errorPanel: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  errorText: {fileID: 0}
 --- !u!114 &114851200266975112
 MonoBehaviour:
   m_ObjectHideFlags: 1

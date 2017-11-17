@@ -438,6 +438,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paused: 0
+  errorPanel: {fileID: 0}
+  canvasGroup: {fileID: 0}
+  errorText: {fileID: 0}
 --- !u!114 &114519563649813638
 MonoBehaviour:
   m_ObjectHideFlags: 1
