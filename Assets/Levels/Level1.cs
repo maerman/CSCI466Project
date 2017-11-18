@@ -88,7 +88,7 @@ public class Level1 : Level
 
         LazerSword sword = (LazerSword)createObject("LazerSwordPF");
         MultiShots multiShot = (MultiShots)createObject("MultiShotPF");
-        HomingMissiles homing = (HomingMissiles)createObject("HomingShooterPF");
+        HomingMissiles homing = (HomingMissiles)createObject("HomingMissilesPF");
         HomingMines mines = (HomingMines)createObject("HomingMinesPF");
         GravityWellController well = (GravityWellController)createObject("GravityWellControllerPF");
         ChargedShots charged = (ChargedShots)createObject("ChargedShotPF");

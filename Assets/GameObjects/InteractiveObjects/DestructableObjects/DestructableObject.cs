@@ -32,16 +32,24 @@ public abstract class DestructableObject : InteractiveObject
     protected abstract void startDestructableObject();
     protected override void startInteractiveObject()
     {
-        startDestructableObject();
-        if (this.GetType() != typeof(Player))
+        if (level == null)
         {
-            level.addToGame(this);
+            Debug.Log("Destroying " + this + " since level is null when it is being created.");
+            Destroy(this);
         }
+        else
+        {
+            startDestructableObject();
+            if (this.GetType() != typeof(Player))
+            {
+                level.addToGame(this);
+            }
 
-        theMaxHealth = health;
+            theMaxHealth = health;
 
-        healthBar = Instantiate(Resources.Load("HealthBarPF"), new Vector3(position.x, position.y, -5), Quaternion.Euler(0, 0, 0)) as GameObject;
-        healthBar.GetComponent<HealthBar>().owner = this;
+            healthBar = Instantiate(Resources.Load("HealthBarPF"), new Vector3(position.x, position.y, -5), Quaternion.Euler(0, 0, 0)) as GameObject;
+            healthBar.GetComponent<HealthBar>().owner = this;
+        }
     }
 
     protected abstract void updateDestructableObject();

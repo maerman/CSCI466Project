@@ -436,7 +436,16 @@ public abstract class Level : MonoBehaviour
 
         if (GameStates.gameState == GameStates.GameState.Replay && updateFile != null)
         {
-            Controls.get().updateFromFile(updateFile);
+            if (updateFile.Peek() >= 0)
+            {
+                Controls.get().updateFromFile(updateFile);
+            }
+            else
+            {
+                Debug.Log("Reached end of input file; Level should have ended but it has not.");
+                GameStates.gameState = GameStates.GameState.LoadReplay;
+                return;
+            }
         }
         else
         {
@@ -603,6 +612,11 @@ public abstract class Level : MonoBehaviour
     {
         clearLevel();
 
+        if (updateFile != null)
+        {
+            updateFile.Close();
+        }
+
         if (theCurrentLevel == this)
         {
             theCurrentLevel = null;
@@ -694,28 +708,46 @@ public abstract class Level : MonoBehaviour
 
     public Level restartLevel()
     {
-        Level lvl = getLevel(levelNumber);
+        Level lvl;
 
-        if (lvl != null)
+        if (updateFile == null)
         {
-            lvl.create(thePlayers.Length, theDifficulty, randomSeed, thePvp);
+            lvl = getLevel(levelNumber);
 
-            for (int i = 0; i < thePlayers.Length; i++)
+            if (lvl != null)
             {
-                for (int j = 0; j < thePlayers[i].items.Length; j++)
-                {
-                    if (initialPlayers[i].items[j] != null)
-                    {
-                        initialPlayers[i].items[j].pickup(lvl.thePlayers[i], j);
-                        lvl.theNonInteractives.AddLast(lvl.thePlayers[i].items[j]);
-                        theNonInteractives.Remove(lvl.thePlayers[i].items[j]);
-                    }
-                }
-                lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
-            }
+                lvl.create(thePlayers.Length, theDifficulty, randomSeed, thePvp);
 
-            clearLevel();
-            Destroy(this.gameObject);
+                for (int i = 0; i < thePlayers.Length; i++)
+                {
+                    for (int j = 0; j < thePlayers[i].items.Length; j++)
+                    {
+                        if (initialPlayers[i].items[j] != null)
+                        {
+                            initialPlayers[i].items[j].pickup(lvl.thePlayers[i], j);
+                            lvl.theNonInteractives.AddLast(lvl.thePlayers[i].items[j]);
+                            theNonInteractives.Remove(lvl.thePlayers[i].items[j]);
+                        }
+                    }
+                    lvl.initialPlayers[i] = lvl.thePlayers[i].clone();
+                }
+
+                clearLevel();
+                Destroy(this.gameObject);
+            }
+        }
+        else
+        {
+            updateFile.DiscardBufferedData();
+            updateFile.BaseStream.Seek(0, System.IO.SeekOrigin.Begin);
+            lvl = loadReplay(updateFile);
+
+            if (lvl != null)
+            {
+                updateFile = null;
+                clearLevel();
+                Destroy(this.gameObject);
+            }
         }
 
         return lvl;
@@ -932,17 +964,20 @@ public abstract class Level : MonoBehaviour
         return lvl;
     }
 
-
     public static Level loadReplay(string fileName)
     {
-        System.IO.StreamReader replay = new System.IO.StreamReader(fileName);
+        return loadReplay(new System.IO.StreamReader(fileName));
+    }
+
+    public static Level loadReplay(System.IO.StreamReader replay)
+    {
 
         Level lvl = getLevel(Convert.ToInt32(replay.ReadLine()));
 
         int players = Convert.ToInt32(replay.ReadLine());
         int difficulty = Convert.ToInt32(replay.ReadLine());
-        int randomSeed = Convert.ToInt32(replay.ReadLine());
         bool pvp = Convert.ToBoolean(replay.ReadLine());
+        int randomSeed = Convert.ToInt32(replay.ReadLine());
         lvl.create(players, difficulty, randomSeed, pvp);
 
         lvl.loadItems(replay);
@@ -956,8 +991,6 @@ public abstract class Level : MonoBehaviour
         lvl.updateFile = replay;
 
         GameStates.gameState = GameStates.GameState.Replay;
-
-        replay.Close();
 
         return lvl;
     }

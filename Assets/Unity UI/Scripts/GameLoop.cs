@@ -8,9 +8,9 @@ public class GameLoop : MonoBehaviour {
     private static GameLoop gameLoop;
     private GameState lastGameState;
     
-
     //initilzed in editor
     public GameObject loginMenu;
+    public GameObject createAccountMenu;
     public GameObject mainMenu;
     public GameObject newGameMenu;
     public GameObject loadGameMenu;
@@ -19,6 +19,7 @@ public class GameLoop : MonoBehaviour {
     public GameObject levelCompleteMenu;
     public GameObject gameOverMenu;
     public GameObject gameCompleteMenu;
+    public GameObject loadReplayMenu;
     public GameObject aboutMenu;
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
@@ -55,7 +56,7 @@ public class GameLoop : MonoBehaviour {
                 {
                     //set them all to false, then in the switch, set only the correct one to true
                     loginMenu.SetActive(false);
-                    //createAccountMenu.SetActive(false);
+                    createAccountMenu.SetActive(false);
                     mainMenu.SetActive(false);
                     newGameMenu.SetActive(false);
                     loadGameMenu.SetActive(false);
@@ -64,7 +65,7 @@ public class GameLoop : MonoBehaviour {
                     pauseMenu.SetActive(false);
                     gameOverMenu.SetActive(false);
                     gameCompleteMenu.SetActive(false);
-                    //loadReplayMenu.SetActive(false);
+                    loadReplayMenu.SetActive(false);
                     //optionsMenu.SetActive(false);
                     aboutMenu.SetActive(false);
                     previousGameState = lastGameState;
@@ -80,7 +81,7 @@ public class GameLoop : MonoBehaviour {
                         loginMenu.SetActive(true);
                         break;
                     case GameState.CreateAccount:
-                        //createAccountMenu.SetActive(true);
+                        createAccountMenu.SetActive(true);
                         break;
                     case GameState.Main:
                         mainMenu.SetActive(true);
@@ -127,7 +128,7 @@ public class GameLoop : MonoBehaviour {
                         gameCompleteMenu.SetActive(true);
                         break;
                     case GameState.LoadReplay:
-                        //loadReplayMenu.SetActive(true);
+                        loadReplayMenu.SetActive(true);
                         break;
                     case GameState.Replay:
                         ingameInterface.SetActive(true);

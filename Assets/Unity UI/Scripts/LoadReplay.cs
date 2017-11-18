@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using DG.Tweening;
 
-public class LoadGame : MonoBehaviour
+public class LoadReplay : MonoBehaviour
 {
     //initilzied in editor
-    public GameObject gameSavesList;
+    public GameObject replayList;
     public ToggleGroup group;
     public Color selectedColor = Color.green;
     public Color notSelectedColor = Color.gray;
@@ -15,7 +14,7 @@ public class LoadGame : MonoBehaviour
     public CanvasGroup canvasGroup;
     public Text errorText;
 
-    public List<SavedGameItem> saves = new List<SavedGameItem>();
+    public List<ReplayItem> replays = new List<ReplayItem>();
 
    
     void Start()
@@ -25,7 +24,7 @@ public class LoadGame : MonoBehaviour
 
     private void OnGUI()
     {
-        foreach (SavedGameItem item in saves)
+        foreach (ReplayItem item in replays)
         {
             ColorBlock colors = item.toggle.colors;
             if (item.toggle.isOn)
@@ -50,19 +49,10 @@ public class LoadGame : MonoBehaviour
         refresh();
     }
 
-    public LoadGame(GameObject gameSavesList, ToggleGroup group, Color selectedColor, Color notSelectedColor, List<SavedGameItem> saves)
-    {
-        this.gameSavesList = gameSavesList;
-        this.group = group;
-        this.selectedColor = selectedColor;
-        this.notSelectedColor = notSelectedColor;
-        this.saves = saves;
-    }
-
     private void refresh()
     {
-        saves.Clear();
-        foreach (Transform t in gameSavesList.transform)
+        replays.Clear();
+        foreach (Transform t in replayList.transform)
         {
             Destroy(t.gameObject);
         }
@@ -74,15 +64,15 @@ public class LoadGame : MonoBehaviour
 
         foreach (string item in filePaths)
         {
-            GameObject saveItem = SavedGameItem.getFromFile(item);
-            if (saveItem != null)
+            GameObject replay = ReplayItem.getFromFile(item);
+            if (replay != null)
             {
-                saveItem.transform.SetParent(gameSavesList.transform);
-                saveItem.transform.localScale = Vector3.one;
-                saveItem.GetComponent<Toggle>().group = group;
-                saveItem.GetComponent<Toggle>().isOn = false;
+                replay.transform.SetParent(replayList.transform);
+                replay.transform.localScale = Vector3.one;
+                replay.GetComponent<Toggle>().group = group;
+                replay.GetComponent<Toggle>().isOn = false;
 
-                saves.Add(saveItem.GetComponent<SavedGameItem>());
+                replays.Add(replay.GetComponent<ReplayItem>());
             }
         }
 
@@ -92,23 +82,23 @@ public class LoadGame : MonoBehaviour
 
     public void load()
     {
-        foreach (SavedGameItem item in saves)
+        foreach (ReplayItem item in replays)
         {
             if (item.toggle.isOn)
             {
-                if (item.loadSave())
+                if (item.loadReplay())
                 {
-                    GameStates.gameState = GameStates.GameState.Playing;
+                    GameStates.gameState = GameStates.GameState.Replay;
                     return;
                 }
                 else
                 {
-                    showErrorMenu("Problem loading save!");
+                    showErrorMenu("Problem loading replay!");
                 }
             }
         }
 
-        showErrorMenu("No save selected.");
+        showErrorMenu("No replay selected.");
     }
 
     public void back()

@@ -8,7 +8,8 @@ using DG.Tweening;
 
 public class GameOver : MonoBehaviour, IErrorPanel
 {
-    public InputField replayNameInputField; //initilized in editor
+    //initilized in editor
+    public InputField replayNameInputField;
     public GameObject errorPanel;
     public CanvasGroup canvasGroup;
     public Text errorText;

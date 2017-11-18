@@ -81,8 +81,16 @@ public abstract class NonInteractiveObject : SpaceObject
     protected abstract void startNonInteractiveObject();
     protected override void startObject()
     {
-        startNonInteractiveObject();
-        level.addToGame(this);
+        if (level == null)
+        {
+            Debug.Log("Destroying " + this + " since level is null when it is being created.");
+            Destroy(this);
+        }
+        else
+        {
+            startNonInteractiveObject();
+            level.addToGame(this);
+        }
     }
 
     protected abstract void updateNonInteractiveObject();

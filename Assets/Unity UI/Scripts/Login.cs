@@ -75,6 +75,11 @@ public class Login : MonoBehaviour, IErrorPanel {
         canvasGroup.DOFade(1.0f, 2.0f);
     }
 
+    public void CreateAccount()
+    {
+        gameState = GameState.CreateAccount;
+    }
+
     public void PlayDemo() //sets gamestate to the main menu and variable that signifies demo version use to true
     {
         User.user.isTrial = true;

@@ -63,7 +63,7 @@ public class NewGame : MonoBehaviour
         else if (competative.isOn) //if competitive is toggled, set players to 2
         {
             players = 2;
-            pvp = false;
+            pvp = true;
         }
         else
         {

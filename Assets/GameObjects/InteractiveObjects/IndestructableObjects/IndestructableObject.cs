@@ -6,8 +6,16 @@ public abstract class IndestructableObject : InteractiveObject
     protected abstract void startIndestructableObject();
     protected override void startInteractiveObject()
     {
-        startIndestructableObject();
-        level.addToGame(this);
+        if (level == null)
+        {
+            Debug.Log("Destroying " + this + " since level is null when it is being created.");
+            Destroy(this);
+        }
+        else
+        {
+            startIndestructableObject();
+            level.addToGame(this);
+        }
     }
 
     protected abstract void updateIndestructableObject();

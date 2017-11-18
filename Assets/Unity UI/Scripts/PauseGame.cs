@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 
 public class PauseGame : MonoBehaviour, IErrorPanel {
-	public bool paused = false; //set pause menu to false so it does not appear by default
+
     public GameObject errorPanel;
     public CanvasGroup canvasGroup;
     public Text errorText;

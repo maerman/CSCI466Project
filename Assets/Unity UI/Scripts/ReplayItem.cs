@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public class SavedGameItem : MonoBehaviour
+public class ReplayItem : MonoBehaviour
 {
     //initilize in editor
     public Text date;
@@ -15,7 +15,7 @@ public class SavedGameItem : MonoBehaviour
     public Text pvp;
     public Toggle toggle;
 
-    public string saveFile;
+    public string replayFile;
 
 
     public static GameObject getFromFile(string file)
@@ -27,11 +27,7 @@ public class SavedGameItem : MonoBehaviour
             string extention = Path.GetExtension(file);
             string tempSaveName, tempDate, tempLevel, tempPlayers, tempDifficulty, tempPvp;
 
-            if (extention.Equals(Level.AUTO_SAVE_EXTENTION))
-            {
-                tempSaveName = "Auto Save";
-            }
-            else if (extention.Equals(Level.SAVE_EXTENTION))
+            if (extention.Equals(Level.REPLAY_EXTENTION))
             {
                 tempSaveName = Path.GetFileNameWithoutExtension(file);
             }
@@ -49,8 +45,8 @@ public class SavedGameItem : MonoBehaviour
             tempDifficulty = reader.ReadLine();
             tempPvp = reader.ReadLine();
 
-            GameObject obj = Instantiate(Resources.Load("SaveGameItemPF"), Vector3.zero, Quaternion.Euler(0, 0, 0)) as GameObject;
-            SavedGameItem save = obj.GetComponent<SavedGameItem>();
+            GameObject obj = Instantiate(Resources.Load("ReplayItemPF"), Vector3.zero, Quaternion.Euler(0, 0, 0)) as GameObject;
+            ReplayItem save = obj.GetComponent<ReplayItem>();
 
             save.date.text = tempDate;
             save.saveName.text = tempSaveName;
@@ -58,7 +54,7 @@ public class SavedGameItem : MonoBehaviour
             save.players.text = tempPlayers;
             save.difficulty.text = tempDifficulty;
             save.pvp.text = tempPvp;
-            save.saveFile = file;
+            save.replayFile = file;
 
             return obj;
         }
@@ -75,15 +71,15 @@ public class SavedGameItem : MonoBehaviour
         }
     }
 
-    public bool loadSave()
+    public bool loadReplay()
     {
-        if (saveFile == null)
+        if (replayFile == null)
         {
             return false;
         }
         else
         {
-            return (Level.loadLevel(saveFile) != null);
+            return (Level.loadReplay(replayFile) != null);
         }
     }
 }

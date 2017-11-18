@@ -47,8 +47,8 @@ public class PlayerInput
 
             pickupDrop = System.Convert.ToBoolean(parts[18]);
             shoot = System.Convert.ToBoolean(parts[19]);
-            relativeMovement = System.Convert.ToBoolean(parts[21]);
-            turns = System.Convert.ToBoolean(parts[22]);
+            relativeMovement = System.Convert.ToBoolean(parts[20]);
+            turns = System.Convert.ToBoolean(parts[21]);
         }
         else
         {
@@ -682,10 +682,12 @@ public class Controls
 
     public void updateFromFile(System.IO.StreamReader file)
     {
-        staticLevel = System.Convert.ToBoolean(file.ReadLine());
+        if (file.Peek() >= 0)
+            staticLevel = System.Convert.ToBoolean(file.ReadLine());
         foreach (PlayerControls item in players)
         {
-            item.updateFromString(file.ReadLine());
+            if (file.Peek() >= 0)
+                item.updateFromString(file.ReadLine());
         }
     }
 
