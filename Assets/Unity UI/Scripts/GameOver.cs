@@ -58,7 +58,7 @@ public class GameOver : MonoBehaviour, IErrorPanel
     {
         if (Level.currentLevel != null)
         {
-            Destroy(Level.currentLevel);
+            Destroy(Level.currentLevel.gameObject);
         }
         GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
 	}

@@ -84,7 +84,7 @@ public abstract class NonInteractiveObject : SpaceObject
         if (level == null)
         {
             Debug.Log("Destroying " + this + " since level is null when it is being created.");
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {

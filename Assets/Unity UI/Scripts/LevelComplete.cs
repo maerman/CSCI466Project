@@ -122,7 +122,7 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
     {
         if (Level.currentLevel != null)
         {
-            Destroy(Level.currentLevel);
+            Destroy(Level.currentLevel.gameObject);
         }
         GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
     }

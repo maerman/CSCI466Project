@@ -6,7 +6,7 @@ using System.IO;
 
 public class SavedGameItem : MonoBehaviour
 {
-    //initilize in editor
+    //initilized in editor
     public Text date;
     public Text saveName;
     public Text level;
@@ -15,34 +15,33 @@ public class SavedGameItem : MonoBehaviour
     public Text pvp;
     public Toggle toggle;
 
-    public string saveFile;
+    public FileInfo saveFile;
 
 
-    public static GameObject getFromFile(string file)
+    public static GameObject getFromFile(FileInfo file)
     {
         StreamReader reader = null;
 
         try
         {
-            string extention = Path.GetExtension(file);
             string tempSaveName, tempDate, tempLevel, tempPlayers, tempDifficulty, tempPvp;
 
-            if (extention.Equals(Level.AUTO_SAVE_EXTENTION))
+            if (file.Extension.Equals(Level.AUTO_SAVE_EXTENTION))
             {
                 tempSaveName = "Auto Save";
             }
-            else if (extention.Equals(Level.SAVE_EXTENTION))
+            else if (file.Extension.Equals(Level.SAVE_EXTENTION))
             {
-                tempSaveName = Path.GetFileNameWithoutExtension(file);
+                tempSaveName = Path.GetFileNameWithoutExtension(file.Name);
             }
             else
             {
                 return null;
             }
 
-            tempDate = File.GetLastWriteTime(file).ToString();
+            tempDate = file.LastWriteTime.ToString();
 
-            reader = new System.IO.StreamReader(file);
+            reader = new System.IO.StreamReader(file.FullName);
 
             tempLevel = reader.ReadLine();
             tempPlayers = reader.ReadLine();
@@ -83,7 +82,7 @@ public class SavedGameItem : MonoBehaviour
         }
         else
         {
-            return (Level.loadLevel(saveFile) != null);
+            return (Level.loadLevel(saveFile.FullName) != null);
         }
     }
 }

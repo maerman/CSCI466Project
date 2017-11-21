@@ -9,23 +9,24 @@ public class Blob : DestructableObject
     public void mergeWith(Blob other)
     {
         other.merged = true;
+        merged = true;
 
         float portionThis = mass / (mass + other.mass);
         float portionOther = other.mass / (mass + other.mass);
 
         mass += other.mass;
         health += other.health;
-
+        
         float area = (float)(scale.x * scale.x / 4 * System.Math.PI);
         area += (float)(other.scale.x * other.scale.x / 4 * System.Math.PI);
-        area = (float)(System.Math.Sqrt(area / System.Math.PI * 4));
+        area = (float)(System.Math.Sqrt(area  * 4/ System.Math.PI));
         scale = new Vector2(area, area);
-
+        
         position = position * portionThis + other.position * portionOther;
         angle = angle * portionThis + other.angle * portionOther;
         angularVelocity = angularVelocity * portionThis + other.angularVelocity * portionOther;
         velocity = velocity * portionThis + other.velocity * portionOther;
-
+        
         maxHealth = health;
 
         other.destroyThis();
@@ -38,7 +39,11 @@ public class Blob : DestructableObject
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
-        if (other.GetType() == typeof(Blob))
+        if (other.team != this.team)
+        {
+            other.damageThis(scale.x * 4);
+        }
+        else if (other.GetType() == typeof(Blob))
         {
             if(!merged && !((Blob)(other)).merged && scale.x + other.scale.x < maxSize)
             {
@@ -59,7 +64,10 @@ public class Blob : DestructableObject
 
     protected override void playerCollision(Player other, Collision2D collision)
     {
-        
+        if (other.team != this.team)
+        {
+            other.damageThis(scale.x * 4);
+        }
     }
 
     protected override void startDestructableObject()
@@ -69,7 +77,7 @@ public class Blob : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        
+        merged = false;
     }
 
     public override void damageThis(float damage)
@@ -88,7 +96,7 @@ public class Blob : DestructableObject
 
                 float area = (float)(scale.x * scale.x / 4 * System.Math.PI);
                 area /= pieces;
-                float theScale = (float)(System.Math.Sqrt(area / System.Math.PI * 4));
+                float theScale = (float)(System.Math.Sqrt(area * 4 / System.Math.PI));
 
                 for (int i = 0; i < pieces; i++)
                 {

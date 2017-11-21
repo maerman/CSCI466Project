@@ -173,6 +173,10 @@ public class Player : DestructableObject
     {
         Player clone = (Player)this.MemberwiseClone();
         clone.theItems = new Item[PlayerInput.NUM_ITEMS];
+        for (int i = 0; i < theItems.Length; i++)
+        {
+            clone.theItems[i] = theItems[i];
+        }
         return clone;
     }
 }

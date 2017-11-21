@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using DG.Tweening;
 
 public class LoadGame : MonoBehaviour
@@ -67,12 +69,11 @@ public class LoadGame : MonoBehaviour
             Destroy(t.gameObject);
         }
 
-        System.IO.Directory.CreateDirectory(Level.SAVE_PATH);
-        string[] filePaths = System.IO.Directory.GetFiles(Level.SAVE_PATH);
+        Directory.CreateDirectory(Level.SAVE_PATH);
 
-        System.Array.Sort(filePaths);
+        List<FileInfo> files = new DirectoryInfo(Level.SAVE_PATH).GetFiles().OrderByDescending(f => f.LastWriteTime).ToList();
 
-        foreach (string item in filePaths)
+        foreach (FileInfo item in files)
         {
             GameObject saveItem = SavedGameItem.getFromFile(item);
             if (saveItem != null)

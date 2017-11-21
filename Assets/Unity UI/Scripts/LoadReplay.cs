@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.IO;
+using System.Linq;
 using DG.Tweening;
 
 public class LoadReplay : MonoBehaviour
@@ -58,11 +60,10 @@ public class LoadReplay : MonoBehaviour
         }
 
         System.IO.Directory.CreateDirectory(Level.SAVE_PATH);
-        string[] filePaths = System.IO.Directory.GetFiles(Level.SAVE_PATH);
 
-        System.Array.Sort(filePaths);
+        List<FileInfo> files = new DirectoryInfo(Level.SAVE_PATH).GetFiles().OrderByDescending(f => f.LastWriteTime).ToList();
 
-        foreach (string item in filePaths)
+        foreach (FileInfo item in files)
         {
             GameObject replay = ReplayItem.getFromFile(item);
             if (replay != null)

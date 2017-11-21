@@ -6,7 +6,7 @@ using System.IO;
 
 public class ReplayItem : MonoBehaviour
 {
-    //initilize in editor
+    //initilized in editor
     public Text date;
     public Text saveName;
     public Text level;
@@ -15,30 +15,30 @@ public class ReplayItem : MonoBehaviour
     public Text pvp;
     public Toggle toggle;
 
-    public string replayFile;
+    public FileInfo replayFile;
 
 
-    public static GameObject getFromFile(string file)
+    public static GameObject getFromFile(FileInfo file)
     {
         StreamReader reader = null;
 
         try
         {
-            string extention = Path.GetExtension(file);
+            string extention = file.Extension;
             string tempSaveName, tempDate, tempLevel, tempPlayers, tempDifficulty, tempPvp;
 
             if (extention.Equals(Level.REPLAY_EXTENTION))
             {
-                tempSaveName = Path.GetFileNameWithoutExtension(file);
+                tempSaveName = Path.GetFileNameWithoutExtension(file.Name);
             }
             else
             {
                 return null;
             }
 
-            tempDate = File.GetLastWriteTime(file).ToString();
+            tempDate = file.LastWriteTime.ToString();
 
-            reader = new System.IO.StreamReader(file);
+            reader = new System.IO.StreamReader(file.FullName);
 
             tempLevel = reader.ReadLine();
             tempPlayers = reader.ReadLine();
@@ -79,7 +79,7 @@ public class ReplayItem : MonoBehaviour
         }
         else
         {
-            return (Level.loadReplay(replayFile) != null);
+            return (Level.loadReplay(replayFile.FullName) != null);
         }
     }
 }

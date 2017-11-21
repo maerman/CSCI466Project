@@ -679,7 +679,7 @@ public abstract class SpaceObject : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 

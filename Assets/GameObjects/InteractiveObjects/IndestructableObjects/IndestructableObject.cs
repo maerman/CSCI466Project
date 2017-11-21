@@ -9,7 +9,7 @@ public abstract class IndestructableObject : InteractiveObject
         if (level == null)
         {
             Debug.Log("Destroying " + this + " since level is null when it is being created.");
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {

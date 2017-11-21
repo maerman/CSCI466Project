@@ -46,9 +46,9 @@ public class Level1 : Level
             //HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
-            //Blob current = (Blob)createObject("BlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            Blob current = (Blob)createObject("BlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
         for (int i = 0; i < 2; i++)
@@ -83,7 +83,7 @@ public class Level1 : Level
 
         for (int i = 0; i < 1; i++)
         {
-            RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
+            //RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
         }
 
         LazerSword sword = (LazerSword)createObject("LazerSwordPF");

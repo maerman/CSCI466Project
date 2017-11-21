@@ -17,7 +17,7 @@ public abstract class DestructableObject : InteractiveObject
         }
         set
         {
-            maxHealth = value;
+            theMaxHealth = value;
         }
     }
 
@@ -35,7 +35,7 @@ public abstract class DestructableObject : InteractiveObject
         if (level == null)
         {
             Debug.Log("Destroying " + this + " since level is null when it is being created.");
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {

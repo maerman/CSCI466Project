@@ -38,7 +38,7 @@ public class PauseGame : MonoBehaviour, IErrorPanel {
     {
         if (Level.currentLevel != null)
         {
-            Destroy(Level.currentLevel);
+            Destroy(Level.currentLevel.gameObject);
         }
         GameStates.gameState = GameStates.GameState.Main; // sets gamestate back to main menu
     }
