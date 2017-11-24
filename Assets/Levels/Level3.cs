@@ -38,6 +38,11 @@ public class Level3 : Level
         
     }
 
+    protected override void endLevel()
+    {
+
+    }
+
     /*
     public override string progress
     {

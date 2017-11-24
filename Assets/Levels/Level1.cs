@@ -138,6 +138,11 @@ public class Level1 : Level
         
     }
 
+    protected override void endLevel()
+    {
+        Destroy(level1Music);
+    }
+
     /*
     public override string progress
     {

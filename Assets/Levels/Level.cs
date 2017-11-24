@@ -608,8 +608,12 @@ public abstract class Level : MonoBehaviour
         removeNonInteractives.Clear();
     }
 
+    protected abstract void endLevel();
+
     private void OnDestroy()
     {
+        endLevel();
+
         clearLevel();
 
         if (updateFile != null)
