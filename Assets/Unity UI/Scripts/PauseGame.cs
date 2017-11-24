@@ -18,13 +18,13 @@ public class PauseGame : MonoBehaviour, IErrorPanel {
 
 	public void Restart() // method used by the restart button on the pause menu to set level to its beginning
     {
-        if (Level.currentLevel == null) //if there is an error with the current level, throw exception and display error message
+        if (Level.current == null) //if there is an error with the current level, throw exception and display error message
         {
             showErrorMenu("Current Level is null, can't restart");
         }
         else //else set level to the beginning state and call the unpause method to remove the interface 
         {
-            Level.currentLevel.restartLevel();
+            Level.current.restartLevel();
             Unpause();
         }
 	}
@@ -36,9 +36,9 @@ public class PauseGame : MonoBehaviour, IErrorPanel {
 
 	public void Exit() // method used by the pause menu to set the gamestate to the main menu on exit button click
     {
-        if (Level.currentLevel != null)
+        if (Level.current != null)
         {
-            Destroy(Level.currentLevel.gameObject);
+            Destroy(Level.current.gameObject);
         }
         GameStates.gameState = GameStates.GameState.Main; // sets gamestate back to main menu
     }

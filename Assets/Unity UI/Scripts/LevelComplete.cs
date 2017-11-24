@@ -30,9 +30,9 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
     public void conntiue() // method used by the level complete menu to load the gamestate for next level
     {
         //if there is an error with the current level then throw an exception and an error message is displayed
-        if(Level.currentLevel == null)  showErrorMenu("CurrentLevel is null when trying to go to next Level");
+        if(Level.current == null)  showErrorMenu("CurrentLevel is null when trying to go to next Level");
         //if next level cannot be loaded then throw an exception and display an error message
-        if (Level.currentLevel.nextLevel() == null) showErrorMenu("Problem loading next Level");
+        if (Level.current.nextLevel() == null) showErrorMenu("Problem loading next Level");
             
         GameStates.gameState = GameStates.GameState.Playing;
         
@@ -40,7 +40,7 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
 
     public void saveGame() // method used by the level complete menu to take user input from input field and create save file on user's device
     {
-        if (Level.currentLevel == null) showErrorMenu("CurrentLevel is null when trying to save"); //if there is an error with the current level then throw an exception and an error message is displayed
+        if (Level.current == null) showErrorMenu("CurrentLevel is null when trying to save"); //if there is an error with the current level then throw an exception and an error message is displayed
 
         if (saveNameInputField == null || saveNameInputField.text == null)
         {
@@ -52,7 +52,7 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
         }
         else //else create save file on user's hardrive using input field text
         {
-            if (Level.currentLevel.save(saveNameInputField.text))
+            if (Level.current.save(saveNameInputField.text))
             {
                 showErrorMenu("Save game created successfully!");
             }
@@ -93,7 +93,7 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
 
     public void saveReplay() // method used by the level complete menu to create a save file
     {
-        if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
+        if (Level.current == null) //if there is an error with the current level then throw an exception and an error message is displayed
         {
             showErrorMenu("CurrentLevel is null when trying to saveReplay");
         }
@@ -107,7 +107,7 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
         }
         else //else create replay recording on user's hardrive using the input field text
         {
-            if (Level.currentLevel.saveReplay(replayNameInputField.text))
+            if (Level.current.saveReplay(replayNameInputField.text))
             {
                 showErrorMenu("Replay created successfully!");
             }
@@ -120,9 +120,9 @@ public class LevelComplete : MonoBehaviour, IErrorPanel //add the error panel in
 
     public void quit() // method used by the level complete menu to set gamestate to main menu
     {
-        if (Level.currentLevel != null)
+        if (Level.current != null)
         {
-            Destroy(Level.currentLevel.gameObject);
+            Destroy(Level.current.gameObject);
         }
         GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
     }

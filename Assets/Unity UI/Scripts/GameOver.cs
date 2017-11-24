@@ -16,20 +16,20 @@ public class GameOver : MonoBehaviour, IErrorPanel
 
     public void restart() // method used by the restart button on the gameover menu to set level to its beginning
     {
-        if (Level.currentLevel == null) //if there is an error with the current level, throw exception and display error message
+        if (Level.current == null) //if there is an error with the current level, throw exception and display error message
         {
             showErrorMenu("Can't restart level, current level is set to null");
         }
         else //else set level to its beginning state
         {
-            Level.currentLevel.restartLevel();
+            Level.current.restartLevel();
             GameStates.gameState = GameStates.GameState.Playing;
         }
 	}
 
     public void saveReplay() // method used by the Gameover menu to create a save file
     {
-        if (Level.currentLevel == null) //if there is an error with the current level then throw an exception and an error message is displayed
+        if (Level.current == null) //if there is an error with the current level then throw an exception and an error message is displayed
         {
             showErrorMenu("CurrentLevel is null when trying to saveReplay");
         }
@@ -43,7 +43,7 @@ public class GameOver : MonoBehaviour, IErrorPanel
         }
         else //else create replay recording on user's hardrive using the input field text
         {
-            if (Level.currentLevel.saveReplay(replayNameInputField.text))
+            if (Level.current.saveReplay(replayNameInputField.text))
             {
                 showErrorMenu("Replay has been saved successfully!"); //display that replay was saved
             }
@@ -56,9 +56,9 @@ public class GameOver : MonoBehaviour, IErrorPanel
 
     public void quit() // method used by the gameover menu to set gamestate to main menu
     {
-        if (Level.currentLevel != null)
+        if (Level.current != null)
         {
-            Destroy(Level.currentLevel.gameObject);
+            Destroy(Level.current.gameObject);
         }
         GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
 	}

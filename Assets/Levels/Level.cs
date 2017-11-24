@@ -39,7 +39,7 @@ public abstract class Level : MonoBehaviour
     }
 
     private static Level theCurrentLevel;
-    public static Level currentLevel
+    public static Level current
     {
         get
         {
@@ -423,7 +423,7 @@ public abstract class Level : MonoBehaviour
     
     public void FixedUpdate()
     {
-        if (currentLevel != this)
+        if (current != this)
         {
             clearLevel();
             Destroy(this.gameObject);

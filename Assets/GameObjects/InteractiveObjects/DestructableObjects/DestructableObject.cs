@@ -47,8 +47,11 @@ public abstract class DestructableObject : InteractiveObject
 
             theMaxHealth = health;
 
-            healthBar = Instantiate(Resources.Load("HealthBarPF"), new Vector3(position.x, position.y, -5), Quaternion.Euler(0, 0, 0)) as GameObject;
-            healthBar.GetComponent<HealthBar>().owner = this;
+            if (healthBar == null)
+            {
+                healthBar = Instantiate(Resources.Load("HealthBarPF"), new Vector3(position.x, position.y, -5), Quaternion.Euler(0, 0, 0)) as GameObject;
+                healthBar.GetComponent<HealthBar>().owner = this;
+            }
         }
     }
 
@@ -79,7 +82,16 @@ public abstract class DestructableObject : InteractiveObject
         set
         {
             gameObject.SetActive(value);
-            healthBar.SetActive(value);
+
+            if (healthBar != null)
+            {
+                healthBar.SetActive(value);
+            }
+            else
+            {
+                healthBar = Instantiate(Resources.Load("HealthBarPF"), new Vector3(position.x, position.y, -5), Quaternion.Euler(0, 0, 0)) as GameObject;
+                healthBar.GetComponent<HealthBar>().owner = this;
+            }
         }
     }
 

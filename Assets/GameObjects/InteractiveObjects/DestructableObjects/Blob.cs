@@ -7,6 +7,8 @@ public abstract class BlobBehaviour
 
     public abstract void update(Blob thisBlob);
 
+    public abstract bool combine(BlobBehaviour other);
+
     public virtual BlobBehaviour clone()
     {
         return (BlobBehaviour)this.MemberwiseClone();
@@ -15,21 +17,24 @@ public abstract class BlobBehaviour
 
 public class Blob : DestructableObject
 {
-    private bool merged = false;
+    public float damageMultiplier = 6f;
+    public float mergeCooldownSecs = 0.25f;
+    private int mergeTimer = 0;
     public float maxSize = 1.5f;
     public LinkedList<BlobBehaviour> behaviors = new LinkedList<BlobBehaviour>();
 
     public void mergeWith(Blob other)
     {
-        other.merged = true;
-        merged = true;
+        other.mergeTimer = -1;
+        mergeTimer = (int)(mergeCooldownSecs * level.updatesPerSec);
 
         float portionThis = mass / (mass + other.mass);
         float portionOther = other.mass / (mass + other.mass);
 
         mass += other.mass;
         health += other.health;
-        
+        maxHealth += other.maxHealth;
+
         float area = (float)(scale.x * scale.x / 4 * System.Math.PI);
         area += (float)(other.scale.x * other.scale.x / 4 * System.Math.PI);
         area = (float)(System.Math.Sqrt(area  * 4/ System.Math.PI));
@@ -46,8 +51,33 @@ public class Blob : DestructableObject
         {
             behaviors.AddFirst(item);
         }
-        
-        maxHealth = health;
+        other.behaviors.Clear();
+
+        if (behaviors.Count > 1)
+        {
+            LinkedListNode<BlobBehaviour> current = behaviors.First;
+
+            while (current != null && current.Next != null)
+            {
+                LinkedListNode<BlobBehaviour> next = current.Next;
+                do
+                {
+                    if (current.Value.combine(next.Value))
+                    {
+                        LinkedListNode<BlobBehaviour> toRemove = next;
+                        next = next.Next;
+                        behaviors.Remove(toRemove);
+                    }
+                    else
+                    {
+                        next = next.Next;
+                    }
+
+                } while (next != null);
+
+                current = current.Next;
+            }
+        }
 
         other.destroyThis();
     }
@@ -61,11 +91,11 @@ public class Blob : DestructableObject
     {
         if (other.team != this.team)
         {
-            other.damageThis(scale.x * 4);
+            other.damageThis(scale.x * damageMultiplier);
         }
         else if (other.GetType() == typeof(Blob))
         {
-            if(!merged && !((Blob)(other)).merged && scale.x + other.scale.x < maxSize)
+            if(mergeTimer == 0 && ((Blob)(other)).mergeTimer == 0 && scale.x + other.scale.x < maxSize)
             {
                 mergeWith((Blob)other);
             }
@@ -86,7 +116,7 @@ public class Blob : DestructableObject
     {
         if (other.team != this.team)
         {
-            other.damageThis(scale.x * 4);
+            other.damageThis(scale.x * damageMultiplier);
         }
     }
 
@@ -98,7 +128,10 @@ public class Blob : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        merged = false;
+        if (mergeTimer > 0)
+        {
+            mergeTimer--;
+        }
 
         foreach (BlobBehaviour item in behaviors)
         {
@@ -134,6 +167,7 @@ public class Blob : DestructableObject
                     current.health = health / pieces;
                     current.team = team;
                     current.color = color;
+                    current.mergeTimer = (int)(mergeCooldownSecs * level.updatesPerSec);
 
                     foreach (BlobBehaviour item in behaviors)
                     {
@@ -142,6 +176,7 @@ public class Blob : DestructableObject
                         current.behaviors.AddFirst(temp);
                     }
                 }
+                mergeTimer = -1;
                 destroyThis();
             }
             else

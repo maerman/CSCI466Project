@@ -368,14 +368,14 @@ public class PlayerControls
             mousePos = Camera.main.ScreenToWorldPoint(mousePos);
             Vector2 playerPos = Vector2.zero;
 
-            if (Level.currentLevel != null)
+            if (Level.current != null)
             {
                 for (int i = Controls.get().players.Length - 1; i >= 0; i--)
                 {
                     PlayerControls current = Controls.get().players[i];
                     if (current == this)
                     {
-                        playerPos = Level.currentLevel.players[i].position;
+                        playerPos = Level.current.players[i].position;
                     }
                 }
             }

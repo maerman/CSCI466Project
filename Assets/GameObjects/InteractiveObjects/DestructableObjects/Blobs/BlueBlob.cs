@@ -5,21 +5,36 @@ public class PullOthers : BlobBehaviour
 {
     private float pullSpeed;
 
-    public PullOthers(float moveSpeed)
+    public PullOthers(float pullSpeed)
     {
-        this.pullSpeed = moveSpeed;
+        this.pullSpeed = pullSpeed;
     }
 
-    public void combine(PullOthers other)
+    public override bool combine(BlobBehaviour other)
     {
+        if (other.GetType() == typeof(PullOthers))
+        {
+            PullOthers theOther = (PullOthers)other;
 
+            float amountThis = magnitude / (magnitude + other.magnitude);
+
+            magnitude += other.magnitude;
+
+            pullSpeed = pullSpeed * amountThis + theOther.pullSpeed * (1 - amountThis);
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public override void update(Blob thisBlob)
     {
-        foreach (DestructableObject item in Level.currentLevel.destructables)
+        foreach (DestructableObject item in Level.current.destructables)
         {
-            if (item.GetType().IsSubclassOf(typeof(Blob)) || item.GetType() == typeof(Blob))
+            if ((item.GetType().IsSubclassOf(typeof(Blob)) || item.GetType() == typeof(Blob)) && item != thisBlob)
             {
                 item.moveTowards(thisBlob, pullSpeed * magnitude / thisBlob.distanceFrom(item));
             }
@@ -29,7 +44,7 @@ public class PullOthers : BlobBehaviour
 
 public class BlueBlob : Blob
 {
-    public float pullSpeed;
+    public float pullSpeed = 0.01f;
 
     protected override void startBlob()
     {
