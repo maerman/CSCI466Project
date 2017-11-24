@@ -33,13 +33,19 @@ public class LazerShot : NonInteractiveObject
 
     protected override void playerCollision(Player other)
     {
-        other.damageThis(damage);
+        if (team != other.team)
+        {
+            other.damageThis(damage);
+        }
         destroyThis();
     }
 
     protected override void destructableObjectCollision(DestructableObject other)
     {
-        other.damageThis(damage);
+        if (team != other.team)
+        {
+            other.damageThis(damage);
+        }
         destroyThis();
     }
 

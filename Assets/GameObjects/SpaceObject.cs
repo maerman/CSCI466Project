@@ -5,7 +5,9 @@ using UnityEngine;
 
 public abstract class SpaceObject : MonoBehaviour
 {
-    public float maxSpeed = 15;
+    public float maxSpeed = 15f;
+
+    public float maxAngularSpeed = 360f;
 
     public sbyte team = 0;
 
@@ -508,30 +510,7 @@ public abstract class SpaceObject : MonoBehaviour
         turnTowards(turnTo.position);
     }
 
-    public void turnAway(Vector2 awayFrom)
-    {
-        awayFrom = closestMirrorOfPosition(awayFrom);
-        angle = Mathf.Rad2Deg * (Mathf.Atan2(position.y - awayFrom.y, position.x - awayFrom.x) - Mathf.PI / 2);
-    }
-
-    public void turnAway(SpaceObject awayFrom)
-    {
-        turnAway(awayFrom.position);
-    }
-
-    public void moveForward(float speed)
-    {
-        moveDirection(speed, angle);
-    }
-
-    public void moveDirection(float speed, float direction)
-    {
-        velocity += new Vector2(-Mathf.Sin(direction * Mathf.Deg2Rad) * speed, Mathf.Cos(direction * Mathf.Deg2Rad) * speed);
-    }
-
-
-    //has bugs, needs fixed
-    public void rotateTowards(Vector2 rotateTo, float amount)
+    public void turnTowards(Vector2 rotateTo, float amount)
     {
         float theAngle = angle;
         while (theAngle < 0)
@@ -558,16 +537,6 @@ public abstract class SpaceObject : MonoBehaviour
 
         float angleDiff = angleTo - theAngle;
 
-        int direction;
-        if (angleDiff > 0)
-        {
-            direction = -1;
-        }
-        else
-        {
-            direction = 1;
-        }
-
         while (angleDiff < 0)
         {
             angleDiff += 360;
@@ -577,20 +546,64 @@ public abstract class SpaceObject : MonoBehaviour
             angleDiff -= 360;
         }
 
-        if (angleDiff < amount || 360.0f - angle < amount)
+        if (angleDiff < amount)
         {
             angle = angleTo;
         }
+        else if (angleDiff > 180)
+        {
+            angle = theAngle - amount;
+        }
         else
         {
-            angle = theAngle - amount * direction;
+            angle = theAngle + amount;
         }
-
     }
 
-    public void rotateTowards(SpaceObject rotateTo, float amount)
+    public void turnTowards(SpaceObject rotateTo, float amount)
     {
-        rotateTowards(rotateTo.position, amount);
+        turnTowards(rotateTo.position, amount);
+    }
+
+    public void turnAway(Vector2 awayFrom)
+    {
+        awayFrom = closestMirrorOfPosition(awayFrom);
+        angle = Mathf.Rad2Deg * (Mathf.Atan2(position.y - awayFrom.y, position.x - awayFrom.x) - Mathf.PI / 2);
+    }
+
+    public void turnAway(SpaceObject awayFrom)
+    {
+        turnAway(awayFrom.position);
+    }
+
+    public float angleToAbsolute(Vector2 to)
+    {
+        return position.angleFrom(to);
+    }
+
+    public float angleToAbsolute(SpaceObject to)
+    {
+        return angleToAbsolute(to.position);
+    }
+
+    public float angleToRelative(Vector2 to)
+    {
+        return position.angleFrom(to) - angle;
+    }
+
+    public float angleToRelative(SpaceObject to)
+    {
+        return angleToRelative(to.position);
+    }
+
+    public void moveForward(float speed)
+    {
+        moveDirection(speed, angle);
+    }
+
+    public void moveDirection(float speed, float direction)
+    {
+        velocity += new Vector2(-Mathf.Sin(direction * Mathf.Deg2Rad) * speed, Mathf.Cos(direction * Mathf.Deg2Rad) * speed);
     }
 
     /// <summary>
@@ -705,6 +718,11 @@ public abstract class SpaceObject : MonoBehaviour
         if (speed > maxSpeed)
         {
             speed = maxSpeed;
+        }
+
+        if (angularVelocity > maxAngularSpeed)
+        {
+            angularVelocity = maxAngularSpeed;
         }
 
         Vector2 pos = position;

@@ -105,6 +105,7 @@ public class Player : DestructableObject
             shot.velocity = velocity;
             shot.moveForward(shotSpeed);
             shot.color = color;
+            shot.team = team;
         }
 
         for (int i = 0; i < theItems.Length; i++)

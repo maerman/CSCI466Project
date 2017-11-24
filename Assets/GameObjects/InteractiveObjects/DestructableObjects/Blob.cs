@@ -1,10 +1,23 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+
+public abstract class BlobBehaviour
+{
+    public float magnitude = 1;
+
+    public abstract void update(Blob thisBlob);
+
+    public virtual BlobBehaviour clone()
+    {
+        return (BlobBehaviour)this.MemberwiseClone();
+    }
+}
 
 public class Blob : DestructableObject
 {
     private bool merged = false;
     public float maxSize = 1.5f;
+    public LinkedList<BlobBehaviour> behaviors = new LinkedList<BlobBehaviour>();
 
     public void mergeWith(Blob other)
     {
@@ -26,6 +39,13 @@ public class Blob : DestructableObject
         angle = angle * portionThis + other.angle * portionOther;
         angularVelocity = angularVelocity * portionThis + other.angularVelocity * portionOther;
         velocity = velocity * portionThis + other.velocity * portionOther;
+
+        color = color * portionThis + other.color * portionOther;
+
+        foreach (BlobBehaviour item in other.behaviors)
+        {
+            behaviors.AddFirst(item);
+        }
         
         maxHealth = health;
 
@@ -70,14 +90,20 @@ public class Blob : DestructableObject
         }
     }
 
+    protected virtual void startBlob() { }
     protected override void startDestructableObject()
     {
-        
+        startBlob();
     }
 
     protected override void updateDestructableObject()
     {
         merged = false;
+
+        foreach (BlobBehaviour item in behaviors)
+        {
+            item.update(this);
+        }
     }
 
     public override void damageThis(float damage)
@@ -106,6 +132,15 @@ public class Blob : DestructableObject
 
                     current.mass = mass / pieces;
                     current.health = health / pieces;
+                    current.team = team;
+                    current.color = color;
+
+                    foreach (BlobBehaviour item in behaviors)
+                    {
+                        BlobBehaviour temp = item.clone();
+                        temp.magnitude /= pieces;
+                        current.behaviors.AddFirst(temp);
+                    }
                 }
                 destroyThis();
             }

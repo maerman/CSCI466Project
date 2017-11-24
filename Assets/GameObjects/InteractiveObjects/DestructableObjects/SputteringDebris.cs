@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class SlowTurner : DestructableObject
+public class SputteringDebris : DestructableObject
 {
-    public float turnSpeed = 0.01f;
-    public float damage = 10f;
-    public float acceleration = 0.1f;
-    private DestructableObject target;
+    public float damage = 15f;
+    public float acceleration = 0.5f;
+    public float turnSpeed = 1f;
+    public float maxAccelerateDurationSecs = 2f;
+
+    private int wait = 0;
+    private bool accelerate = false;
 
     protected override void destroyDestructableObject()
     {
-
+        
     }
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
-        if (other.team != team)
+        if (team != other.team)
         {
             other.damageThis(damage);
         }
@@ -34,7 +36,7 @@ public class SlowTurner : DestructableObject
 
     protected override void playerCollision(Player other, Collision2D collision)
     {
-        if (other.team != team)
+        if (team != other.team)
         {
             other.damageThis(damage);
         }
@@ -47,19 +49,18 @@ public class SlowTurner : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (target == null || !target.active)
+        if (wait <= 0)
         {
-            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
-            targetList[0] = level.destructables;
-            targetList[1] = level.players;
-
-            target = closestObject<DestructableObject>(targetList, false);
-        }
-        else
-        {
-            turnTowards(target, turnSpeed);
+            accelerate = !accelerate;
+            wait = level.random.Next((int)(maxAccelerateDurationSecs * level.updatesPerSec));
         }
 
-        moveForward(acceleration);
+        if (accelerate)
+        {
+            angularVelocity += turnSpeed;
+            moveForward(acceleration);
+        }
+
+        wait--;
     }
 }
