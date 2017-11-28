@@ -82,6 +82,16 @@ public class Key
         return value;
     }
 
+    public void changeValue(int value)
+    {
+        this.value = value;
+    }
+
+    public void changeValue(Key copy)
+    {
+        value = copy.getValue();
+    }
+
     public bool isPressed()
     {
         try
@@ -681,9 +691,9 @@ public class Key
 
         float axisValue;
 
-        for (int i = 0; i < NUM_CONTROLLERS; i++)
+        for (int i = 1; i <= NUM_CONTROLLERS; i++)
         {
-            for (int j = 0; j < NUM_AXIS; j++)
+            for (int j = 1; j <= NUM_AXIS / 2; j++)
             {
                 axisValue = Input.GetAxis(getAxisString(i, j));
                 if (System.Math.Abs(axisValue) > ACTIVATION_THRESHOLD)

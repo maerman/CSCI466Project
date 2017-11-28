@@ -20,6 +20,7 @@ public class GameLoop : MonoBehaviour {
     public GameObject gameOverMenu;
     public GameObject gameCompleteMenu;
     public GameObject loadReplayMenu;
+    public GameObject optionsMenu;
     public GameObject aboutMenu;
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
@@ -66,7 +67,7 @@ public class GameLoop : MonoBehaviour {
                     gameOverMenu.SetActive(false);
                     gameCompleteMenu.SetActive(false);
                     loadReplayMenu.SetActive(false);
-                    //optionsMenu.SetActive(false);
+                    optionsMenu.SetActive(false);
                     aboutMenu.SetActive(false);
                     previousGameState = lastGameState;
                 }
@@ -143,7 +144,7 @@ public class GameLoop : MonoBehaviour {
                         }
                         break;
                     case GameState.Options:
-                        //optionsMenu.SetActive(true);
+                        optionsMenu.SetActive(true);
                         break;
                     case GameState.About:
                         aboutMenu.SetActive(true);
