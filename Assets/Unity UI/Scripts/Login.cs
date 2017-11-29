@@ -42,7 +42,7 @@ public class Login : MonoBehaviour, IErrorPanel {
                 return;
             }
             Debug.Assert(user.username != null, "Player is not logged in!"); //player should be logged in here
-        gameState = GameState.Playing;
+        gameState = GameState.NewGame;
     }
 
     //User attempts to login to an existing account

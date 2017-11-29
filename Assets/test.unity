@@ -10703,7 +10703,6 @@ MonoBehaviour:
   pauseMenu: {fileID: 1176483530}
   levelCompleteMenu: {fileID: 790657553}
   gameOverMenu: {fileID: 310033343}
-  gameCompleteMenu: {fileID: 403437486}
 --- !u!4 &1813642573
 Transform:
   m_ObjectHideFlags: 0
@@ -11872,7 +11871,7 @@ Prefab:
       objectReference: {fileID: 413245717}
     - target: {fileID: 1659488790069886, guid: dcadd5a2e1c501348b6ffcdf5295a7f6, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dcadd5a2e1c501348b6ffcdf5295a7f6, type: 2}
