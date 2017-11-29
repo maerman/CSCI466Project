@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using static GameStates;
 
 public class PauseGame : MonoBehaviour, IErrorPanel {
 
@@ -11,9 +12,20 @@ public class PauseGame : MonoBehaviour, IErrorPanel {
     public CanvasGroup canvasGroup;
     public Text errorText;
 
+    private GameState callingScreen;
+
+    private void OnEnable()
+    {
+        if (previousGameState == GameState.Replay ||
+            previousGameState == GameState.Playing)
+        {
+            callingScreen = previousGameState;
+        }
+    }
+
     public void Unpause() // method used by the resume button on the pause menu to dismiss the menu and continue playing
     {
-        GameStates.gameState = GameStates.previousGameState; //set gamestate to last gamestate, which removes pause interface
+        gameState = callingScreen; //set gamestate to last gamestate, which removes pause interface
 	}
 
 	public void Restart() // method used by the restart button on the pause menu to set level to its beginning
@@ -31,7 +43,7 @@ public class PauseGame : MonoBehaviour, IErrorPanel {
 
 	public void Options() // method used by the pause menu to display the options sub-menu
     {
-        GameStates.gameState = GameStates.GameState.Options; //set gamestate to options to display options interface
+        gameState = GameState.OptionsHub; //set gamestate to options to display options interface
 	}
 
 	public void Exit() // method used by the pause menu to set the gamestate to the main menu on exit button click
@@ -40,7 +52,7 @@ public class PauseGame : MonoBehaviour, IErrorPanel {
         {
             Destroy(Level.current.gameObject);
         }
-        GameStates.gameState = GameStates.GameState.Main; // sets gamestate back to main menu
+        gameState = GameState.Main; // sets gamestate back to main menu
     }
 
     public bool HasError()

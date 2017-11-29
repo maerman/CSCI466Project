@@ -226,35 +226,35 @@ public abstract class Level : MonoBehaviour
     private List<DestructableObject> removeDestructables = new List<DestructableObject>();
     private List<DestructableObject> addDestructables = new List<DestructableObject>();
     private LinkedList<DestructableObject> theDestructables = new LinkedList<DestructableObject>();
-	public LinkedList<DestructableObject> destructables
-	{
-		get 
-		{
-			return theDestructables;
-		}
-	}
+    public LinkedList<DestructableObject> destructables
+    {
+        get
+        {
+            return theDestructables;
+        }
+    }
 
     private List<IndestructableObject> removeIndestructables = new List<IndestructableObject>();
     private List<IndestructableObject> addIndestructables = new List<IndestructableObject>();
     private LinkedList<IndestructableObject> theIndestructables = new LinkedList<IndestructableObject>();
-	public LinkedList<IndestructableObject> indestructables
-	{
-		get 
-		{
-			return theIndestructables;
-		}
-	}
+    public LinkedList<IndestructableObject> indestructables
+    {
+        get
+        {
+            return theIndestructables;
+        }
+    }
 
     private List<NonInteractiveObject> removeNonInteractives = new List<NonInteractiveObject>();
     private List<NonInteractiveObject> addNonInteractives = new List<NonInteractiveObject>();
     private LinkedList<NonInteractiveObject> theNonInteractives = new LinkedList<NonInteractiveObject>();
-	public LinkedList<NonInteractiveObject> nonInteractives
-	{
-		get 
-		{
-			return theNonInteractives;
-		}
-	}
+    public LinkedList<NonInteractiveObject> nonInteractives
+    {
+        get
+        {
+            return theNonInteractives;
+        }
+    }
 
     public List<IEnumerable<SpaceObject>> getTypes(bool players, bool destructables, bool indestructables, bool nonInteractives)
     {
@@ -346,13 +346,72 @@ public abstract class Level : MonoBehaviour
 
     private Player[] initialPlayers = new Player[Controls.MAX_PLAYERS];
     private Player[] thePlayers = new Player[Controls.MAX_PLAYERS];
-	public Player[] players
-	{
-		get 
-		{
-			return thePlayers;
-		}
-	}
+    public Player[] players
+    {
+        get
+        {
+            return thePlayers;
+        }
+    }
+
+    private float theMusicVolume = 1;
+    private AudioSource theMusicAudio;
+    protected AudioSource musicAudio
+    {
+        get
+        {
+            return theMusicAudio;
+        }
+    }
+    protected void musicPlay(AudioClip clip)
+    {
+        theMusicAudio.clip = clip;
+        theMusicAudio.loop = true;
+        theMusicAudio.Play();
+    }
+    protected float musicVolume
+    {
+        get
+        {
+            return theMusicVolume;
+        }
+        set
+        {
+            theMusicVolume = Mathf.Clamp01(value);
+        }
+    }
+
+    private float theEffectVolume = 1;
+    private AudioSource theEffectAudio;
+    public AudioSource effectAudio
+    {
+        get
+        {
+            return theEffectAudio;
+        }
+    }
+    public void effectPlay(AudioClip clip)
+    {
+        theEffectAudio.clip = clip;
+        theEffectAudio.Play();
+    }
+    public float effectVolume
+    {
+        get
+        {
+            return theEffectVolume;
+        }
+        set
+        {
+            theEffectVolume = Mathf.Clamp01(value);
+        }
+    }
+
+    private void Start()
+    {
+        theMusicAudio = gameObject.AddComponent<AudioSource>();
+        theEffectAudio = gameObject.AddComponent<AudioSource>();
+    }
 
     protected abstract void createLevel();
 
@@ -430,9 +489,9 @@ public abstract class Level : MonoBehaviour
             return;
         }
 
-        Options.updateOptions();
-
         theDuration += UnityEngine.Time.fixedDeltaTime;
+        theMusicAudio.volume = Options.get().volumeMusic * musicVolume;
+        theEffectAudio.volume = Options.get().volumeMusic * effectVolume;
 
         if (GameStates.gameState == GameStates.GameState.Replay && updateFile != null)
         {
@@ -497,7 +556,7 @@ public abstract class Level : MonoBehaviour
             }
         }
         
-        if (!Controls.get().staticLevel && playersRemaining > 0)
+        if (!Options.get().levelStatic && playersRemaining > 0)
         {
             float xUpperLimit = theGameBounds.xMin;
             float xLowerLimit = theGameBounds.xMax;
@@ -799,7 +858,7 @@ public abstract class Level : MonoBehaviour
 
         Array.Sort(filePaths);
 
-        for (int i = 0; i < filePaths.Length - Options.maxAutosaves - 1; i++)
+        for (int i = 0; i < filePaths.Length - Options.get().levelMaxAutosaves - 1; i++)
         {
             System.IO.File.Delete(filePaths[i]);
         }

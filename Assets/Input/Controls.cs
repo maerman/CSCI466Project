@@ -520,8 +520,6 @@ public class Controls
     public const int MAX_PLAYERS = 4;
     public const string CONTROLS_FILE = "Controls.options";
 
-    public bool staticLevel = false;
-
     private PlayerControls[] thePlayers = new PlayerControls[MAX_PLAYERS];
 
     public PlayerControls[] players
@@ -541,10 +539,11 @@ public class Controls
 
         try
         {
-            setControlsFromFile();
+            loadControls();
         }
         catch
         {
+            Debug.Log("Problem loading controls, setting default controls.");
             setDefaultControls();
         }
     }
@@ -683,7 +682,7 @@ public class Controls
     public void updateFromFile(System.IO.StreamReader file)
     {
         if (file.Peek() >= 0)
-            staticLevel = System.Convert.ToBoolean(file.ReadLine());
+            Options.get().levelStatic = System.Convert.ToBoolean(file.ReadLine());
         foreach (PlayerControls item in players)
         {
             if (file.Peek() >= 0)
@@ -695,7 +694,7 @@ public class Controls
     {
         for (int i = 0; i < players[0].inputs.Count; i++)
         {
-            file.WriteLine(staticLevel.ToString());
+            file.WriteLine(Options.get().levelStatic.ToString());
             for (int j = 0; j < MAX_PLAYERS; j++)
             {
                 file.WriteLine(players[j].inputs[i].ToString());
@@ -703,12 +702,12 @@ public class Controls
         }
     }
 
-    public void setControlsFromFile()
+    public void loadControls()
     {
-        setControlsFromFile(CONTROLS_FILE);
+        loadControls(CONTROLS_FILE);
     }
 
-    public void setControlsFromFile(string fileName)
+    public void loadControls(string fileName)
     {
         System.IO.StreamReader file = null;
         try
@@ -733,12 +732,12 @@ public class Controls
         }
     }
 
-    public void saveControlsToFile()
+    public void saveControls()
     {
-        saveControlsToFile(CONTROLS_FILE);
+        saveControls(CONTROLS_FILE);
     }
 
-    public void saveControlsToFile(string fileName)
+    public void saveControls(string fileName)
     {
         System.IO.StreamWriter file = null;
         try

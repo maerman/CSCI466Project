@@ -31,6 +31,8 @@ public class ModifyControls : MonoBehaviour
 
     private void refresh()
     {
+        playerControls = Controls.get().players[playerNumber];
+
         forward.text = playerControls.forwardKey.ToString();
         backward.text = playerControls.backwardKey.ToString();
         left.text = playerControls.straifLKey.ToString();
@@ -60,7 +62,11 @@ public class ModifyControls : MonoBehaviour
 
     void Start()
     {
-        playerControls = Controls.get().players[playerNumber];
+        refresh();
+    }
+
+    private void OnEnable()
+    {
         refresh();
     }
 
@@ -225,11 +231,18 @@ public class ModifyControls : MonoBehaviour
 
     public void Back()
     {
-
+        GameStates.gameState = GameStates.GameState.OptionsHub;
     }
 
-    public void Player2()
+    public void PlayerOther()
     {
-
+        if (GameStates.gameState == GameStates.GameState.OptionsPlayer1)
+        {
+            GameStates.gameState = GameStates.GameState.OptionsPlayer2;
+        }
+        else
+        {
+            GameStates.gameState = GameStates.GameState.OptionsPlayer1;
+        }
     }
 }

@@ -23,6 +23,32 @@ public abstract class SpaceObject : MonoBehaviour
 
     public abstract Bounds bounds { get; }
 
+    private float theEffectVolume = 1;
+    private AudioSource theEffectAudio;
+    public AudioSource effectAudio
+    {
+        get
+        {
+            return theEffectAudio;
+        }
+    }
+    public void effectPlay(AudioClip clip)
+    {
+        theEffectAudio.clip = clip;
+        theEffectAudio.Play();
+    }
+    public float effectVolume
+    {
+        get
+        {
+            return theEffectVolume;
+        }
+        set
+        {
+            theEffectVolume = Mathf.Clamp01(value);
+        }
+    }
+
     public Vector2 scale
     {
         get
@@ -707,6 +733,7 @@ public abstract class SpaceObject : MonoBehaviour
     protected abstract void startObject();
     protected void Start ()
     {
+        theEffectAudio = gameObject.AddComponent<AudioSource>();
         startObject();
 	}
 
@@ -748,7 +775,9 @@ public abstract class SpaceObject : MonoBehaviour
             position += velocity * level.secsPerUpdate;
             position = pos;
         }
-	}
+
+        theEffectAudio.volume = Options.get().volumeMusic * effectVolume;
+    }
 
     protected abstract void destroyObject();
     protected void OnDestroy()

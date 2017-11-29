@@ -50,8 +50,6 @@ public class Message
 
 public class IngameInterface : MonoBehaviour
 {
-    public static float interfaceAlpha = 0.7f;
-
     //Initilzed in editor
     public Text durationText;
     public Text numberName;
@@ -92,13 +90,13 @@ public class IngameInterface : MonoBehaviour
             Level level = Level.current;
 
             durationText.text = level.duration.ToString(@"hh\:mm\:ss");
-            durationText.applyAlpha(interfaceAlpha);
+            durationText.applyAlpha(Options.get().ingameInterfaceAlpha);
 
             numberName.text = level.levelNumber.ToString() + ":" + level.levelName;
-            numberName.applyAlpha(interfaceAlpha);
+            numberName.applyAlpha(Options.get().ingameInterfaceAlpha);
 
             progress.text = level.progress;
-            progress.applyAlpha(interfaceAlpha);
+            progress.applyAlpha(Options.get().ingameInterfaceAlpha);
 
             string messageText = "";
             for (int i = messageList.Count - 1; i >= 0; i--)
@@ -119,7 +117,7 @@ public class IngameInterface : MonoBehaviour
                 }
             }
             messages.text = messageText;
-            messages.applyAlpha(interfaceAlpha);
+            messages.applyAlpha(Options.get().ingameInterfaceAlpha);
 
             for (int i = 0; i < playerPanels.Count; i++)
             {
@@ -131,7 +129,7 @@ public class IngameInterface : MonoBehaviour
                 {
                     playerPanels[i].SetActive(true);
                     playerPanels[i].GetComponent<PlayerPanel>().player = level.players[i];
-                    playerPanels[i].applyAlphaToChildren(interfaceAlpha);
+                    playerPanels[i].applyAlphaToChildren(Options.get().ingameInterfaceAlpha);
                 }
             }
         }      

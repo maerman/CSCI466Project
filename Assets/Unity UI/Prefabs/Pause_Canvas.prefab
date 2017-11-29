@@ -437,7 +437,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6706ff506976b6469a9be2a554301a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paused: 0
   errorPanel: {fileID: 0}
   canvasGroup: {fileID: 0}
   errorText: {fileID: 0}

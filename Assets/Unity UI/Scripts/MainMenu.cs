@@ -49,7 +49,7 @@ public class MainMenu : MonoBehaviour
 
     public void Options() //method used by the main menu to open the options menu
     {
-        gameState = GameState.Options;
+        gameState = GameState.OptionsHub;
     }
 
     public void About() //method used by the main menu to open the about page

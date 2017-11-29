@@ -3,10 +3,6 @@ using System.Collections;
 
 public class Key
 {
-    public static bool XBoxControllerNames = true;
-
-    public const float ACTIVATION_THRESHOLD = 0.5f;
-    public const float DEAD_ZONE = 0.1f;
     public const string MOUSE_WHEEL_NAME = "MouseWheel";
     public const int MOUSE_WHEEL_UP = 1022;
     public const int MOUSE_WHELL_DOWN = 1023; 
@@ -120,11 +116,11 @@ public class Key
 
                 if (name[0] == '+')
                 {
-                    return (Input.GetAxis(name.Substring(1)) > ACTIVATION_THRESHOLD);
+                    return (Input.GetAxis(name.Substring(1)) > Options.get().keyActivationThreshold);
                 }
                 else if (name[0] == '-')
                 {
-                    return (Input.GetAxis(name.Substring(1)) < -ACTIVATION_THRESHOLD);
+                    return (Input.GetAxis(name.Substring(1)) < -Options.get().keyActivationThreshold);
                 }
                 else
                 {
@@ -171,9 +167,9 @@ public class Key
 
                 if (name[0] == '+')
                 {
-                    if (axisValue > 0 && axisValue > DEAD_ZONE)
+                    if (axisValue > 0 && axisValue > Options.get().keyDeadZone)
                     {
-                        axisValue = (axisValue - DEAD_ZONE) / (1 - DEAD_ZONE);
+                        axisValue = (axisValue - Options.get().keyDeadZone) / (1 - Options.get().keyDeadZone);
                         return axisValue;
                     }
                     else
@@ -183,10 +179,10 @@ public class Key
                 }
                 else if (name[0] == '-')
                 {
-                    if (axisValue < 0 && axisValue < -DEAD_ZONE)
+                    if (axisValue < 0 && axisValue < -Options.get().keyDeadZone)
                     {
                         axisValue = -axisValue;
-                        axisValue = (axisValue - DEAD_ZONE) / (1 - DEAD_ZONE);
+                        axisValue = (axisValue - Options.get().keyDeadZone) / (1 - Options.get().keyDeadZone);
                         return axisValue;
                     }
                     else
@@ -514,7 +510,7 @@ public class Key
             int controller = temp / 20;
             int button = temp % 20;
 
-            if (XBoxControllerNames)
+            if (Options.get().keyXboxNames)
             {
                 switch (button)
                 {
@@ -557,7 +553,7 @@ public class Key
             bool positive = (tempValue % 2) == 0;
             axis = axis / 2 + 1;
 
-            if (XBoxControllerNames)
+            if (Options.get().keyXboxNames)
             {
                 if (positive)
                 {
@@ -696,7 +692,7 @@ public class Key
             for (int j = 1; j <= NUM_AXIS / 2; j++)
             {
                 axisValue = Input.GetAxis(getAxisString(i, j));
-                if (System.Math.Abs(axisValue) > ACTIVATION_THRESHOLD)
+                if (System.Math.Abs(axisValue) > Options.get().keyDeadZone)
                 {
                     if (axisValue > 0)
                     {

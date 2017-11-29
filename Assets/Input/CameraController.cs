@@ -3,9 +3,6 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour
 {
-    public static float edgeBufferSize = 10;
-    public static float zoomSpeed = 0.02f;
-
     public Camera gameCamera;
     public Rect defaultScreenSize = new Rect(Vector2.zero, new Vector2(40, 30));
     private float preferedSize;
@@ -50,9 +47,9 @@ public class CameraController : MonoBehaviour
             foreach (PlayerControls item in Controls.get().players)
             {
                 if (item.zoomOut)
-                    preferedSize *= 1 + zoomSpeed;
+                    preferedSize *= 1 + Options.get().cameraZoomSpeed;
                 if (item.zoomIn)
-                    preferedSize /= 1 + zoomSpeed;
+                    preferedSize /= 1 + Options.get().cameraZoomSpeed;
             }
         }
         else
@@ -72,15 +69,15 @@ public class CameraController : MonoBehaviour
             preferedSize = gameBounds.height / 2f;
         else if (aspectRatio * 2f * preferedSize > gameBounds.width)
             preferedSize = gameBounds.width / (aspectRatio * 2f);
-        else if (preferedSize < edgeBufferSize)
-            preferedSize = edgeBufferSize;
+        else if (preferedSize < Options.get().cameraEdgeBufferSize)
+            preferedSize = Options.get().cameraEdgeBufferSize;
 
         size = preferedSize;
 
-        xUpperLimit += edgeBufferSize;
-        xLowerLimit -= edgeBufferSize;
-        yUpperLimit += edgeBufferSize;
-        yLowerLimit -= edgeBufferSize;
+        xUpperLimit += Options.get().cameraEdgeBufferSize;
+        xLowerLimit -= Options.get().cameraEdgeBufferSize;
+        yUpperLimit += Options.get().cameraEdgeBufferSize;
+        yLowerLimit -= Options.get().cameraEdgeBufferSize;
 
         if (xUpperLimit > gameBounds.xMax)
             xUpperLimit = gameBounds.xMax;
