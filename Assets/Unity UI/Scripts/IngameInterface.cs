@@ -17,13 +17,13 @@ public class Message
     public Message(string text, float durationSecs)
     {
         this.theText = text;
-        if (Level.currentLevel == null)
+        if (Level.current == null)
         {
             duration = (int)(durationSecs * 50);
         }
         else
         {
-            duration = (int)(durationSecs * Level.currentLevel.updatesPerSec);
+            duration = (int)(durationSecs * Level.current.updatesPerSec);
         }
     }
 
@@ -87,9 +87,9 @@ public class IngameInterface : MonoBehaviour
     void Update()
     {
          
-        if (Level.currentLevel != null)
+        if (Level.current != null)
         {
-            Level level = Level.currentLevel;
+            Level level = Level.current;
 
             durationText.text = level.duration.ToString(@"hh\:mm\:ss");
             durationText.applyAlpha(interfaceAlpha);

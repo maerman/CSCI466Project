@@ -8,16 +8,20 @@ public class GameLoop : MonoBehaviour {
     private static GameLoop gameLoop;
     private GameState lastGameState;
     
-
     //initilzed in editor
     public GameObject loginMenu;
+    public GameObject createAccountMenu;
     public GameObject mainMenu;
     public GameObject newGameMenu;
+    public GameObject loadGameMenu;
     public GameObject ingameInterface;
     public GameObject pauseMenu;
     public GameObject levelCompleteMenu;
     public GameObject gameOverMenu;
-    //public GameObject gameCompleteMenu;
+    public GameObject gameCompleteMenu;
+    public GameObject loadReplayMenu;
+    public GameObject optionsMenu;
+    public GameObject aboutMenu;
 
     private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
     {
@@ -53,18 +57,18 @@ public class GameLoop : MonoBehaviour {
                 {
                     //set them all to false, then in the switch, set only the correct one to true
                     loginMenu.SetActive(false);
-                    //createAccountMenu.SetActive(false);
+                    createAccountMenu.SetActive(false);
                     mainMenu.SetActive(false);
                     newGameMenu.SetActive(false);
-                    //loadGameMenu.SetActive(false);
+                    loadGameMenu.SetActive(false);
                     ingameInterface.SetActive(false);
                     levelCompleteMenu.SetActive(false);
                     pauseMenu.SetActive(false);
                     gameOverMenu.SetActive(false);
-                    //gameCompleteMenu.SetActive(false);
-                    //loadReplayMenu.SetActive(false);
-                    //optionsMenu.SetActive(false);
-                    //aboutMenu.SetActive(false);
+                    gameCompleteMenu.SetActive(false);
+                    loadReplayMenu.SetActive(false);
+                    optionsMenu.SetActive(false);
+                    aboutMenu.SetActive(false);
                     previousGameState = lastGameState;
                 }
                 lastGameState = gameState;
@@ -78,7 +82,7 @@ public class GameLoop : MonoBehaviour {
                         loginMenu.SetActive(true);
                         break;
                     case GameState.CreateAccount:
-                        //createAccountMenu.SetActive(true);
+                        createAccountMenu.SetActive(true);
                         break;
                     case GameState.Main:
                         mainMenu.SetActive(true);
@@ -87,7 +91,7 @@ public class GameLoop : MonoBehaviour {
                         newGameMenu.SetActive(true);
                         break;
                     case GameState.LoadGame:
-                        //loadGameMenu.SetActive(true);
+                        loadGameMenu.SetActive(true);
                         break;
                     case GameState.Playing:
                         loginMenu.SetActive(false);
@@ -122,10 +126,10 @@ public class GameLoop : MonoBehaviour {
                         gameOverMenu.SetActive(true);
                         break;
                     case GameState.WonGame:
-                        //gameCompleteMenu.SetActive(true);
+                        gameCompleteMenu.SetActive(true);
                         break;
                     case GameState.LoadReplay:
-                        //loadReplayMenu.SetActive(true);
+                        loadReplayMenu.SetActive(true);
                         break;
                     case GameState.Replay:
                         ingameInterface.SetActive(true);
@@ -140,10 +144,10 @@ public class GameLoop : MonoBehaviour {
                         }
                         break;
                     case GameState.Options:
-                        //optionsMenu.SetActive(true);
+                        optionsMenu.SetActive(true);
                         break;
                     case GameState.About:
-                        //aboutMenu.SetActive(true);
+                        aboutMenu.SetActive(true);
                         break;
                     case GameState.Exit:
                         break;

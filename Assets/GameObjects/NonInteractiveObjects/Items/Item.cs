@@ -19,7 +19,7 @@ public abstract class Item : NonInteractiveObject
 
     protected override void startNonInteractiveObject()
     {
-
+        drawDepth = 1;
     }
 
     protected override void destructableObjectCollision(DestructableObject other) { }

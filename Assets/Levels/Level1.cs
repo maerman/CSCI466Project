@@ -46,7 +46,7 @@ public class Level1 : Level
             //HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 4; i++)
         {
             //Blob current = (Blob)createObject("BlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
@@ -83,12 +83,45 @@ public class Level1 : Level
 
         for (int i = 0; i < 1; i++)
         {
-            RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
+            //RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            //SputteringDebris current = (SputteringDebris)createObject("SputteringDebrisPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            //RotatingLazerSentry current = (RotatingLazerSentry)createObject("RotatingLazerSentryPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            //LazerEmitter current = (LazerEmitter)createObject("LazerEmitterPF", getRandomPosition(), getRandomAngle());
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            //IndestructableDebris current = (IndestructableDebris)createObject("IndestructableDebrisPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(15), random.Next(10));
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            RedBlob current = (RedBlob)createObject("RedBlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+        }
+        for (int i = 0; i < 1; i++)
+        {
+            GreenBlob current = (GreenBlob)createObject("GreenBlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+        }
+        for (int i = 0; i < 1; i++)
+        {
+            BlueBlob current = (BlueBlob)createObject("BlueBlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
         }
 
         LazerSword sword = (LazerSword)createObject("LazerSwordPF");
         MultiShots multiShot = (MultiShots)createObject("MultiShotPF");
-        HomingMissiles homing = (HomingMissiles)createObject("HomingShooterPF");
+        HomingMissiles homing = (HomingMissiles)createObject("HomingMissilesPF");
         HomingMines mines = (HomingMines)createObject("HomingMinesPF");
         GravityWellController well = (GravityWellController)createObject("GravityWellControllerPF");
         ChargedShots charged = (ChargedShots)createObject("ChargedShotPF");
@@ -103,6 +136,11 @@ public class Level1 : Level
     protected override void updateLevel()
     {
         
+    }
+
+    protected override void endLevel()
+    {
+        Destroy(level1Music);
     }
 
     /*

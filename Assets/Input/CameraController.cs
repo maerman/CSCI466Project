@@ -28,11 +28,11 @@ public class CameraController : MonoBehaviour
         float yLowerLimit = float.MaxValue;
         float size;
 
-        if (Level.currentLevel != null)
+        if (Level.current != null)
         {
-            gameBounds = Level.currentLevel.gameBounds;
+            gameBounds = Level.current.gameBounds;
 
-            foreach (Player item in Level.currentLevel.players)
+            foreach (Player item in Level.current.players)
             {
                 if (item != null && item.active)
                 {
@@ -110,8 +110,8 @@ public class CameraController : MonoBehaviour
             position.y += gameBounds.yMin - position.y + size;
 
 
-        if (Level.currentLevel != null)
-            Level.currentLevel.backgroundPosition = position;
+        if (Level.current != null)
+            Level.current.backgroundPosition = position;
 
         gameCamera.orthographicSize = size;
         transform.position = position;

@@ -11,6 +11,7 @@ using static Delegates;
 
 public class CreateAccount : MonoBehaviour, IErrorPanel
 {
+    //initilized in editor
     public Button createBtn;
     public InputField userName;
     public InputField password;
@@ -88,6 +89,16 @@ public class CreateAccount : MonoBehaviour, IErrorPanel
         errorPanel.SetActive(true);
        
         canvasGroup.DOFade(1.0f, 2.0f);
+    }
+
+    public void Back()
+    {
+        gameState = GameState.LoggingIn;
+    }
+
+    public void Quit()
+    {
+        gameState = GameState.Exit;
     }
 
 }

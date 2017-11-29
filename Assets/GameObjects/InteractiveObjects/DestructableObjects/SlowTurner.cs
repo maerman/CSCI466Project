@@ -57,7 +57,7 @@ public class SlowTurner : DestructableObject
         }
         else
         {
-            rotateTowards(target, turnSpeed);
+            turnTowards(target, turnSpeed);
         }
 
         moveForward(acceleration);

@@ -17,8 +17,8 @@ public class MainMenu : MonoBehaviour
     {
         if (User.user.isTrial) //determines if the user is playing without an account i.e. playing the demo version
         {
-            loadGame.interactable = false; //if they are then these features are disabled for them
-            watchReplay.interactable = false;
+            //loadGame.interactable = false; //if they are then these features are disabled for them
+            //watchReplay.interactable = false;
         }
         else //else they can use these features on the main menu
         {

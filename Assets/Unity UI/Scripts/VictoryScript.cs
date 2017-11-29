@@ -18,9 +18,9 @@ public class VictoryScript : MonoBehaviour {
 
 	public void Exit()
     {
-        if (Level.currentLevel != null)
+        if (Level.current != null)
         {
-            Destroy(Level.currentLevel);
+            Destroy(Level.current.gameObject);
         }
         GameStates.gameState = GameStates.GameState.Main;
 	}

@@ -18,7 +18,7 @@ public class Asteroid :DestructableObject
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
     {
-        //ScoreScript.ScoreValue += 10;
+        
     }
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
@@ -29,7 +29,6 @@ public class Asteroid :DestructableObject
     protected override void playerCollision(Player other, Collision2D collision)
     {
         other.damageThis(damageMultiply * mass);
-        //ScoreScript.ScoreValue += -20;
     }
 
     protected override void startDestructableObject()
@@ -80,6 +79,8 @@ public class Asteroid :DestructableObject
 
                         current.mass = mass / pieces;
                         current.health = health / pieces;
+                        current.team = team;
+                        current.color = color;
                     }
 
                     if (pieces > 0)

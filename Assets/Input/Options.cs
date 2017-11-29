@@ -14,6 +14,7 @@ class Options
     //Key deadzone
     //CameraController.edgeBufferSize;
     //CameraController.zoomSpeed;
+    //number of autosaves
 
     public static void updateOptions()
     {

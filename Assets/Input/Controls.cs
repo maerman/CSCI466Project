@@ -47,8 +47,8 @@ public class PlayerInput
 
             pickupDrop = System.Convert.ToBoolean(parts[18]);
             shoot = System.Convert.ToBoolean(parts[19]);
-            relativeMovement = System.Convert.ToBoolean(parts[21]);
-            turns = System.Convert.ToBoolean(parts[22]);
+            relativeMovement = System.Convert.ToBoolean(parts[20]);
+            turns = System.Convert.ToBoolean(parts[21]);
         }
         else
         {
@@ -368,14 +368,14 @@ public class PlayerControls
             mousePos = Camera.main.ScreenToWorldPoint(mousePos);
             Vector2 playerPos = Vector2.zero;
 
-            if (Level.currentLevel != null)
+            if (Level.current != null)
             {
                 for (int i = Controls.get().players.Length - 1; i >= 0; i--)
                 {
                     PlayerControls current = Controls.get().players[i];
                     if (current == this)
                     {
-                        playerPos = Level.currentLevel.players[i].position;
+                        playerPos = Level.current.players[i].position;
                     }
                 }
             }
@@ -682,10 +682,12 @@ public class Controls
 
     public void updateFromFile(System.IO.StreamReader file)
     {
-        staticLevel = System.Convert.ToBoolean(file.ReadLine());
+        if (file.Peek() >= 0)
+            staticLevel = System.Convert.ToBoolean(file.ReadLine());
         foreach (PlayerControls item in players)
         {
-            item.updateFromString(file.ReadLine());
+            if (file.Peek() >= 0)
+                item.updateFromString(file.ReadLine());
         }
     }
 

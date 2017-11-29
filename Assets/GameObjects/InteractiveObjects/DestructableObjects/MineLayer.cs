@@ -92,7 +92,7 @@ public class MineLayer : DestructableObject
 
         if (turnFrom != null && distanceFrom(turnFrom) < stayAwayDistance)
         {
-            rotateTowards(turnFrom, -turnSpeed);
+            turnTowards(turnFrom, -turnSpeed);
         }
 
         moveForward(acceleration);
