@@ -369,6 +369,15 @@ public abstract class Level : MonoBehaviour
         theMusicAudio.loop = true;
         theMusicAudio.Play();
     }
+    protected void musicPlay(string clipName)
+    {
+        AudioClip clip = Resources.Load(clipName) as AudioClip;
+
+        if (clip != null)
+            musicPlay(clip);
+        else
+            Debug.Log("Couldn't load audioclip: " + clipName);
+    }
     protected float musicVolume
     {
         get
@@ -395,6 +404,15 @@ public abstract class Level : MonoBehaviour
         theEffectAudio.clip = clip;
         theEffectAudio.Play();
     }
+    protected void effectPlay(string clipName)
+    {
+        AudioClip clip = Resources.Load(clipName) as AudioClip;
+
+        if (clip != null)
+            effectPlay(clip);
+        else
+            Debug.Log("Couldn't load audioclip: " + clipName);
+    }
     public float effectVolume
     {
         get
@@ -405,12 +423,6 @@ public abstract class Level : MonoBehaviour
         {
             theEffectVolume = Mathf.Clamp01(value);
         }
-    }
-
-    private void Start()
-    {
-        theMusicAudio = gameObject.AddComponent<AudioSource>();
-        theEffectAudio = gameObject.AddComponent<AudioSource>();
     }
 
     protected abstract void createLevel();
@@ -424,7 +436,7 @@ public abstract class Level : MonoBehaviour
 
         Controls.get().clearInputs();
         theCurrentLevel = this;
-
+        
         background = GetComponent<SpriteRenderer>();
 
         theDifficulty = difficulty;
@@ -459,6 +471,9 @@ public abstract class Level : MonoBehaviour
             item.clearInputs();
         }
 
+        theMusicAudio = gameObject.AddComponent<AudioSource>();
+        theEffectAudio = gameObject.AddComponent<AudioSource>();
+        
         createLevel();
 
         backgroundPosition = gameBounds.center;

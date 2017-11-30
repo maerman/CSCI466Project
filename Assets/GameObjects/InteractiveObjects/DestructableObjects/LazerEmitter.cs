@@ -51,7 +51,7 @@ public class LazerEmitter : DestructableObject
         {
             emitTimer = (int)(lazerEmitSecs * level.updatesPerSec);
 
-            for (int i = 0; i < numLazers; i++)
+            for (int i = 0; i < numLazers * difficultyModifier; i++)
             {
                 float currentAngle = angle + i * 360f / numLazers;
                 LazerShot current = (LazerShot)level.createObject("LazerShotPF", position + lazerOffset.rotate(currentAngle), currentAngle, new Vector2().toAngle(currentAngle, lazerSpeed) + velocity);

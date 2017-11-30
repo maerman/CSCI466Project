@@ -117,7 +117,7 @@ public class HomingMine : DestructableObject
                 }
             }
 
-            moveTowards(target, acceleration);
+            moveTowards(target, acceleration * difficultyModifier);
         }
     }
 }

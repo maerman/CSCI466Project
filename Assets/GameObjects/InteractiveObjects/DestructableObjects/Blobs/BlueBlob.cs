@@ -36,7 +36,7 @@ public class PullOthers : BlobBehaviour
         {
             if ((item.GetType().IsSubclassOf(typeof(Blob)) || item.GetType() == typeof(Blob)) && item != thisBlob)
             {
-                item.moveTowards(thisBlob, pullSpeed * magnitude / thisBlob.distanceFrom(item));
+                item.moveTowards(thisBlob, pullSpeed * magnitude * thisBlob.difficultyModifier / thisBlob.distanceFrom(item));
             }
         }
     }

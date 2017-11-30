@@ -15,7 +15,7 @@ public class RubberyDebris : DestructableObject
     {
         if (other.team != team)
         {
-            other.damageThis(damage);
+            other.damageThis(damage * difficultyModifier);
         }
 
         bounce(collision);
@@ -35,7 +35,7 @@ public class RubberyDebris : DestructableObject
     {
         if (other.team != team)
         {
-            other.damageThis(damage);
+            other.damageThis(damage * difficultyModifier);
         }
 
         bounce(collision);

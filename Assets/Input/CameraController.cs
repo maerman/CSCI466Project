@@ -112,6 +112,5 @@ public class CameraController : MonoBehaviour
 
         gameCamera.orthographicSize = size;
         transform.position = position;
-        
     }
 }

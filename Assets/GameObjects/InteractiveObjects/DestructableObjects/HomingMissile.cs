@@ -67,7 +67,7 @@ public class HomingMissile : DestructableObject
 
         if (target != null)
         {
-            turnTowards(target, turnSpeed);
+            turnTowards(target, turnSpeed * difficultyModifier);
         }
         moveForward(acceleration);
     }

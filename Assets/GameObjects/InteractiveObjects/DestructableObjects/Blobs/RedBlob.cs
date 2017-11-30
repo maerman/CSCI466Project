@@ -51,14 +51,14 @@ public class TowardsTarget : BlobBehaviour
         }
         else
         {
-            thisBlob.moveTowards(target, moveSpeed * magnitude);
+            thisBlob.moveTowards(target, moveSpeed * magnitude * thisBlob.difficultyModifier);
         }
     }
 }
 
 public class RedBlob : Blob
 {
-    public float moveSpeed = 5f;
+    public float moveSpeed = 3f;
     public float updateTargetSecs = 2f;
 
     protected override void startBlob()

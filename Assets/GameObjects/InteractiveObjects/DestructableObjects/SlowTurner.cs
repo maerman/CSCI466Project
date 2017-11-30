@@ -49,15 +49,11 @@ public class SlowTurner : DestructableObject
     {
         if (target == null || !target.active)
         {
-            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
-            targetList[0] = level.destructables;
-            targetList[1] = level.players;
-
-            target = closestObject<DestructableObject>(targetList, false);
+            target = closestObject(level.getTypes(true, true, false, false)) as DestructableObject;
         }
         else
         {
-            turnTowards(target, turnSpeed);
+            turnTowards(target, turnSpeed * difficultyModifier);
         }
 
         moveForward(acceleration);

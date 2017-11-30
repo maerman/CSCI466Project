@@ -5,7 +5,7 @@ public class RotatingLazerSentry : DestructableObject
 {
     public float damage = 1.1f;
     public float extendSpeed = 0.2f;
-    public float maxLength = 12f;
+    public float maxLength = 10f;
     public float turnSpeed = 4f;
     public Color lazerColor = Color.green;
 
@@ -44,16 +44,16 @@ public class RotatingLazerSentry : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (target != null && distanceFrom(target) > maxLength)
+        if (target != null && distanceFrom(target) > maxLength * difficultyModifier)
         {
             target = null;
         }
 
         if (target == null)
         {
-            target = (DestructableObject)closestObjectInDirection<SpaceObject>(level.getTypes(true, true, false, false), angle, false);
+            target = closestObjectInDirection(level.getTypes(true, true, false, false), angle, false) as DestructableObject;
 
-            if (target != null && distanceFrom(target) > maxLength)
+            if (target != null && distanceFrom(target) > maxLength * difficultyModifier)
             {
                 target = null;
             }
@@ -79,8 +79,8 @@ public class RotatingLazerSentry : DestructableObject
                 lazer = (Lazer)level.createObject("LazerPF", position, angle);
                 lazer.attachedTo = this;
                 lazer.damage = damage;
-                lazer.extendSpeed = extendSpeed;
-                lazer.maxLength = maxLength;
+                lazer.extendSpeed = extendSpeed * difficultyModifier;
+                lazer.maxLength = maxLength * difficultyModifier;
                 lazer.team = team;
                 lazer.color = lazerColor;
             }

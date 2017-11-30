@@ -16,7 +16,7 @@ public class IndestructableDebris : IndestructableObject
         float damageSpeed = collision.relativeVelocity.magnitude - minDamageSpeed;
         if (damageSpeed > 0)
         {
-            other.damageThis(damageSpeed * damageMultiplier);
+            other.damageThis(damageSpeed * damageMultiplier * difficultyModifier);
         }
     }
 
@@ -35,7 +35,7 @@ public class IndestructableDebris : IndestructableObject
         float damageSpeed = collision.relativeVelocity.magnitude - minDamageSpeed;
         if (damageSpeed > 0)
         {
-            other.damageThis(damageSpeed * damageMultiplier);
+            other.damageThis(damageSpeed * damageMultiplier * difficultyModifier);
         }
     }
 

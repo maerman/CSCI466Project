@@ -94,6 +94,8 @@ MonoBehaviour:
   team: 0
   health: 100
   armor: 1
+  damageMultiplier: 6
+  mergeCooldownSecs: 0.25
   maxSize: 1.5
   pullSpeed: 0.25
 --- !u!212 &212847022306893140

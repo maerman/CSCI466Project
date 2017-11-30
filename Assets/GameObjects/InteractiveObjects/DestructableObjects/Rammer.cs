@@ -77,4 +77,12 @@ public class Rammer : DestructableObject
             }
         }
     }
+
+    public override void damageThis(float damage)
+    {
+        if (damage > armor * difficultyModifier)
+        {
+            health -= (damage - armor * difficultyModifier);
+        }
+    }
 }

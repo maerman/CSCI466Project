@@ -46,7 +46,7 @@ public class Shoot : BlobBehaviour
 
             if (shootTimer <= 0)
             {
-                shootTimer = (int)(shootTimeSecs * Level.current.updatesPerSec / magnitude);
+                shootTimer = (int)(shootTimeSecs * Level.current.updatesPerSec / magnitude / thisBlob.difficultyModifier);
 
                 SpaceObject target = thisBlob.closestObject<SpaceObject>(Level.current.getTypes(true, true, false, false), false);
 

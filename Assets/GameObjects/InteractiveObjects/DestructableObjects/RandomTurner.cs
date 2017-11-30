@@ -26,7 +26,7 @@ public class RandomTurner : DestructableObject
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
     {
-        //ScoreScript.ScoreValue += 50;
+        
     }
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
@@ -39,7 +39,6 @@ public class RandomTurner : DestructableObject
         if (other.team != team)
         {
             other.damageThis(damage);
-            //ScoreScript.ScoreValue += -20;
         }
     }
 
@@ -68,6 +67,6 @@ public class RandomTurner : DestructableObject
             angle = angle + turnSpeed;
         }
 
-        moveForward(acceleration);
+        moveForward(acceleration * difficultyModifier);
     }
 }

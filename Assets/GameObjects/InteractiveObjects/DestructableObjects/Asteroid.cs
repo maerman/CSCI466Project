@@ -13,7 +13,7 @@ public class Asteroid :DestructableObject
 
     protected override void destructableObjectCollision(DestructableObject other, Collision2D collision)
     {
-        other.damageThis(damageMultiply * mass);
+        other.damageThis(damageMultiply * mass * difficultyModifier);
     }
 
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
@@ -28,7 +28,7 @@ public class Asteroid :DestructableObject
 
     protected override void playerCollision(Player other, Collision2D collision)
     {
-        other.damageThis(damageMultiply * mass);
+        other.damageThis(damageMultiply * mass * difficultyModifier);
     }
 
     protected override void startDestructableObject()

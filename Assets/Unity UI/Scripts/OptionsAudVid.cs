@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class OptionsAudVid : MonoBehaviour
 {
     //initilizedInEditor
+    public Slider master;
     public Slider soundEffects;
     public Slider music;
     public Dropdown resolution;
@@ -20,6 +21,7 @@ public class OptionsAudVid : MonoBehaviour
 
     private void refresh()
     {
+        master.value = options.volumeMaster;
         soundEffects.value = options.volumeEffects;
         music.value = options.volumeMusic;
         fullscreen.isOn = options.fullScreen;
@@ -53,6 +55,12 @@ public class OptionsAudVid : MonoBehaviour
         refresh();
     }
 
+    public void MasterVolume()
+    {
+        options.volumeMaster = master.value;
+        refresh();
+    }
+
     public void SoundEffectVolume()
     {
         options.volumeEffects = soundEffects.value;
@@ -67,26 +75,8 @@ public class OptionsAudVid : MonoBehaviour
 
     public void Resolution()
     {
-        string resolutionString = resolution.options[resolution.value].text;
-
-        try
-        {
-            char[] seperators = new char[1];
-            seperators[0] = ' ';
-            string[] parts = resolutionString.Split(seperators);
-
-            Resolution selectedResolution = new UnityEngine.Resolution();
-            selectedResolution.width = System.Convert.ToInt32(parts[0]);
-            selectedResolution.height = System.Convert.ToInt32(parts[2]);
-
-            options.resolution = selectedResolution;
-
-            refresh();
-        }
-        catch
-        {
-            throw new System.Exception("Problem loading resolution: " + resolutionString);
-        }
+        options.setResolution(resolution.options[resolution.value].text);
+        refresh();
     }
 
     public void FullScreen()

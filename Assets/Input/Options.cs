@@ -10,14 +10,24 @@ class Options
     public float healthBarAlpha = 0.7f;
     public int levelMaxAutosaves = 10;
     public bool levelStatic = false;
-    public float volumeEffects = 50;
-    public float volumeMusic = 50;
+    public float volumeMaster
+    {
+        get
+        {
+            return AudioListener.volume;
+        }
+        set
+        {
+            AudioListener.volume = value;
+        }
+    }
+    public float volumeEffects = 0.5f;
+    public float volumeMusic = 0.5f;
     public float keyActivationThreshold = 0.5f;
     public float keyDeadZone = 0.1f;
     public bool keyXboxNames = true;
     public float cameraEdgeBufferSize = 10f;
     public float cameraZoomSpeed = 0.02f;
-    
     public bool fullScreen
     {
         get
@@ -29,7 +39,6 @@ class Options
             Screen.fullScreen = value;
         }
     }
-
     public Resolution resolution
     {
         get
@@ -39,6 +48,27 @@ class Options
         set
         {
             Screen.SetResolution(value.width, value.height, Screen.fullScreen);
+        }
+    }
+
+    public void setResolution(int width, int height)
+    {
+        Screen.SetResolution(width, height, Screen.fullScreen);
+    }
+
+    public void setResolution(string toString)
+    {
+        try
+        {
+            char[] seperators = new char[1];
+            seperators[0] = ' ';
+            string[] parts = toString.Split(seperators);
+
+            setResolution(System.Convert.ToInt32(parts[0]), System.Convert.ToInt32(parts[2]));
+        }
+        catch
+        {
+            Debug.Log("Problem setting resolution from string: " + toString);
         }
     }
 
@@ -63,15 +93,16 @@ class Options
         healthBarAlpha = 0.7f;
         levelMaxAutosaves = 10;
         levelStatic = false;
-        volumeEffects = 50f;
-        volumeMusic = 50f;
+        volumeMaster = 1f;
+        volumeEffects = 0.5f;
+        volumeMusic = 0.5f;
         keyActivationThreshold = 0.5f;
         keyDeadZone = 0.1f;
         keyXboxNames = true;
         cameraEdgeBufferSize = 10f;
         cameraZoomSpeed = 0.02f;
-        fullScreen = false;
-        //resolution
+        //use whatever fullscreen it started as
+        //use whatever resolution it started as
     }
 
     public void loadOptions()
@@ -90,6 +121,7 @@ class Options
             healthBarAlpha = System.Convert.ToSingle(file.ReadLine());
             levelMaxAutosaves = System.Convert.ToInt32(file.ReadLine());
             levelStatic = System.Convert.ToBoolean(file.ReadLine());
+            volumeMaster = System.Convert.ToSingle(file.ReadLine());
             volumeEffects = System.Convert.ToSingle(file.ReadLine());
             volumeMusic = System.Convert.ToSingle(file.ReadLine());
             keyActivationThreshold = System.Convert.ToSingle(file.ReadLine());
@@ -98,7 +130,7 @@ class Options
             cameraEdgeBufferSize = System.Convert.ToSingle(file.ReadLine());
             cameraZoomSpeed = System.Convert.ToSingle(file.ReadLine());
             fullScreen = System.Convert.ToBoolean(file.ReadLine());
-            //resolution
+            setResolution(file.ReadLine());
 
             file.Close();
         }
@@ -131,6 +163,7 @@ class Options
             file.WriteLine(healthBarAlpha);
             file.WriteLine(levelMaxAutosaves);
             file.WriteLine(levelStatic);
+            file.WriteLine(volumeMaster);
             file.WriteLine(volumeEffects);
             file.WriteLine(volumeMusic);
             file.WriteLine(keyActivationThreshold);
@@ -139,7 +172,7 @@ class Options
             file.WriteLine(cameraEdgeBufferSize);
             file.WriteLine(cameraZoomSpeed);
             file.WriteLine(fullScreen);
-            //resolution
+            file.WriteLine(resolution.ToString());
 
             file.Close();
         }

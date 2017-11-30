@@ -77,7 +77,7 @@ class LazerShooter : DestructableObject
                 }
                 else
                 {
-                    shootNextUpdates = shootTimeSecs * level.updatesPerSec;
+                    shootNextUpdates = shootTimeSecs * level.updatesPerSec / difficultyModifier;
 
                     LazerShot shot = (LazerShot)level.createObject("LazerShotPF", 
                         new Vector2(0, 3 + shotSpeed * level.secsPerUpdate).rotate(angle) + position, angle);

@@ -63,4 +63,12 @@ public class SputteringDebris : DestructableObject
 
         wait--;
     }
+
+    public override void damageThis(float damage)
+    {
+        if (damage > armor * difficultyModifier)
+        {
+            health -= (damage - armor * difficultyModifier);
+        }
+    }
 }

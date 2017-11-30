@@ -91,7 +91,7 @@ public class Blob : DestructableObject
     {
         if (other.team != this.team)
         {
-            other.damageThis(scale.x * damageMultiplier);
+            other.damageThis(scale.x * damageMultiplier * difficultyModifier);
         }
         else if (other.GetType() == typeof(Blob))
         {
@@ -116,7 +116,7 @@ public class Blob : DestructableObject
     {
         if (other.team != this.team)
         {
-            other.damageThis(scale.x * damageMultiplier);
+            other.damageThis(scale.x * damageMultiplier * difficultyModifier);
         }
     }
 

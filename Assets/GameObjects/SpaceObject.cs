@@ -37,6 +37,15 @@ public abstract class SpaceObject : MonoBehaviour
         theEffectAudio.clip = clip;
         theEffectAudio.Play();
     }
+    protected void effectPlay(string clipName)
+    {
+        AudioClip clip = Resources.Load(clipName) as AudioClip;
+
+        if (clip != null)
+            effectPlay(clip);
+        else
+            Debug.Log("Couldn't load audioclip: " + clipName);
+    }
     public float effectVolume
     {
         get
@@ -727,6 +736,17 @@ public abstract class SpaceObject : MonoBehaviour
         get
         {
             return Level.current;
+        }
+    }
+
+    public float difficultyModifier
+    {
+        get
+        {
+            if (team > 0)
+                return 1;
+            else
+                return level.difficulty;
         }
     }
 

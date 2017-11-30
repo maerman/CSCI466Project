@@ -66,7 +66,7 @@ public class MineLayer : DestructableObject
 
         if (updatesUntilNextMine <= 0)
         {
-            if (mines.Count >= maxMines)
+            if (mines.Count >= maxMines * difficultyModifier)
             {
                 HomingMine firstMine = mines.First.Value;
                 firstMine.destroyThis();
