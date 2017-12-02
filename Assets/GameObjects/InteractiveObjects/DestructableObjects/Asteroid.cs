@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Aserioids are DestructableObjects that break apart when damaged.
+/// They deal damage to DestructableObjects baised on their size. 
+/// </summary>
 public class Asteroid :DestructableObject
 {
     public float minSize = 0.3f;
@@ -41,6 +45,11 @@ public class Asteroid :DestructableObject
         
     }
 
+    /// <summary>
+    /// If the damage gets past thie Asteroid's armor and this Asteroid is not too small
+    /// then it will be broken up into smaller pieces baised on the damage.
+    /// </summary>
+    /// <param name="damage"></param>
     public override void damageThis(float damage)
     {
         if (damage - armor > 0)
@@ -59,6 +68,9 @@ public class Asteroid :DestructableObject
 
                 base.damageThis(damage);
 
+                //find the size of the new Asteroids baised on the number of them and 
+                //the area of the old Asteroid
+                //if the new Asteroids would be too small, decrease the number of them 
                 float area;
                 float theScale;
                 do
@@ -71,8 +83,10 @@ public class Asteroid :DestructableObject
 
                 if (pieces > 1)
                 {
+                    //create each new Asteroid
                     for (int i = 0; i < pieces; i++)
                     {
+                        //make each new Asteroid and have them spread out from the old Asteroid's position
                         float theAngle = i * 360.0f / pieces + angle;
                         Asteroid current = (Asteroid)level.createObject("AsteroidPF", position + new Vector2(size.x / pieces, 0).rotate(theAngle),
                             angle, velocity + new Vector2(pieces, 0).rotate(theAngle), angularVelocity + pieces, theScale);
@@ -83,10 +97,8 @@ public class Asteroid :DestructableObject
                         current.color = color;
                     }
 
-                    if (pieces > 0)
-                    {
-                        destroyThis();
-                    }
+                    //Destroy the old Asteroid, since it is no longer needed
+                    destroyThis();
                 }
             }
         }

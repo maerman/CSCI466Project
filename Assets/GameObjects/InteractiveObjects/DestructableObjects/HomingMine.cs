@@ -2,6 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// HomingMines are DestructableObjects that move towards enemy DestructableObjects that
+/// are close enough to it. When it collides with a DestructableObject, it deals damage to it. 
+/// </summary>
 public class HomingMine : DestructableObject
 {
     public float acceleration = 0.2f;
@@ -26,7 +30,6 @@ public class HomingMine : DestructableObject
     protected override void indestructableObjectCollision(IndestructableObject other, Collision2D collision)
     {
         destroyThis();
-        //ScoreScript.ScoreValue += 10;
     }
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
@@ -38,83 +41,60 @@ public class HomingMine : DestructableObject
     {
         other.damageThis(damage);
         destroyThis();
-        //ScoreScript.ScoreValue += -50;
     }
 
     protected override void startDestructableObject()
     {
-        angularVelocity = targetAngularVelocity;
+        
     }
 
     protected override void updateDestructableObject()
     {
+        //if the target is too far away, make it no longer the target
         if (target != null && distanceFrom(target) > targetLossProximity)
-        {
             target = null;
-        }
 
         if (target == null || !target.active)
         {
-            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
-            targetList[0] = level.destructables;
-            targetList[1] = level.players;
+            //set the target to the closest enemy DestructableObject
+            target = closestObject(level.getTypes(true, true, false, false), false);
 
-            target = closestObject<DestructableObject>(targetList, false);
-
+            //if the target is too far away, make it no longer the target
             if (target != null && distanceFrom(target) > targetFindProximity)
-            {
                 target = null;
-            }
         }
 
-
-        if (target == null || !target.active)
+        //if there is no target, slow down to a stop
+        if (target == null || !target.active) 
         {
             if (speed > acceleration)
-            {
                 speed = speed - acceleration;
-            }
             else
-            {
                 speed = 0;
-            }
 
             if (angularVelocity > 0 && angularVelocity > angularAcceleration)
-            {
                 angularVelocity = angularVelocity - angularAcceleration;
-            }
             else if (angularVelocity < 0 && angularVelocity < -angularAcceleration)
-            {
                 angularVelocity = angularVelocity + angularAcceleration;    
-            }
             else
-            {
                 angularVelocity = 0;
-            }
         }
-        else
+        //if there is a target, accelerate towards it
+        else 
         {
             if (angularVelocity > targetAngularVelocity)
             {
                 if (angularVelocity - angularAcceleration < targetAngularVelocity)
-                {
                     angularVelocity = targetAngularVelocity;
-                }
                 else
-                {
                     angularVelocity -= angularAcceleration;
-                }
             }
             else if (angularVelocity < targetAngularVelocity)
             {
                 if (angularVelocity + angularAcceleration > targetAngularVelocity)
-                {
                     angularVelocity = targetAngularVelocity;
-                }
                 else
-                {
                     angularVelocity += angularAcceleration;
-                }
             }
 
             moveTowards(target, acceleration * difficultyModifier);

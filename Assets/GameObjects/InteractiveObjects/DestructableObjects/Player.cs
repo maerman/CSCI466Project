@@ -2,15 +2,20 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Players are DestructableObjects that are the user's ingame representation and is controlled by the user's inputs
+/// Players can always shoot a LazerShot but can also pickup and use Items
+/// </summary>
 public class Player : DestructableObject
 {
+    //how long, in seconds, the Players can't be damaged at teh begining of the Level
     public const float INVULNERABLE_SECS = 2.0f;
 
-    public int playerNum = 0;
+    public byte playerNum = 0;
     public float accelerationPerSec = 20f;
     public float turnSpeed = 100f;
 
-    private float shootNextUpdates = 0;
+    private float shootTimer = 0;
     public float shootTimeSecs = 0.5f;
     public float shotSpeed = 15f;
 
@@ -25,19 +30,13 @@ public class Player : DestructableObject
         }
     }
 
-    /*
-    public virtual void damageThis(float damage)
-    {
-        if (damage > armor)
-        {
-            health -= (damage - armor);
-        }
-    }
-    */
-
     protected override void startDestructableObject()
     {
-        team = 1;
+        if (team < 1)
+        {
+            Debug.Log("Player had a negative team value of: " + team + ". Setting team to 1.");
+            team = 1;
+        }
 
         switch (playerNum)
         {
@@ -55,6 +54,7 @@ public class Player : DestructableObject
                 break;
             default:
                 color = Color.grey;
+                Debug.Log("Player number not between 0-3, playerNum: " + playerNum);
                 break;
         }
     }
@@ -65,42 +65,49 @@ public class Player : DestructableObject
 
         Vector2 move = new Vector2();
 
+        //find which direction to move this Player
         move.y += input.forward;
         move.y -= input.backward;
         move.x -= input.straifL;
         move.x += input.straifR;
-
         move.Normalize();
+
+        //find out how much to more this Player in the direction
         move *= accelerationPerSec * level.secsPerUpdate;
 
+        //move this Player relative to its current angle
         if (input.relativeMovement)
-        {
             modifyVelocityRelative(move);
-        }
-        else
-        {
-            modifyVelocityAbsolute(move);
-        }
 
+        //move this Player relative to the screen
+        else
+            modifyVelocityAbsolute(move);
+
+        //turn this Player left or right
         if (input.turns)
         {
             angularVelocity += turnSpeed * input.turnL;
             angularVelocity -= turnSpeed * input.turnR;
         }
+        //point this Player in a direction on the screen
         else
         {
             double toTurn = new Vector2(input.turnL - input.turnR, input.turnUp - input.turnDown).getAngle();
 
             if (!double.IsNaN(toTurn))
-            {
                 angle = (float)toTurn;
-            }
         }
 
-        shootNextUpdates--;
-        if (input.shoot && shootNextUpdates <= 0)
+        if (shootTimer > 0)
         {
-            shootNextUpdates = shootTimeSecs * level.updatesPerSec;
+            shootTimer--;
+        }
+        else if (input.shoot)
+        {
+            //reset shootTimer
+            shootTimer = shootTimeSecs * level.updatesPerSec;
+
+            //create a new lazerShot infront of this Player
             SpaceObject shot = level.createObject("LazerShotPF", new Vector2(0, 2).rotate(angle) + position, angle);
             shot.velocity = velocity;
             shot.moveForward(shotSpeed);
@@ -108,21 +115,21 @@ public class Player : DestructableObject
             shot.team = team;
         }
 
+        //update Items held by this Player and check to see if any were dropped
         for (int i = 0; i < theItems.Length; i++)
         {
             if (theItems[i] != null)
             {
                 theItems[i].holding(input.items(i));
                 if (input.pickupDrop && input.items(i))
-                {
                     theItems[i].drop();
-                }
             }
         }
     }
 
     protected override void destroyDestructableObject()
     {
+        //when this Player is destroyed, drop all of its Items
         for (int i = 0; i < theItems.Length; i++)
         {
             if (theItems[i] != null)
@@ -144,6 +151,7 @@ public class Player : DestructableObject
 
     protected override void nonInteractiveObjectCollision(NonInteractiveObject other)
     {
+        //if this Player is colliding with an Item then check to see if it should be picked up
         if (input.pickupDrop && other.GetType().IsSubclassOf(typeof(Item)))
         {
             Item item = (Item)other;
@@ -166,6 +174,7 @@ public class Player : DestructableObject
 
     public override void damageThis(float damage)
     {
+        //don't let this take damage during the begining seconds of the Level
         if (level.duration.Seconds > INVULNERABLE_SECS) 
             base.damageThis(damage);
     }

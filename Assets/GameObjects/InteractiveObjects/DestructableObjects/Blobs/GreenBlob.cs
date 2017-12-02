@@ -8,7 +8,6 @@ public class Shoot : BlobBehaviour
     private float shotSize;
     private float shotSpeed;
 
-
     public Shoot(float shootTimeSecs, float shotSize, float shotSpeed)
     {
         this.shootTimeSecs = shootTimeSecs;
@@ -38,6 +37,10 @@ public class Shoot : BlobBehaviour
         }
     }
 
+    /// <summary>
+    /// Every so often, shoots a shotBlob from itself at closest enemy DestructableObject
+    /// </summary>
+    /// <param name="thisBlob">The Blob this behavior is attached to.</param>
     public override void update(Blob thisBlob)
     {
         if (thisBlob.scale.x > shotSize)
@@ -46,6 +49,7 @@ public class Shoot : BlobBehaviour
 
             if (shootTimer <= 0)
             {
+                //reset shootTimer
                 shootTimer = (int)(shootTimeSecs * Level.current.updatesPerSec / magnitude / thisBlob.difficultyModifier);
 
                 SpaceObject target = thisBlob.closestObject<SpaceObject>(Level.current.getTypes(true, true, false, false), false);
@@ -54,43 +58,50 @@ public class Shoot : BlobBehaviour
                 {
                     thisBlob.turnTowards(target);
 
+                    //find where the shotBlob should be shot to hit the target, given their current positions and velocities
                     Vector3 aimAt = SpaceObject.intersectPosTime(target, shotSpeed, thisBlob.position + new Vector2(0, thisBlob.scale.x * 3).rotate(thisBlob.angle));
 
+                    //if the taget cannot be hit, just shoot straight at its current position
                     if (aimAt.z < 0)
                     {
                         aimAt = target.position;
                     }
 
+                    //create the shotBlob with an the velocity to hit where it is being aimed at
                     float theAngle = thisBlob.angleToAbsolute(aimAt);
-                    Blob current = (Blob)Level.current.createObject("BlobPF", thisBlob.position + new Vector2(0, thisBlob.scale.x * 3).rotate(thisBlob.angle), theAngle,
+                    Blob shotBlob = (Blob)Level.current.createObject("BlobPF", thisBlob.position + new Vector2(0, thisBlob.scale.x * 3).rotate(thisBlob.angle), theAngle,
                         new Vector2(0, shotSpeed).rotate(theAngle), thisBlob.angularVelocity + magnitude, shotSize);
 
                     float shotPortion = shotSize / thisBlob.scale.x;
                     float thisPortion = 1 - shotPortion;
 
-                    current.mass = thisBlob.mass * shotPortion;
-                    current.health = thisBlob.health * shotPortion;
-                    current.team = thisBlob.team;
-                    current.color = thisBlob.color;
-
+                    //make the shotBlob's health, mass and Behaviors proportional to how much of thisBlob is it taking
+                    //also decrease thisBlob's behaviors baised on how much the shotBlob took from it
+                    shotBlob.mass = thisBlob.mass * shotPortion;
+                    shotBlob.health = thisBlob.health * shotPortion;
                     foreach (BlobBehaviour item in thisBlob.behaviors)
                     {
                         BlobBehaviour temp = item.clone();
 
                         temp.magnitude *= shotPortion;
-                        current.behaviors.AddFirst(temp);
+                        shotBlob.behaviors.AddFirst(temp);
 
                         item.magnitude *= thisPortion;
                     }
 
+                    shotBlob.team = thisBlob.team;
+                    shotBlob.color = thisBlob.color;
+
+                    //find the new size of thisBlob baised on how much area the shotBlob took from it
                     float area = (thisBlob.scale.x * thisBlob.scale.x / 4 * Mathf.PI);
                     area -= (shotSize * shotSize / 4 * Mathf.PI); 
                     float theScale = Mathf.Sqrt(area * 4 / Mathf.PI);
 
+                    //decrease thisBlob's size, mass and health baised on how much the shotBlob took from it
                     thisBlob.scale = new Vector2(theScale, theScale);
                     thisBlob.mass *= thisPortion;
                     thisBlob.health *= thisPortion;
-                    thisBlob.maxHealth -= current.health;
+                    thisBlob.maxHealth -= shotBlob.health;
                 }
             }
         }

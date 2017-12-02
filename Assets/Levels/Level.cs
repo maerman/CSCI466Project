@@ -456,7 +456,7 @@ public abstract class Level : MonoBehaviour
                 new Vector2(gameBounds.center.x - (numPlayers - 1) * 2 + i * 4, gameBounds.center.y) , Quaternion.identity) as GameObject;
             Player current = obj.GetComponent<Player>();
 
-            current.playerNum = i;
+            current.playerNum = (byte)i;
             if (pvp)
                 current.team = (sbyte)(i + 1);
             else
@@ -954,6 +954,7 @@ public abstract class Level : MonoBehaviour
         }
     }
 
+    const string LEVEL_PATH = "levels/";
     public static Level getLevel(int levelNum)
     {
         UnityEngine.GameObject obj;
@@ -963,36 +964,36 @@ public abstract class Level : MonoBehaviour
             switch (levelNum)
             {
                 case 1:
-                    obj = Instantiate(Resources.Load("Level1PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level1PF")) as GameObject;
                     break;
                 case 2:
-                    obj = Instantiate(Resources.Load("Level2PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level2PF")) as GameObject;
                     break;
                 case 3:
-                    obj = Instantiate(Resources.Load("Level3PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level3PF")) as GameObject;
                     break;
                 case 4:
-                    obj = Instantiate(Resources.Load("Level4PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level4PF")) as GameObject;
                     break;
                 case 5:
-                    obj = Instantiate(Resources.Load("Level5PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level5PF")) as GameObject;
                     break;
                 case 6:
-                    obj = Instantiate(Resources.Load("Level6PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level6PF")) as GameObject;
                     break;
                 case 7:
-                    obj = Instantiate(Resources.Load("Level7PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level7PF")) as GameObject;
                     break;
                 case 8:
-                    obj = Instantiate(Resources.Load("Level8PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level8PF")) as GameObject;
                     break;
                 case 9:
-                    obj = Instantiate(Resources.Load("Level9PF")) as GameObject;
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level9PF")) as GameObject;
                     break;
                 default:
                     try
                     {
-                        obj = Instantiate(Resources.Load("Level" + levelNum.ToString() + "PF")) as GameObject;
+                        obj = Instantiate(Resources.Load(LEVEL_PATH + "Level" + levelNum.ToString() + "PF")) as GameObject;
                     }
                     catch
                     {

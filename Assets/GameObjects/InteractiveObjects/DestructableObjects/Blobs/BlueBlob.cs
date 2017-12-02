@@ -19,7 +19,6 @@ public class PullOthers : BlobBehaviour
             float amountThis = magnitude / (magnitude + other.magnitude);
 
             magnitude += other.magnitude;
-
             pullSpeed = pullSpeed * amountThis + theOther.pullSpeed * (1 - amountThis);
 
             return true;
@@ -30,6 +29,10 @@ public class PullOthers : BlobBehaviour
         }
     }
 
+    /// <summary>
+    /// Pulls each other Blob in the current Level towards thisBlob baised on pullSpeed 
+    /// </summary>
+    /// <param name="thisBlob">The Blob this behavior is attached to.</param>
     public override void update(Blob thisBlob)
     {
         foreach (DestructableObject item in Level.current.destructables)

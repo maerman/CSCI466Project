@@ -36,6 +36,11 @@ public class TowardsTarget : BlobBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets its target to the closest enemy DestructableObject to thisBlob, updating the target every so often
+    /// Moves thisBlob towars the target. 
+    /// </summary>
+    /// <param name="thisBlob">The Blob this behavior is attached to.</param>
     public override void update(Blob thisBlob)
     {
         updateTargetTimer--;
@@ -58,7 +63,7 @@ public class TowardsTarget : BlobBehaviour
 
 public class RedBlob : Blob
 {
-    public float moveSpeed = 3f;
+    public float moveSpeed = 2f;
     public float updateTargetSecs = 2f;
 
     protected override void startBlob()

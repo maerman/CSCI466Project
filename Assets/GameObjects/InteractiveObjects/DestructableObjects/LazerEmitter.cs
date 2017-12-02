@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// LazerEmitters are DestructableObjects that every so often shoot LazerShots all around it
+/// </summary>
 public class LazerEmitter : DestructableObject
 {
     public float damage = 5f;
@@ -47,10 +50,12 @@ public class LazerEmitter : DestructableObject
     {
         emitTimer--;
 
+        //emit Lazers if it is time to
         if (emitTimer <= 0)
         {
             emitTimer = (int)(lazerEmitSecs * level.updatesPerSec);
 
+            //create LazerShots around the this LazerEmitter equally spaced angles
             for (int i = 0; i < numLazers * difficultyModifier; i++)
             {
                 float currentAngle = angle + i * 360f / numLazers;

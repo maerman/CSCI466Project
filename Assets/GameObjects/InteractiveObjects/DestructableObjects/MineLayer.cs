@@ -2,16 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// MineLayers create HomingMines every so often and move away from enimes
+/// </summary>
 public class MineLayer : DestructableObject
 {
     private LinkedList<HomingMine> mines = new LinkedList<HomingMine>();
     public int maxMines = 10;
     public float mineLayWaitSecs = 4;
-    private int updatesUntilNextMine = 0;
+    private int layMineTimer = 0;
     public float damage = 15;
     public float stayAwayDistance = 15f;
     public float turnSpeed = 0.5f;
     public float acceleration = 0.2f;
+    public Vector2 offset = new Vector2(0, -2);
 
     protected override void destroyDestructableObject()
     {
@@ -45,27 +49,26 @@ public class MineLayer : DestructableObject
 
     protected override void updateDestructableObject()
     {
+        //remove HomingMine entries of HomingMines that no longer exist
         List<HomingMine> remove = new List<HomingMine>();
         foreach (HomingMine item in mines)
         {
             if (item == null || !item.active)
-            {
                 remove.Add(item);
-            }
         }
-
         foreach (HomingMine item in remove)
-        {
             mines.Remove(item);
-        }
 
-        if (updatesUntilNextMine > 0)
-        {
-            updatesUntilNextMine--;
-        }
+        if (layMineTimer > 0)
+            layMineTimer--;
 
-        if (updatesUntilNextMine <= 0)
+        //lay a new mine if it is time to
+        if (layMineTimer <= 0)
         {
+            //reset the layMineTimer
+            layMineTimer = (int)(mineLayWaitSecs * level.updatesPerSec);
+
+            //destroy and remove the first mine if there are too many
             if (mines.Count >= maxMines * difficultyModifier)
             {
                 HomingMine firstMine = mines.First.Value;
@@ -73,27 +76,20 @@ public class MineLayer : DestructableObject
                 mines.Remove(firstMine);
             }
 
-            HomingMine mine = (HomingMine)level.createObject("HomingMinePF", new Vector2(0, -2).rotate(angle) + position, 0, 0);
+            //create a new mine behind this 
+            HomingMine mine = (HomingMine)level.createObject("HomingMinePF", offset.rotate(angle) + position, 0, 0);
 
             mine.damage = damage;
             mine.team = team;
 
             mines.AddLast(mine);
-
-            updatesUntilNextMine = (int)(mineLayWaitSecs * level.updatesPerSec);
         }
 
-        IEnumerable<InteractiveObject>[] awayFrom = new IEnumerable<InteractiveObject>[3];
-        awayFrom[0] = level.players;
-        awayFrom[1] = level.destructables;
-        awayFrom[2] = level.indestructables;
-
-        InteractiveObject turnFrom = closestObject<InteractiveObject>(awayFrom, false);
+        //turn and move away from the closest enemy InteractiveObject if it is too close, or just move forward
+        SpaceObject turnFrom = closestObject(level.getTypes(true, true, true, false), false);
 
         if (turnFrom != null && distanceFrom(turnFrom) < stayAwayDistance)
-        {
             turnTowards(turnFrom, -turnSpeed);
-        }
 
         moveForward(acceleration);
     }
