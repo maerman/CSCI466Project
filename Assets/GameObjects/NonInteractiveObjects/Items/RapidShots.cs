@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// RapidShots is an Item that allow its holder to shoot small, weak 
+/// LazerShots in quick succession
+/// </summary>
 public class RapidShots : Item
 {
     public float shotLifeSecs = 3f;
@@ -18,10 +22,13 @@ public class RapidShots : Item
 
     protected override void holdingItem(bool use, bool startUse, bool endUse, bool doubleUse)
     {
+        //update the time before the next shot
         if (shotCooldown > 0)
         {
             shotCooldown--;
         }
+        //if the holder is holding down this Item's key and it is time to shoot another shot
+        //then create a LazerShot infront of the holder
         else if (use)
         {
             LazerShot shot = (LazerShot)level.createObject("LazerShotPF", holder.position + offset.rotate(holder.angle), holder.angle);
@@ -32,6 +39,7 @@ public class RapidShots : Item
             shot.color = color;
             shot.team = holder.team;
 
+            //reset the time until the next shot
             shotCooldown = (int)(shotCooldownSecs * level.updatesPerSec);
         }
     }

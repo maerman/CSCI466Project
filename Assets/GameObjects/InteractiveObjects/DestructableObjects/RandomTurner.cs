@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// RandomTurner is a DestructableObject that moves that turns left then right for a
+/// random amount of time and continually moves forward. It damages any enemy DestructableObject
+/// that it collids with.
+/// </summary>
 public class RandomTurner : DestructableObject
 {
     public float damage = 20f;
     public float acceleration = 0.4f;
     public float turnSpeed = 0.3f;
-    private int updatesToNextRand = 0;
+    private int nextRandTimer = 0;
     public float maxSecsInADirection = 10;
     public float minSecsInADirection = 1;
     private bool turnLeft = false;
@@ -49,15 +54,17 @@ public class RandomTurner : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        updatesToNextRand--;
+        nextRandTimer--;
 
-        if (updatesToNextRand <= 0)
+        //if timer is up, start turning in the opposite direction and reset the timer
+        if (nextRandTimer <= 0)
         {
             turnLeft = !turnLeft;
 
-            updatesToNextRand = level.random.Next((int)(minSecsInADirection * level.updatesPerSec), (int)(maxSecsInADirection * level.updatesPerSec));
+            nextRandTimer = level.random.Next((int)(minSecsInADirection * level.updatesPerSec), (int)(maxSecsInADirection * level.updatesPerSec));
         }
 
+        //turn left or right
         if (turnLeft)
         {
             angle = angle - turnSpeed;

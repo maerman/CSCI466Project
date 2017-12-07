@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Options is a singleton class that represents the non-input options that can be changed in the game.
+/// </summary>
 class Options
 {
     public const string OPTIONS_FILE = "Nebula.options";
@@ -51,11 +54,21 @@ class Options
         }
     }
 
+    /// <summary>
+    /// Sets the current resolution to the given width and height in pixles.
+    /// </summary>
+    /// <param name="width">Screen width in pixles.</param>
+    /// <param name="height">Screen height in pixles.</param>
     public void setResolution(int width, int height)
     {
         Screen.SetResolution(width, height, Screen.fullScreen);
     }
 
+    /// <summary>
+    /// Sets the current resolution given resolution string.
+    /// The string should be the output from Resolution.toString()
+    /// </summary>
+    /// <param name="toString">Resolution string</param>
     public void setResolution(string toString)
     {
         try
@@ -72,10 +85,11 @@ class Options
         }
     }
 
-
-
+    
     private Options()
     {
+        //try loading the options from the default file, if there is a problem, 
+        //set the options to default values
         try
         {
             loadOptions();
@@ -87,6 +101,9 @@ class Options
         }
     }
 
+    /// <summary>
+    /// Sets the options to default values
+    /// </summary>
     public void setDefaultOptions()
     {
         ingameInterfaceAlpha = 0.7f;
@@ -105,11 +122,18 @@ class Options
         //use whatever resolution it started as
     }
 
+    /// <summary>
+    /// Load the options from the default file
+    /// </summary>
     public void loadOptions()
     {
         loadOptions(OPTIONS_FILE);
     }
 
+    /// <summary>
+    /// Load the options from the given file
+    /// </summary>
+    /// <param name="fileName">File to load the options from</param>
     public void loadOptions(string fileName)
     {
         System.IO.StreamReader file = null;
@@ -147,11 +171,18 @@ class Options
         }
     }
 
+    /// <summary>
+    /// Save the options to the default file
+    /// </summary>
     public void saveOptions()
     {
         saveOptions(OPTIONS_FILE);
     }
 
+    /// <summary>
+    /// Save the options to the given file
+    /// </summary>
+    /// <param name="fileName">File to save the options to</param>
     public void saveOptions(string fileName)
     {
         System.IO.StreamWriter file = null;

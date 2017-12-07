@@ -2,12 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// SlowTurner is a DestructableObject that slowly turns towars its target, always moving forward.
+/// The target is assigned to the closest enemy DestructableObject. SlowTurners damage any enemy DestructableObject
+/// they collide with. 
+/// </summary>
 public class SlowTurner : DestructableObject
 {
     public float turnSpeed = 0.01f;
     public float damage = 10f;
     public float acceleration = 0.1f;
-    private DestructableObject target;
+    private SpaceObject target;
 
     protected override void destroyDestructableObject()
     {
@@ -47,10 +52,12 @@ public class SlowTurner : DestructableObject
 
     protected override void updateDestructableObject()
     {
+        //find a target if there is not currently one
         if (target == null || !target.active)
         {
-            target = closestObject(level.getTypes(true, true, false, false)) as DestructableObject;
+            target = closestObject(level.getTypes(true, true, false, false));
         }
+        //if there is a target, turn towards it
         else
         {
             turnTowards(target, turnSpeed * difficultyModifier);

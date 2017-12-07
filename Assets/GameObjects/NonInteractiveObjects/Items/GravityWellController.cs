@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// GravityWellController is an Item that allows its holder to create and control a GravityWell
+/// </summary>
 public class GravityWellController : Item
 {
     public Vector2 offset = new Vector2(0, 3);
@@ -11,6 +14,7 @@ public class GravityWellController : Item
 
     private GravityWell well;
 
+    //If this Item is dropped, destroy its GravityWell if it currrently has one
     protected override void dropItem()
     {
         if (well != null)
@@ -22,24 +26,24 @@ public class GravityWellController : Item
 
     protected override void holdingItem(bool use, bool startUse, bool endUse, bool doubleUse)
     {
+        //When the holder first presses this Item's key, create a GravityWell 
+        //behind the holder if there isn't one, if there is one move it behind the holder. 
         if (startUse)
         {
+            Vector2 direction = holder.velocity.normalized;
+            direction.x *= -1;
             if (well == null)
             {
-                Vector2 direction = holder.velocity.normalized;
-                direction.x *= -1;
-
                 well = (GravityWell)level.createObject("GravityWellPF", holder.position + offset.rotate(direction.getAngle()));
                 well.damage = wellDamage;
                 well.gravity = startGravity;
             }
             else
             {
-                Vector2 direction = holder.velocity.normalized;
-                direction.x *= -1;
                 well.position = holder.position + offset.rotate(direction.getAngle());
             }
         }
+        //When the holder holds down this Item's key, increase the GravityWell's size.
         else if (use && well != null)
         {
             well.gravity *= 1f + gravityIncreaseSpeed;
@@ -50,6 +54,7 @@ public class GravityWellController : Item
             }
         }
 
+        //When the holder double presses this Item's key, destroy the GravityWell if one exists.
         if (doubleUse && well != null)
         {
             well.destroyThis();

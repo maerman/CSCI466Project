@@ -2,11 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Rammer is a DestructableObject that finds the closest enemy DestructableObject 
+/// then tries to ram into it. It damages any enemy DestructableObjects it collides with. 
+/// </summary>
 public class Rammer : DestructableObject
 {
     public float damage = 15;
 
-    public DestructableObject target;
+    public SpaceObject target;
     private float ramTime = 0;
     public float overRunSecs = 2;
 
@@ -48,27 +52,29 @@ public class Rammer : DestructableObject
 
     protected override void updateDestructableObject()
     {
+        //find new target if there is not currently one
         if (target == null || !target.active)
         {
-            IEnumerable<DestructableObject>[] targetList = new IEnumerable<DestructableObject>[2];
-            targetList[0] = level.destructables;
-            targetList[1] = level.players;
-
-            target = closestObject<DestructableObject>(targetList, false);
+            target = closestObject(level.getTypes(true, true, false, false), false);
         }
+        //continue moving forward until ramTime runs out
         else if (ramTime > 0)
         {
             ramTime--;
         }
+        //try to ram target
         else
         {
+            //find position to ram baised on this and target's current position, ram speed and target's current velocity
             Vector3 temp = intersectPosTime(target, maxSpeed);
             if (temp.z < 0)
             {
+                //remove target if it cannot be rammed
                 target = null;
             }
             else
             {
+                //set how long to move towards target then move towards target
                 ramTime = (temp.z + overRunSecs) * level.updatesPerSec;
                 turnTowards(temp);
                 angularVelocity = 0;
@@ -78,6 +84,10 @@ public class Rammer : DestructableObject
         }
     }
 
+    /// <summary>
+    /// takes less damage baised on difficulty
+    /// </summary>
+    /// <param name="damage"></param>
     public override void damageThis(float damage)
     {
         if (damage > armor * difficultyModifier)

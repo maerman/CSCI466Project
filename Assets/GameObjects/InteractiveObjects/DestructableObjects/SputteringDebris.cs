@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// SputteringDebris is a DestructableObject that switches between accelerating forward while turning in a certain direction
+/// and waiting (gliding forward at its current speed) for a random durations. It damages any enemy DestructableObject it
+/// collides with. 
+/// </summary>
 public class SputteringDebris : DestructableObject
 {
     public float damage = 15f;
@@ -8,7 +13,7 @@ public class SputteringDebris : DestructableObject
     public float turnSpeed = 1f;
     public float maxAccelerateDurationSecs = 2f;
 
-    private int wait = 0;
+    private int timer = 0;
     private bool accelerate = false;
 
     protected override void destroyDestructableObject()
@@ -49,26 +54,32 @@ public class SputteringDebris : DestructableObject
 
     protected override void updateDestructableObject()
     {
-        if (wait <= 0)
+        //if timer is up, toggle between accelerating and reset the timer
+        if (timer <= 0)
         {
             accelerate = !accelerate;
-            wait = level.random.Next((int)(maxAccelerateDurationSecs * level.updatesPerSec));
+            timer = level.random.Next((int)(maxAccelerateDurationSecs * level.updatesPerSec));
         }
 
+        //if accelerating, turn in a direction and accelerate forward
         if (accelerate)
         {
             angularVelocity += turnSpeed;
             moveForward(acceleration);
         }
 
-        wait--;
+        timer--;
     }
 
+    /// <summary>
+    /// Takes less damage baised on difficulty
+    /// </summary>
+    /// <param name="damage"></param>
     public override void damageThis(float damage)
     {
         if (damage > armor * difficultyModifier)
         {
-            health -= (damage - armor * difficultyModifier);
+            health -= (damage - armor - difficultyModifier * 2f);
         }
     }
 }

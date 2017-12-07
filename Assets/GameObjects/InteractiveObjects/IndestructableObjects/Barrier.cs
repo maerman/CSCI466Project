@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Barrier is an IndestructableObject that attaches to a SpaceObject and deflects/absorbs things 
+/// to protect what it is attached to
+/// </summary>
 public class Barrier : IndestructableObject
 {
     public float width = 8f;
@@ -10,7 +14,6 @@ public class Barrier : IndestructableObject
     public SpaceObject attachedTo;
 
     private float originalWidth;
-    private float previousScaleX = 0;
     public float previousWidth = 0;
 
     protected override void destroyIndestructableObject()
@@ -38,9 +41,10 @@ public class Barrier : IndestructableObject
 
     }
 
-
+    
     protected override void startIndestructableObject()
     {
+        //find and save the original width of this 
         angle = 0;
         originalWidth = gameObject.GetComponent<Collider2D>().bounds.size.x / scale.x;
         angle = attachedTo.angle + attachAngle;
@@ -48,8 +52,10 @@ public class Barrier : IndestructableObject
 
     protected override void updateIndestructableObject()
     {
+
         if (attachedTo != null && attachedTo.active)
         {
+            //change the scale to make it the correct width if it is not
             if (originalWidth * scale.x != width)
             {
                 Vector2 newScale = scale;
@@ -57,14 +63,16 @@ public class Barrier : IndestructableObject
                 scale = newScale;
             }
 
+            //keep it attached to the correct position relative to what it is attached to
             angle = attachedTo.angle + attachAngle;
             Vector2 toRotate = attachPoint;
-
             position = attachedTo.position + toRotate.rotate(angle);
 
+            //make sure physics is not moving this, would cause it to be attached incorrectly
             velocity = Vector2.zero;
             angularVelocity = 0;
         }
+        //if this is not attached to anything, destroy it
         else
         {
             destroyThis();

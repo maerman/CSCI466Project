@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// LazerBeam is an Item that allows the holder to create a Lazer infront of themselves
+/// </summary>
 public class LazerBeam : Item
 {
     public float beamDamge = 5f;
@@ -8,35 +10,38 @@ public class LazerBeam : Item
     public float beamExtendSpeed = 1f;
     public Vector2 offset = new Vector2(0, 0);
 
-    private Lazer beam;
+    private Lazer lazer;
 
+    //If this Item is dropped, destroy the Lazer if it exists
     protected override void dropItem()
     {
-        if (beam != null)
+        if (lazer != null)
         {
-            beam.destroyThis();
-            beam = null;
+            lazer.destroyThis();
+            lazer = null;
         }
     }
 
     protected override void holdingItem(bool use, bool startUse, bool endUse, bool doubleUse)
     {
+        //if the holder presses this Item's key, create a Lazer
         if (startUse)
         {
-            beam = (Lazer)level.createObject("LazerPF");
-            beam.position = holder.position;
-            beam.angle = holder.angle;
-            beam.attachedTo = holder;
-            beam.damage = beamDamge;
-            beam.maxLength = beamMaxLength;
-            beam.extendSpeed = beamExtendSpeed;
-            beam.color = holder.color;
+            lazer = (Lazer)level.createObject("LazerPF");
+            lazer.position = holder.position;
+            lazer.angle = holder.angle;
+            lazer.attachedTo = holder;
+            lazer.damage = beamDamge;
+            lazer.maxLength = beamMaxLength;
+            lazer.extendSpeed = beamExtendSpeed;
+            lazer.color = holder.color;
         }
 
-        if (!use && beam != null)
+        //if the user presses releases this Item's key, destroy the Lazer
+        if (!use && lazer != null)
         {
-            beam.destroyThis();
-            beam = null;
+            lazer.destroyThis();
+            lazer = null;
         }
     }
 

@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// RubberyDebris is a DestructableObject that perfectly bounces off any InteractiveObject (not losing any speed)
+/// and damages any DestructableObject not on the same team that it collides with
+/// </summary>
 public class RubberyDebris : DestructableObject
 {
     public float damage = 5;

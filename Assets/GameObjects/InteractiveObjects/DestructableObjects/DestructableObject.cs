@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// DestructableObjects are InteractiveObjects that have health which can be damaged 
+/// and are destroyed when they lose all their health
+/// </summary>
 public abstract class DestructableObject : InteractiveObject
 {
     private float theMaxHealth;
@@ -22,7 +26,7 @@ public abstract class DestructableObject : InteractiveObject
     }
 
     /// <summary>
-    /// Deal damage to this DestructableObject. Its armor will mitigate some of the damage.
+    /// Deal damage to this. Its armor will mitigate some of the damage.
     /// If its health decreases to 0 or less, it will be destroyed next time it is updated.
     /// </summary>
     /// <param name="damage"></param>
@@ -34,7 +38,7 @@ public abstract class DestructableObject : InteractiveObject
         }
     }
 
-    // Called shortly after this DestructableObject is created
+    // Called shortly after this is created
     protected abstract void startDestructableObject();
     protected override void startInteractiveObject()
     {
@@ -86,7 +90,7 @@ public abstract class DestructableObject : InteractiveObject
 
     
     /// <summary>
-    /// get: return whether this DestructableObject is active or not
+    /// get: return whether this is active or not
     /// set: activate and deactivate this DestructableObject and it's HealthBar
     /// </summary>
     public override bool active
@@ -109,7 +113,7 @@ public abstract class DestructableObject : InteractiveObject
         }
     }
 
-    // Called right before this DestructableObject is destroyed
+    // Called right before this is destroyed
     // removes this from the Level's lists and destroys its healhbar
     protected abstract void destroyDestructableObject();
     protected override void destroyInteractiveObject()

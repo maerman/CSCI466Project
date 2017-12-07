@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// MineLayers create HomingMines every so often and move away from enimes
+/// MineLayers is a DestructableObject that creates a HomingMine every so often and moves away from enimes
 /// </summary>
 public class MineLayer : DestructableObject
 {

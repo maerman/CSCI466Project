@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Key are used to represent a particular input from the user
+/// Unifies KeyCodes and Axises
+/// </summary>
 public class Key
 {
     public const string MOUSE_WHEEL_NAME = "MouseWheel";
@@ -12,11 +16,21 @@ public class Key
 
     private int value;
 
+    /// <summary>
+    /// Creates a Key that represents the given KeyCode
+    /// </summary>
+    /// <param name="key">KeyCode to represent this Key as</param>
     public Key(KeyCode key)
     {
         value = (int)key;
     }
 
+    /// <summary>
+    /// Creates a Key that represents the Axis described by the given values
+    /// </summary>
+    /// <param name="controller">Which controller the axis is from</param>
+    /// <param name="axis">Which axis from the controller</param>
+    /// <param name="positive">If this represents the positive or negative part of the axis</param>
     public Key(int controller, int axis, bool positive)
     {
         if (controller < NUM_CONTROLLERS && axis < NUM_AXIS)
@@ -25,13 +39,9 @@ public class Key
             axis--;
 
             if (positive)
-            {
                 value = START_AXIS + controller * NUM_AXIS + axis * 2;
-            }
             else
-            {
                 value = START_AXIS + controller * NUM_AXIS + axis * 2 + 1;
-            }
         }
         else
         {
@@ -39,6 +49,10 @@ public class Key
         }
     }
 
+    /// <summary>
+    /// Creates a Key that represents the mouse wheel's axis
+    /// </summary>
+    /// <param name="mouseWheelUp">If this represents the wheel up or wheel down</param>
     public Key(bool mouseWheelUp)
     {
         if (mouseWheelUp)
@@ -47,6 +61,11 @@ public class Key
             value = MOUSE_WHELL_DOWN;
     }
 
+    /// <summary>
+    /// Creates a Key that represents the input corrosponding to the given value
+    /// Uses the same values as KeyCode but extends past them to represent axises
+    /// </summary>
+    /// <param name="key"></param>
     public Key(int key)
     {
         foreach (KeyCode item in System.Enum.GetValues(typeof(KeyCode)))
@@ -68,26 +87,48 @@ public class Key
         }
     }
 
+    /// <summary>
+    /// Creates a Key that represents the same input as the given Key
+    /// </summary>
+    /// <param name="key">Key to copy</param>
     public Key(Key key)
     {
         value = key.value;
     }
 
+    /// <summary>
+    /// Returns the int value used to keep track of which input it represents
+    /// </summary>
+    /// <returns>The value used to keep track of the input</returns>
     public int getValue()
     {
         return value;
     }
 
+    /// <summary>
+    /// Changes the value used to keep track of which input it represents
+    /// </summary>
+    /// <param name="value">Value to change to</param>
     public void changeValue(int value)
     {
         this.value = value;
     }
 
+    /// <summary>
+    /// Changes this Key to represent the same input as the given Key
+    /// </summary>
+    /// <param name="key">Key to copy</param>
     public void changeValue(Key copy)
     {
         value = copy.getValue();
     }
 
+    /// <summary>
+    /// Return wether the Key is activated or not. 
+    /// If this represents a KeyCode, its activated value will be returned.
+    /// If this represents an axis, true will be returned if the value is above the KeyActivationThreshold.
+    /// </summary>
+    /// <returns>If this is activated or not.</returns>
     public bool isPressed()
     {
         try
@@ -138,6 +179,12 @@ public class Key
         }
     }
 
+    /// <summary>
+    /// Return the float value of this Key.
+    /// If this represents a KeyCode, it will return 1 if it is activated, 0 if not. 
+    /// If this represents an axis, the axis's value will be returned if it is greater than the keyDeadZone
+    /// </summary>
+    /// <returns>If this is activated or not.</returns>
     public float getAxis()
     {
         try
@@ -210,6 +257,10 @@ public class Key
         }
     }
 
+    /// <summary>
+    /// Return a string representing this Key's represented input in 5 charaters or less
+    /// </summary>
+    /// <returns>5 charater or less string representing this Key</returns>
     public string toShortString()
     {
         switch (value)
@@ -504,6 +555,7 @@ public class Key
                 break;
         }
 
+        //if this Key represents a controller button
         if (value >= 330 && value < 510)
         {
             int temp = value - 330;
@@ -544,6 +596,7 @@ public class Key
             }
         }
 
+        //if this Key represents an axis
         if (value >= START_AXIS)
         {
             int tempValue = value - START_AXIS;
@@ -624,6 +677,10 @@ public class Key
         return "?" + value;
     }
 
+    /// <summary>
+    /// Return a string representing this Key's input
+    /// </summary>
+    /// <returns>String representing this Key's input</returns>
     public override string ToString()
     {
         try
@@ -658,11 +715,24 @@ public class Key
         }
     }
 
+    /// <summary>
+    /// Returns the string that represents the axis described by the given values
+    /// </summary>
+    /// <param name="controller">Which controller the axis is from</param>
+    /// <param name="axis">Which axis from the controller</param>
+    /// <returns>String representing the axis</returns>
     public static string getAxisString(int controller, int axis)
     {
         return ("Con" + controller.ToString() + "Axis" + axis.ToString());
     }
 
+    /// <summary>
+    /// Returns the string that represents the axis described by the given values
+    /// </summary>
+    /// <param name="controller">Which controller the axis is from</param>
+    /// <param name="axis">Which axis from the controller</param>
+    /// <param name="positive">If this represents the positive or negative part of the axis</param>
+    /// <returns>String representing the axis</returns>
     public static string getAxisString(int controller, int axis, bool positive)
     {
         if (positive)
@@ -675,6 +745,10 @@ public class Key
         }
     }
 
+    /// <summary>
+    /// Returns one of the inputs that is currently activated. If none are, it will return null.
+    /// </summary>
+    /// <returns>The activated input or null</returns>
     public static Key activatedKey()
     {
         foreach (KeyCode item in System.Enum.GetValues(typeof(KeyCode)))

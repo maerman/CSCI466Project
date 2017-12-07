@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// MultiShots is an Item that allow its holder to shoot multiple LazerShots
+/// at once in an arch
+/// </summary>
 public class MultiShots : Item
 {
     public float numberOfShots = 8f;
@@ -24,27 +28,39 @@ public class MultiShots : Item
         
     }
 
+    /// <summary>
+    ///shoot LazerShots infront of the holder in an arch 
+    /// </summary>
     private void shoot()
     {
+        //make sure the arch is within the correct bounds
         if (spread < spreadStart)
         {
             spread = spreadStart;
         }
+        else if (spread > spreadMax)
+        {
+            spread = spreadMax;
+        }
 
-        float currentAngle = 0;
-
+        //create each LazerShot at a different angle in the arch
         for (int i = 0; i < numberOfShots; i++)
         {
-            currentAngle = holder.angle - spread / 2.0f + i * spread / (numberOfShots - 1);
+            //find the angle for the current LazerShot
+            float currentAngle = holder.angle - spread / 2.0f + i * spread / (numberOfShots - 1);
 
+            //create the LazerShot infront of the holder its angle
             LazerShot current = (LazerShot)level.createObject("LazerShotPF", holder.position + offset.rotate(currentAngle), 
-                currentAngle, new Vector2().toAngle(currentAngle, shotSpeed) + holder.velocity);
+                currentAngle, new Vector2(shotSpeed, 0).toAngle(currentAngle) + holder.velocity);
+
+            //set the LazerShot's initial settings
             current.damage = damageEach;
             current.timeToLiveSecs = shotLifeSecs;
             current.color = color;
             current.team = holder.team;
         }
 
+        //reset shoot settings
         shotCooldown = (int)(shotTimeSecs * level.updatesPerSec);
         shotTimer = 0;
         spread = 0;
@@ -52,15 +68,19 @@ public class MultiShots : Item
 
     protected override void holdingItem(bool use, bool startUse, bool endUse, bool doubleUse)
     {
+        //update the time until the next shot
         if (shotCooldown > 0)
         {
             shotCooldown--;
         }
+        //if it is time and the holder releases this Item's key, shoot the shots
         else if (endUse)
         {
             shoot(); 
         }
 
+        //update the time since the holder pressed this Item's key,
+        //if the time has passed a certian amount, shoot the shots
         if (shotTimer > 0)
         {
             shotTimer--;
@@ -71,6 +91,8 @@ public class MultiShots : Item
             }
         }
 
+        //if the holder is holding down this Item's key, then keep track of when
+        //the next shot should be fired and increase the spread of the shots
         if (use)
         {
             if (shotTimer <= 0)
@@ -92,6 +114,7 @@ public class MultiShots : Item
 
     protected override void pickupItem()
     {
+        //calculate the spreadSpeed
         spreadSpeed = (spreadMax - spreadStart) / (shotTimeSecs * level.updatesPerSec);
     }
 }
