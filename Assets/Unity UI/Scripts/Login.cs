@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿// written by: Shane Barry, Metin Erman, Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Shane Barry, Metin Erman
+
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -9,8 +13,13 @@ using static User;
 using static GameStates;
 using static Delegates;
 
-public class Login : MonoBehaviour, IErrorPanel {
-
+/// <summary>
+/// Login is a MonoBehavior that controls the Login menu and has method that buttons 
+/// in the menu call. 
+/// </summary>
+public class Login : MonoBehaviour, IErrorPanel
+{
+    //initilized in editor
     public Button loginBtn;
     public InputField userName;
     public InputField password;
@@ -75,17 +84,28 @@ public class Login : MonoBehaviour, IErrorPanel {
         canvasGroup.DOFade(1.0f, 2.0f);
     }
 
+    /// <summary>
+    /// Called by the Create Account button, sets the screen to the Create Account menu
+    /// </summary>
     public void CreateAccount()
     {
         gameState = GameState.CreateAccount;
     }
 
+    /// <summary>
+    /// Called by the Play Demo button, sets the scren to the Main menu and 
+    /// sets the user's account to a trial account
+    /// </summary>
     public void PlayDemo() //sets gamestate to the main menu and variable that signifies demo version use to true
     {
         User.user.isTrial = true;
         gameState = GameState.Main;
     }
 
+    /// <summary>
+    /// Called by the Quit button, sets the GameState to Exit which will cause
+    /// GameLoop the close the program. 
+    /// </summary>
     public void Quit()
     {
         gameState = GameState.Exit;

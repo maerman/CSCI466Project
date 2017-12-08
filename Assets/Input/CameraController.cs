@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// written by: Thomas Stewart, Michael Quinn
+// tested by: Michael Quinn
+// debugged by: Thomas Stewart, Shane Barry, Metin Erman
+
+using UnityEngine;
 using System.Collections;
 
 /// <summary>

@@ -1,68 +1,80 @@
-﻿
-﻿using System;
+﻿// written by: Shane Barry, Thomas Stewart, Metin Erman
+// tested by: Michael Quinn
+// debugged by: Shane Barry, Thomas Stewart
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+/// <summary>
+/// GameOver is a MonoBehavior that controls the Game Complete and Game Over menus
+/// has methods that are called when the menus' buttons are pressed. The Game Complete menu
+/// doesn't use the Restart() method.
+/// </summary>
 public class GameOver : MonoBehaviour, IErrorPanel
 {
     //initilized in editor
-    public InputField replayNameInputField;
+    public InputField replayName;
     public GameObject errorPanel;
     public CanvasGroup canvasGroup;
     public Text errorText;
 
-    public void restart() // method used by the restart button on the gameover menu to set level to its beginning
+    /// <summary>
+    /// Method called by the Restart button on the gameover menu to set level to its beginning
+    /// </summary>
+    public void restart() 
     {
-        if (Level.current == null) //if there is an error with the current level, throw exception and display error message
+        //if there is not a current Level, display error message
+        if (Level.current == null) 
         {
             showErrorMenu("Can't restart level, current level is set to null");
         }
-        else //else set level to its beginning state
+        else
         {
             Level.current.restartLevel();
             GameStates.gameState = GameStates.GameState.Playing;
         }
 	}
 
-    public void saveReplay() // method used by the Gameover menu to create a save file
+    /// <summary>
+    /// Method called by the Save Replay button, saves a replay of the current Level
+    /// to a file of the replayName.
+    /// </summary>
+    public void saveReplay()
     {
-        if (Level.current == null) //if there is an error with the current level then throw an exception and an error message is displayed
-        {
+        //if the current Level does not exist then an error message is displayed
+        if (Level.current == null)
             showErrorMenu("CurrentLevel is null when trying to saveReplay");
-        }
-        else if (replayNameInputField == null || replayNameInputField.text == null) //if there is an error with the replay file name then throw an exception and display an error message
+        //if there is an error with the replay file name then throw an exception
+        else if (replayName == null || replayName.text == null)
+            throw new Exception("Problem with replayName InputField");
+        //if user does not enter name in input field then desplay a message to him
+        else if (replayName.text == "")
+            showErrorMenu("You need to enter a name before saving the replay");
+        //else create save the replay
+        else
         {
-            showErrorMenu("Problem with replayName InputField");
-        }
-        else if (replayNameInputField.text == "") //if user does not enter name in input field
-        {
-            showErrorMenu("You need to enter a name before saving the replay"); //display error that need a name to save replay
-        }
-        else //else create replay recording on user's hardrive using the input field text
-        {
-            if (Level.current.saveReplay(replayNameInputField.text))
-            {
-                showErrorMenu("Replay has been saved successfully!"); //display that replay was saved
-            }
+            if (Level.current.saveReplay(replayName.text))
+                showErrorMenu("Replay has been saved successfully!");
             else
-            {
-                showErrorMenu("There was a problem saving the replay!"); //display that there was a problem saving the replay
-            }
+                showErrorMenu("There was a problem saving the replay!");
         }
     }
 
-    public void quit() // method used by the gameover menu to set gamestate to main menu
+    /// <summary>
+    /// Method called by the Quit button, destroys the current Level and changes the screen to the Main menu 
+    /// </summary>
+    public void quit()
     {
         if (Level.current != null)
         {
             Destroy(Level.current.gameObject);
         }
-        GameStates.gameState = GameStates.GameState.Main; //set gamestate to main menu
+        GameStates.gameState = GameStates.GameState.Main;
 	}
-
 
     public bool HasError()
     {

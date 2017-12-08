@@ -1,4 +1,9 @@
-﻿using System;
+﻿// written by: Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Diane Gregory, Shane Barry
+// balanced by: Diane Gregory, Metin Erman, Thomas Stewart
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

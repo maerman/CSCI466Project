@@ -1,9 +1,17 @@
-﻿using System.Collections;
+﻿// written by: Shane Barry, Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Shane Barry, Thomas Stewart
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static GameStates;
 
+/// <summary>
+/// NewGame is a MonoBehavior that controls the New Game menu and has methods 
+/// that are called when the menu's buttons are pressed. 
+/// </summary>
 public class NewGame : MonoBehaviour
 {
     //initilized in editor
@@ -19,22 +27,23 @@ public class NewGame : MonoBehaviour
 
 	void Start ()
     {
-        //remove later once these features are implimented
+        //remove later once this feature is implimented
         practice.interactable = false;
-        survival.interactable = false;
 	}
 
 	void Update ()
     {
-		if (User.user.isTrial) //determines if the user is playing without an account i.e. playing the demo version
+        //disable these features if the user is playing a trial verson of the game
+		if (User.user.isTrial) 
         {
-            cooperative.interactable = false; //if they are then the following features are disabled for them
+            cooperative.interactable = false;
             competative.interactable = false;
             practice.interactable = false;
             survival.interactable = false;
             hard.interactable = false;
         }
-        else //else they can use these features on the new game menu
+        //don't disable these featuers if the user is not playign a trial version of the game
+        else 
         {
             cooperative.interactable = true;
             competative.interactable = true;
@@ -44,25 +53,29 @@ public class NewGame : MonoBehaviour
         }
 	}
 
+    /// <summary>
+    /// Method called by the Start button, creates a new Level with the settings selected by the user
+    /// </summary>
     public void start()
     {
-        int players = 1;
+        int numPlayers = 1;
         bool pvp = false;
         float difficulty = 2;
 
-        if (singlePlayer.isOn) //if singleplayer is toggled, set players to 1
+        //set numPlayers and pvp depending on player setting
+        if (singlePlayer.isOn) 
         {
-            players = 1;
+            numPlayers = 1;
             pvp = false;
         }
-        else if (cooperative.isOn) //if cooperative is toggled, set players to 2
+        else if (cooperative.isOn)
         {
-            players = 2;
+            numPlayers = 2;
             pvp = false;
         }
-        else if (competative.isOn) //if competitive is toggled, set players to 2
+        else if (competative.isOn)
         {
-            players = 2;
+            numPlayers = 2;
             pvp = true;
         }
         else
@@ -70,15 +83,16 @@ public class NewGame : MonoBehaviour
             throw new System.Exception("No player setting was selected when trying to start a new game.");
         }
 
-        if (easy.isOn) //if easy is toggled, set difficulty to 1
+        //set difficulty depending on difficulty setting
+        if (easy.isOn)
         {
             difficulty = 1;
         }
-        else if (medium.isOn) //if medium is toggled, set difficulty to 2
+        else if (medium.isOn)
         {
             difficulty = 2;
         }
-        else if (hard.isOn) //if hard is toggled, set difficulty to 3
+        else if (hard.isOn)
         {
             difficulty = 3;
         }
@@ -87,18 +101,22 @@ public class NewGame : MonoBehaviour
             throw new System.Exception("No difficulty setting was selected when trying to start a new game.");
         }
 
-        if (campaign.isOn) //if campaign is toggled, set level to level 1
+        //if campaign is selected, Create Level1 of the campain
+        if (campaign.isOn) 
         {
             Level level1 = Level.getLevel(1);
-            level1.create(players, difficulty, (int)System.DateTime.Now.Ticks, pvp);
+            level1.create(numPlayers, difficulty, (int)System.DateTime.Now.Ticks, pvp);
         }
         else if (practice.isOn)
         {
             //to impliment later
         }
+        //if survival is selected, create LevelSurvival
         else if (survival.isOn)
         {
-            //to impliment later
+            Level levelSurvival = (Instantiate(Resources.Load(Level.LEVEL_PATH + "LevelSurvivalPF"))
+                as GameObject).GetComponent<Level>();
+            levelSurvival.create(numPlayers, difficulty, (int)System.DateTime.Now.Ticks, pvp);
         }
         else
         {
@@ -108,7 +126,10 @@ public class NewGame : MonoBehaviour
         gameState = GameState.Playing;
     }
 
-    public void back() //method used by the new game menu to go back to the main menu
+    /// <summary>
+    /// method the back button calls, changes the screen to the Main menu
+    /// </summary>
+    public void back()
     {
         gameState = GameState.Main;
     }

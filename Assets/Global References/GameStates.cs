@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿// written by: Metin Erman, Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Metin Erman, Thomas Stewart
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿//Unity created file
+
+using UnityEngine;
 using System.Collections;
 
 public class ApplicationManager : MonoBehaviour {

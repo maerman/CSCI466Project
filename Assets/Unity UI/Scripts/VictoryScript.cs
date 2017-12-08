@@ -1,8 +1,13 @@
-﻿using System.Collections;
+﻿// written by: Shane Barry
+// tested by: Michael Quinn
+// debugged by: Shane Barry
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VictoryScript : MonoBehaviour {
+public class VictoryScript : MonoBehaviour
+{
 	public GameObject canvas;
 	// Use this for initialization
 	void Start ()

@@ -1,8 +1,17 @@
-﻿using System;
+﻿// written by: Thomas Stewart, Diane Gregory
+// tested by: Michael Quinn
+// debugged by: Diane Gregory, Thomas Stewart, Shane Barry, Metin Erman
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// SpaceObject is a MonoBehavoir that is the base for behavior sripts for GameObjects in this game.
+/// Besides defining atributes and behaviors common to all GameObjects in this game, it also provies 
+/// many helper methods for common task that GameObjects in this game may need. 
+/// </summary>
 public abstract class SpaceObject : MonoBehaviour
 {
     public float maxSpeed = 15f;
@@ -19,6 +28,8 @@ public abstract class SpaceObject : MonoBehaviour
     public abstract float mass { get; set; }
     public abstract Bounds bounds { get; }
 
+    #region accessor methods
+
     private float theEffectVolume = 1;
     private AudioSource theEffectAudio;
     public AudioSource effectAudio
@@ -27,20 +38,6 @@ public abstract class SpaceObject : MonoBehaviour
         {
             return theEffectAudio;
         }
-    }
-    public void effectPlay(AudioClip clip)
-    {
-        theEffectAudio.clip = clip;
-        theEffectAudio.Play();
-    }
-    protected void effectPlay(string clipName)
-    {
-        AudioClip clip = Resources.Load(clipName) as AudioClip;
-
-        if (clip != null)
-            effectPlay(clip);
-        else
-            Debug.Log("Couldn't load audioclip: " + clipName);
     }
     public float effectVolume
     {
@@ -196,6 +193,49 @@ public abstract class SpaceObject : MonoBehaviour
         {
             GetComponent<Collider2D>().enabled = !value;
         }
+    }
+
+
+    protected Level level
+    {
+        get
+        {
+            return Level.current;
+        }
+    }
+
+    /// <summary>
+    /// Returns the Level's difficulty if this SpaceObject is not on a Player team.
+    /// Returns 1 if this SpaceObject is on a Player's team.
+    /// </summary>
+    public float difficultyModifier
+    {
+        get
+        {
+            if (team > 0)
+                return 1;
+            else
+                return level.difficulty;
+        }
+    }
+
+    #endregion
+
+    #region helper methods
+
+    public void effectPlay(AudioClip clip)
+    {
+        theEffectAudio.clip = clip;
+        theEffectAudio.Play();
+    }
+    protected void effectPlay(string clipName)
+    {
+        AudioClip clip = Resources.Load(clipName) as AudioClip;
+
+        if (clip != null)
+            effectPlay(clip);
+        else
+            Debug.Log("Couldn't load audioclip: " + clipName);
     }
 
     /// <summary>
@@ -1012,6 +1052,8 @@ public abstract class SpaceObject : MonoBehaviour
         }
     }
 
+    #endregion
+
     /// <summary>
     /// Disables this SpaceObject. If this SpaceObject is not a Player, then also destroy it. 
     /// </summary>
@@ -1025,29 +1067,6 @@ public abstract class SpaceObject : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
-        }
-    }
-
-    protected Level level
-    {
-        get
-        {
-            return Level.current;
-        }
-    }
-
-    /// <summary>
-    /// Returns the Level's difficulty if this SpaceObject is not on a Player team.
-    /// Returns 1 if this SpaceObject is on a Player's team.
-    /// </summary>
-    public float difficultyModifier
-    {
-        get
-        {
-            if (team > 0)
-                return 1;
-            else
-                return level.difficulty;
         }
     }
 

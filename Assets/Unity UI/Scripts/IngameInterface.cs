@@ -1,8 +1,16 @@
-﻿using UnityEngine;
+﻿// written by: Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Thomas Stewart, Diane Gregory, Metin Erman
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Message is a simple class that contains a string and the number of
+/// updates it is to be displayed.
+/// </summary>
 public class Message
 {
     private string theText;
@@ -17,6 +25,8 @@ public class Message
     public Message(string text, float durationSecs)
     {
         this.theText = text;
+
+        //convert the seconds into updates
         if (Level.current == null)
         {
             duration = (int)(durationSecs * 50);
@@ -47,7 +57,10 @@ public class Message
     }
 }
 
-
+/// <summary>
+/// IngameInterface is a MonoBehavior that controls the GameInterface Canvas. 
+/// It updates parts of the interface baised on the Level's and Players' status.
+/// </summary>
 public class IngameInterface : MonoBehaviour
 {
     //Initilzed in editor
@@ -57,21 +70,22 @@ public class IngameInterface : MonoBehaviour
     public Text messages;
     public List<GameObject> playerPanels;
 
+    //These static members and methods allow other classes to create Messages 
+    //to be displayed without having a reference to an instance of this.
     private static IngameInterface current;
     private List<Message> messageList = new List<Message>();
-    
     public static void displayMessage(Message message)
     {
         if (current == null)
         {
-            throw new System.Exception("IngameInterface not created when calling displayMessage()");
+            Debug.Log("IngameInterface not created when calling displayMessage(), discarding message: " 
+                + message.text);
         }
         else
         {
             current.messageList.Add(message);
         }
     }
-
     public static void displayMessage(string message, float durationSecs)
     {
         displayMessage(new Message(message, durationSecs));
@@ -89,15 +103,19 @@ public class IngameInterface : MonoBehaviour
         {
             Level level = Level.current;
 
+            //update the display of the current Level's duration
             durationText.text = level.duration.ToString(@"hh\:mm\:ss");
             durationText.applyAlpha(Options.get().ingameInterfaceAlpha);
 
+            //update the display of the current Level's name
             numberName.text = level.levelNumber.ToString() + ":" + level.levelName;
             numberName.applyAlpha(Options.get().ingameInterfaceAlpha);
 
+            //update the display of the progress though the current Level
             progress.text = level.progress;
             progress.applyAlpha(Options.get().ingameInterfaceAlpha);
 
+            //put each message in the messageList into one string with each on its own line
             string messageText = "";
             for (int i = messageList.Count - 1; i >= 0; i--)
             {
@@ -110,21 +128,26 @@ public class IngameInterface : MonoBehaviour
                     messageText += messageList[i].text;
                 }
 
+                //remove any message that have run out of updates to display them
                 messageList[i].duration--;
                 if (messageList[i].duration <= 0)
                 {
                     messageList.RemoveAt(i);
                 }
             }
+
+            //update the display of messages
             messages.text = messageText;
             messages.applyAlpha(Options.get().ingameInterfaceAlpha);
 
             for (int i = 0; i < playerPanels.Count; i++)
             {
+                //deactivate playerPanels for dead or non-existant Players
                 if (level.players.Length <= i || level.players[i] == null || !level.players[i].active)
                 {
                     playerPanels[i].SetActive(false);
                 }
+                //activate playerPanels for active Players, make sure each playerPanel has its Player set correctly
                 else
                 {
                     playerPanels[i].SetActive(true);
@@ -137,6 +160,7 @@ public class IngameInterface : MonoBehaviour
 
     private void OnDestroy()
     {
-        current = null;
+        if (current == this)
+            current = null;
     }
 }

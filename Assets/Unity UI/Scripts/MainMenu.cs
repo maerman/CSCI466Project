@@ -1,63 +1,91 @@
-﻿using UnityEngine;
+﻿// written by: Shane Barry, Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Shane Barry, Thomas Stewart
+
+using UnityEngine;
 using System.Collections;
 using static GameStates;
 
+/// <summary>
+/// MainMenu is a MonoBehavior that controls the Main menu and has methods
+/// that are called when the menu's buttons are pressed. 
+/// </summary>
 public class MainMenu : MonoBehaviour
 {
     //initilized in editor
     public UnityEngine.UI.Button loadGame;
     public UnityEngine.UI.Button watchReplay;
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
-        if (User.user.isTrial) //determines if the user is playing without an account i.e. playing the demo version
+        //determines if the user is playing without an account i.e. playing the demo version
+        if (User.user.isTrial) 
         {
-            loadGame.interactable = false; //if they are then these features are disabled for them
+            //if they are then these features are disabled for them
+            loadGame.interactable = false; 
             watchReplay.interactable = false;
         }
-        else //else they can use these features on the main menu
+        else 
         {
+            //else they can use these features on the main menu
             loadGame.interactable = true;
             watchReplay.interactable = true;
         }
     }
 
-    public void NewGame() //method used by the main menu to start a start a gamestate
+    /// <summary>
+    /// Method the New Game button calls, changes the screen to the New Game screen
+    /// </summary>
+    public void NewGame()
     {
         gameState = GameState.NewGame;
     }
 
-    public void LoadGame() //method used by the main menu to load a gamestate from a save file
+    /// <summary>
+    /// Method the Load Game button calls, changes the screen to the Load Game screen
+    /// </summary>
+    public void LoadGame()
     {
         gameState = GameState.LoadGame;
     }
 
-    public void WatchReplay() //method used by the main menu to watch a level replay from a save file
+    /// <summary>
+    /// Method the Watch Replay button calls, changes the screen to the Watch Replay screen
+    /// </summary>
+    public void WatchReplay() 
     {
         gameState = GameState.LoadReplay;
     }
 
+    /// <summary>
+    /// Method the Leaderboard button calls, opens the Leaderboard part of the game's website 
+    /// with the default browser
+    /// </summary>
     public void Leaderboard()
     {
-        //open website
+        Application.OpenURL("http://nebulawars.heliohost.org/#works");
     }
 
-    public void Options() //method used by the main menu to open the options menu
+    /// <summary>
+    /// Method the Options button calls, changes the screen to the Options Hub screen
+    /// </summary>
+    public void Options()
     {
         gameState = GameState.OptionsHub;
     }
 
-    public void About() //method used by the main menu to open the about page
+    /// <summary>
+    /// Method the About button calls, changes the screen to the About screen
+    /// </summary>
+    public void About()
     {
         gameState = GameState.About;
     }
 
-    public void Quit() //method used by the main menu to close the program
+    /// <summary>
+    /// Method the Quit button calls, changes the GameState to Exit which will cause GameLoop to close the program
+    /// </summary>
+    public void Quit()
     {
         gameState = GameState.Exit;
     }

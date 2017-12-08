@@ -1,9 +1,18 @@
-﻿using System.Collections;
+﻿// written by: Metin Erman, Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Thomas Stewart, Metin Erman
+
+using System.Collections;
 using System.Collections.Generic;
 using static GameStates;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// GameLoop is a MonoBehaviour that controls the state the of game. It switches the screen
+/// the program is on depending on enumerator GameState. So, other classes can simply change the 
+/// GameState to switch between screens.
+/// </summary>
 public class GameLoop : MonoBehaviour
 {
     private static GameLoop gameLoop;
@@ -28,7 +37,8 @@ public class GameLoop : MonoBehaviour
     public GameObject optionsPlayer2Menu;
     public GameObject aboutMenu;
 
-    private void Awake() //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
+    //here we ensure that this stays as a singleton---if any other user object is instantiated after the initial one, it is destroyed
+    private void Awake() 
     {
         if (gameLoop == null)
         {
@@ -40,6 +50,7 @@ public class GameLoop : MonoBehaviour
             Destroy(this); //destroy if another one is attempted to be created.
         }
     }
+
     // Use this for initialization
     //start the state machine
     void Start()
@@ -54,13 +65,16 @@ public class GameLoop : MonoBehaviour
         previousGameState = GameState.LoggingIn;
         lastGameState = GameState.Exit;
 
+        //keep repeting this loop to switch between screens and control the program until GameState
+        //is set to Exit, which will cause the program to be closed
         while (gameState != GameState.Exit)
         {
             try
             {
+                //if the gamestate has changed disable all menus then in the switch below,
+                //only enable the one that it is set to
                 if (gameState != lastGameState)
                 {
-                    //set them all to false, then in the switch, set only the correct one to true
                     loginMenu.SetActive(false);
                     createAccountMenu.SetActive(false);
                     mainMenu.SetActive(false);
@@ -85,6 +99,8 @@ public class GameLoop : MonoBehaviour
                 //set to 0, then set to 1 only when playing
                 Time.timeScale = 0;
 
+                //enable the menu that the screen is currently set to and 
+                //set the timeScale to 1 if the Level is being played or replayed
                 switch (gameState)
                 {
                     case GameState.LoggingIn:
@@ -106,6 +122,8 @@ public class GameLoop : MonoBehaviour
                         loginMenu.SetActive(false);
                         ingameInterface.SetActive(true);
                         Time.timeScale = 1;
+
+                        //pause the game if the pause key is pressed by the user
                         foreach (PlayerControls item in Controls.get().players)
                         {
                             if (item.Pause)
@@ -119,6 +137,9 @@ public class GameLoop : MonoBehaviour
                     case GameState.Paused:
                         ingameInterface.SetActive(true);
                         pauseMenu.SetActive(true);
+
+                        //unpause the game and set the gameState to its prevous one
+                        //(Paying or Replay) if the pause key is pressed by the user
                         foreach (PlayerControls item in Controls.get().players)
                         {
                             if (item.Pause)
@@ -143,6 +164,8 @@ public class GameLoop : MonoBehaviour
                     case GameState.Replay:
                         ingameInterface.SetActive(true);
                         Time.timeScale = 1;
+
+                        //pause the game if the pause key is pressed by the user
                         foreach (PlayerControls item in Controls.get().players)
                         {
                             if (item.Pause)
@@ -185,6 +208,7 @@ public class GameLoop : MonoBehaviour
             yield return null; //return null to allow other things to continue
         }
 
+        //save Controls and Options settings to their default files
         Controls.get().saveControls();
         Options.get().saveOptions();
 

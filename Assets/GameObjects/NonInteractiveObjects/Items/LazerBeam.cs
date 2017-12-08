@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿// written by: Thomas Stewart
+// tested by: Michael Quinn
+// debugged by: Diane Gregory, Shane Barry
+// balanced by: Diane Gregory, Metin Erman, Thomas Stewart
+
+using UnityEngine;
 
 /// <summary>
 /// LazerBeam is an Item that allows the holder to create a Lazer infront of themselves

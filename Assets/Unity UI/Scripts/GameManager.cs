@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// written by: Shane Barry
+// tested by: Michael Quinn
+// debugged by: Shane Barry
+
+using UnityEngine;
 using System.Collections;
 
 public class GameManager : MonoBehaviour {
