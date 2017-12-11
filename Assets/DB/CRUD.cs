@@ -34,6 +34,8 @@ public class CRUD : MonoBehaviour {
     //GET ---gets a user who is logging in
     public void GetUser(string username, string password)
     {
+        login = LoginErrors.PreLogin;
+
         Debug.Log("Getting User information");
         //var complete = false; //return complete to the calling function
         string url = baseUrl + "getUser.php?username=" + username + "&password=" + password;
