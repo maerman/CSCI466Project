@@ -2652,6 +2652,10 @@ Prefab:
       propertyPath: errorText
       value: 
       objectReference: {fileID: 925036044}
+    - target: {fileID: 1793070807572534, guid: 2e6e4248ebb9c0f489b6135f0e44cecd, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2e6e4248ebb9c0f489b6135f0e44cecd, type: 2}
   m_IsPrefabParent: 0
