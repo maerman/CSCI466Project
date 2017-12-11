@@ -12,6 +12,8 @@ using System.Collections;
 /// </summary>
 public class Shield : Item
 {
+    protected const float USE_POINTS = -0.001f;
+
     public float timeToTurnSecs = 0.25f;
     private int turnTimer;
     public float turnSpeed = 1;
@@ -69,6 +71,11 @@ public class Shield : Item
             {
                 shield.attachAngle += turnSpeed;
             }
+        }
+
+        if (shield != null)
+        {
+            level.score += USE_POINTS;
         }
     }
 

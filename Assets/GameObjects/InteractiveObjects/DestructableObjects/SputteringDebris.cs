@@ -82,9 +82,11 @@ public class SputteringDebris : DestructableObject
     /// <param name="damage"></param>
     public override void damageThis(float damage)
     {
-        if (damage > armor * difficultyModifier)
-        {
-            health -= (damage - armor - difficultyModifier * 2f);
-        }
+        float temp = armor;
+        armor -= difficultyModifier;
+
+        base.damageThis(damage);
+
+        armor = temp;
     }
 }

@@ -11,6 +11,8 @@ using System.Collections;
 /// </summary>
 public class GravityWellController : Item
 {
+    protected const float USE_POINTS = -0.001f;
+
     public Vector2 offset = new Vector2(0, 3);
     public float wellDamage = 10f;
     public float startGravity = 0.5f;
@@ -64,6 +66,11 @@ public class GravityWellController : Item
         {
             well.destroyThis();
             well = null;
+        }
+
+        if (well != null)
+        {
+            level.score += USE_POINTS;
         }
     }
 

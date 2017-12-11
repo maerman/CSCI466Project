@@ -12,6 +12,8 @@ using System.Collections;
 /// </summary>
 public class ChargedShots : Item
 {
+    protected const float USE_POINTS = -0.01f;
+
     public float shotMinDamage = 10f;
     public float shotMaxDamage = 100f;
     public float shotSpeed = 20f;
@@ -54,6 +56,8 @@ public class ChargedShots : Item
                 chargingShot.damage = shotMaxDamage;
             }
             chargingShot.scale = shotScaleStart * Mathf.Sqrt(chargingShot.damage / shotMinDamage);
+
+            level.score += USE_POINTS;
         }
     }
 

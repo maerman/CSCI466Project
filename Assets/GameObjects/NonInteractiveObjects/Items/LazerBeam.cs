@@ -10,6 +10,8 @@ using UnityEngine;
 /// </summary>
 public class LazerBeam : Item
 {
+    protected const float USE_POINTS = -0.01f;
+
     public float beamDamge = 5f;
     public float beamMaxLength = 20f;
     public float beamExtendSpeed = 1f;
@@ -47,6 +49,8 @@ public class LazerBeam : Item
         {
             lazer.destroyThis();
             lazer = null;
+
+            level.score += USE_POINTS;
         }
     }
 

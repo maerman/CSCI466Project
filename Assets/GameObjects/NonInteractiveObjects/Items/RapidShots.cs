@@ -12,6 +12,8 @@ using System.Collections;
 /// </summary>
 public class RapidShots : Item
 {
+    protected const float USE_POINTS = -0.1f;
+
     public float shotLifeSecs = 3f;
     public float shotSpeed = 20f;
     public float shotDamage = 2f;
@@ -47,6 +49,8 @@ public class RapidShots : Item
 
             //reset the time until the next shot
             shotCooldown = (int)(shotCooldownSecs * level.updatesPerSec);
+
+            level.score += USE_POINTS;
         }
     }
 

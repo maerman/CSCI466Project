@@ -39,6 +39,9 @@ public abstract class DestructableObject : InteractiveObject
         if (damage > armor)
         {
             health -= (damage - armor);
+
+            if (team <= 0)
+                level.score += damage - armor;
         }
     }
 
@@ -136,6 +139,7 @@ public abstract class DestructableObject : InteractiveObject
     /// <summary>
     /// Called by Unity when this GameObject collides with another GameObject
     /// Calls another method depending on the collision type to categorize the collision
+    /// Calculates 
     /// </summary>
     /// <param name="collision">holds the properties of the collision</param>
     void OnCollisionEnter2D(Collision2D collision)

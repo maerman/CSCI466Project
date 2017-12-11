@@ -12,6 +12,8 @@ using System.Collections;
 /// </summary>
 public class HomingMissiles : Item
 {
+    protected const float USE_POINTS = -10f;
+
     public float missileDamge = 15;
     public float missileAcceleration = 1;
     public float missileMaxSpeed = 16f;
@@ -35,10 +37,9 @@ public class HomingMissiles : Item
         {
             shotTimer--;
         }
-
         //if its time to shoot the next missle and the holder is pressing this Item's key, 
         //then create a new missle infront of the holder
-        if (use && shotTimer <= 0)
+        else if (use)
         {
             //create the missle infront of the holder
             HomingMissile missile = (HomingMissile)level.createObject("HomingMissilePF",
@@ -55,6 +56,8 @@ public class HomingMissiles : Item
 
             //reset the timer to shoot the next missle
             shotTimer = (int)(shootTimeSecs * level.updatesPerSec);
+
+            level.score += USE_POINTS;
         }
     }
 

@@ -12,6 +12,8 @@ using System.Collections;
 /// </summary>
 public class Accelerant : Item
 {
+    protected const float USE_POINTS = -0.001f;
+
     public float accelerationPerSecGain = 15f;
     public float armorLoss = 2.0f;
 
@@ -48,6 +50,11 @@ public class Accelerant : Item
                 holder.accelerationPerSec -= accelerationPerSecGain;
                 holder.armor += armorLoss;
             }
+        }
+
+        if (activated)
+        {
+            level.score += USE_POINTS;
         }
     }
 

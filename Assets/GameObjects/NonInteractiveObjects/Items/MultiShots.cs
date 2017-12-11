@@ -12,6 +12,8 @@ using System.Collections;
 /// </summary>
 public class MultiShots : Item
 {
+    protected const float USE_POINTS = -10f;
+
     public float numberOfShots = 8f;
     public float damageEach = 10f;
     public float shotSpeed = 20f;
@@ -69,6 +71,8 @@ public class MultiShots : Item
         shotCooldown = (int)(shotTimeSecs * level.updatesPerSec);
         shotTimer = 0;
         spread = 0;
+
+        level.score += USE_POINTS;
     }
 
     protected override void holdingItem(bool use, bool startUse, bool endUse, bool doubleUse)

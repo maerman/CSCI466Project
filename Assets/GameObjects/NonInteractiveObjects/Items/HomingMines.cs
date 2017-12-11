@@ -13,6 +13,8 @@ using System.Collections.Generic;
 /// </summary>
 public class HomingMines : Item
 {
+    protected const float USE_POINTS = -10f;
+
     public float mineDamage = 25f;
     public float mineHealth = 20f;
     public float mineAcceleration = 0.5f;
@@ -88,7 +90,9 @@ public class HomingMines : Item
 
             //reset timer to lay next mine
             layTimer = (int)(layTimeSecs * level.updatesPerSec);
-        }
+
+            level.score += USE_POINTS;
+}
     }
 
     protected override void pickupItem()

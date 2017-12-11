@@ -12,6 +12,8 @@ using System.Collections;
 /// </summary>
 public class Armor : Item
 {
+    protected const float USE_POINTS = -0.001f;
+
     public float armorGain = 3.0f;
     public float healthPerSecondLoss = 0.5f;
 
@@ -53,6 +55,7 @@ public class Armor : Item
             if (holder.health > healthPerSecondLoss * level.secsPerUpdate)
             {
                 holder.health -= healthPerSecondLoss * level.secsPerUpdate;
+                level.score += USE_POINTS;
             }
             //if the holder runs out of health, display that the Item is being deacitvated, then deactivate it.
             else

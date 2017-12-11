@@ -15,6 +15,9 @@ public class Player : DestructableObject
     //how long, in seconds, the Players can't be damaged at teh begining of the Level
     public const float INVULNERABLE_SECS = 2.0f;
 
+    protected const float SHOT_POINTS = -1f;
+    protected const float DAMAGE_POINT_MULTIPLIER = -10f;
+
     public byte playerNum = 0;
     public float accelerationPerSec = 20f;
     public float turnSpeed = 100f;
@@ -117,6 +120,8 @@ public class Player : DestructableObject
             shot.moveForward(shotSpeed);
             shot.color = color;
             shot.team = team;
+
+            level.score += SHOT_POINTS;
         }
 
         //update Items held by this Player and check to see if any were dropped
@@ -179,8 +184,13 @@ public class Player : DestructableObject
     public override void damageThis(float damage)
     {
         //don't let this take damage during the begining seconds of the Level
-        if (level.duration.Seconds > INVULNERABLE_SECS) 
+        if (level.duration.Seconds > INVULNERABLE_SECS)
+        {
             base.damageThis(damage);
+
+            if (damage > armor)
+                level.score += (damage - armor) * DAMAGE_POINT_MULTIPLIER;
+        }
     }
 
     public Player clone()

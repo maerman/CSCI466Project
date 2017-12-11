@@ -51,8 +51,8 @@ public class LevelSurvival : Level
     {
         waveTimer--;
 
+        //determine if there are any enemies left in the level
         bool noEnemies = true;
-
         foreach (DestructableObject item in destructables)
         {
             if (item.team <= 0)
@@ -62,18 +62,25 @@ public class LevelSurvival : Level
             }
         }
 
+        //if it is time for the next wave or there are not more enemies, go to the next wave
         if (waveTimer <= 0 || noEnemies)
         {
+            //reset waveTimer
             waveTimer = (int)(WAVE_TIME_SECS * updatesPerSec);
 
+            //update wave numbers
             type++;
-
             if (type > NUM_TYPES)
             {
                 type = 1;
                 round++;
             }
 
+            //find which type of enemies to spawn, then spawn a number equal to the round
+            //bascially, each type is gone through one at a time then it is started at the 
+            //begining again but this time, waves make one more of that type than last time
+            //each type also gives the user a different item, each round the item given gets stronger
+            //a message is dispayed to the user when each wave is spawned, telling them abou the wave
             switch (type)
             {
                 case 1:

@@ -80,6 +80,8 @@ public abstract class Level : MonoBehaviour
         }
     }
 
+    public float score = 0;
+
     //Amount of time the this Level has been active.
     private float theDuration = 0;
     public TimeSpan duration
@@ -610,6 +612,7 @@ public abstract class Level : MonoBehaviour
         }
 
         created = true;
+        score = 0;
     }
 
     /// <summary>
@@ -755,11 +758,9 @@ public abstract class Level : MonoBehaviour
     /// </summary>
     private void saveToLeaderboard()
     {
-        int score = 0;
+        CRUD.crud.SaveUserData((int)score, levelNumber, (int)duration.TotalMilliseconds, players.Length, (float)Math.Round(difficulty, 2), pvp);
 
-        score = -(int)duration.TotalMilliseconds;
-
-        CRUD.crud.SaveUserData(score, levelNumber, (int)duration.TotalMilliseconds, players.Length, (float)Math.Round(difficulty, 2), pvp);
+        Debug.Log("Saving a score of: " + score);
     }
 
     /// <summary>

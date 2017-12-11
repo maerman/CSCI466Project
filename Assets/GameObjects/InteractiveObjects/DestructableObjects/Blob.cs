@@ -184,7 +184,7 @@ public class Blob : DestructableObject
         damage -= armor;
         if (damage > health)
         {
-            destroyThis();
+            damageThis(damage + armor);
         }
         else if (damage > 0)
         {
@@ -228,7 +228,7 @@ public class Blob : DestructableObject
             }
             else
             {
-                base.damageThis(damage);
+                base.damageThis(damage + armor);
             }
         }
     }
