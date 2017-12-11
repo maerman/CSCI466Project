@@ -117,7 +117,7 @@ MonoBehaviour:
   armor: 1
   damage: 1.5
   extendSpeed: 0.5
-  maxLength: 15
+  maxLength: 7
   turnSpeed: 1
   lazerColor: {r: 0.19117653, g: 1, b: 0, a: 1}
 --- !u!212 &212734245170736184

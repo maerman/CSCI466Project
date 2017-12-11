@@ -15,7 +15,7 @@ public class RotatingLazerSentry : DestructableObject
 {
     public float damage = 1.1f;
     public float extendSpeed = 0.2f;
-    public float maxLength = 10f;
+    public float maxLength = 6f;
     public float turnSpeed = 4f;
     public Color lazerColor = Color.green;
 

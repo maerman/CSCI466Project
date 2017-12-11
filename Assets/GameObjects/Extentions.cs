@@ -219,8 +219,9 @@ public static class VectorExtentions
     /// <returns>A Vector2 with the same magnitude in the given direction</returns>
     public static Vector2 toAngle(this Vector2 original, float direction)
     {
-        original.x = -Mathf.Sin(direction * Mathf.Deg2Rad) * original.magnitude;
-        original.y = Mathf.Cos(direction * Mathf.Deg2Rad) * original.magnitude;
+        float magnitude = original.magnitude;
+        original.x = -Mathf.Sin(direction * Mathf.Deg2Rad) * magnitude;
+        original.y = Mathf.Cos(direction * Mathf.Deg2Rad) * magnitude;
         return original;
     }
 

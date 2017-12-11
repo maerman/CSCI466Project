@@ -47,7 +47,7 @@ public class NewGame : MonoBehaviour
         {
             cooperative.interactable = true;
             competative.interactable = true;
-            practice.interactable = true;
+            //practice.interactable = true;
             survival.interactable = true;
             hard.interactable = true;
         }

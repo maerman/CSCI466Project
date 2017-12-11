@@ -16,7 +16,7 @@ public class LevelSurvival : Level
     {
         get
         {
-            return int.MinValue;
+            return 0;
         }
     }
 
@@ -32,7 +32,7 @@ public class LevelSurvival : Level
     {
         musicPlay("sounds/level1Loop");
 
-        //levelSize = new Vector2(80, 60); //set the level size
+        levelSize = new Vector2(60, 45); //set the level size
 
         createObject("SpaceDustPF", gameBounds.center, 0);
 
@@ -43,15 +43,29 @@ public class LevelSurvival : Level
     int round = 1;
     int waveTimer = 0;
     private const int NUM_TYPES = 12;
-    private const float WAVE_MESSAGE_TIME = 2;
+    private const float WAVE_MESSAGE_TIME = 5;
     private const float ITEM_POWER_INCRIMENT = 0.5f;
+    private const int WAVE_TIME_SECS = 60; //60 seconds between waves
 
     protected override void updateLevel()
     {
         waveTimer--;
 
-        if (waveTimer <= 0)
+        bool noEnemies = true;
+
+        foreach (DestructableObject item in destructables)
         {
+            if (item.team <= 0)
+            {
+                noEnemies = false;
+                break;
+            }
+        }
+
+        if (waveTimer <= 0 || noEnemies)
+        {
+            waveTimer = (int)(WAVE_TIME_SECS * updatesPerSec);
+
             type++;
 
             if (type > NUM_TYPES)
@@ -63,7 +77,7 @@ public class LevelSurvival : Level
             switch (type)
             {
                 case 1:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Suttering Debris and a " 
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Suttering Debris and a " 
                         + round + " power Heal item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -74,7 +88,7 @@ public class LevelSurvival : Level
                     heal.healthPerSecGain *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 2:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Aseroid(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Aseroid(s) and a "
                         + round + " power MultiShot item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -85,7 +99,7 @@ public class LevelSurvival : Level
                     multiShot.numberOfShots *= round * ITEM_POWER_INCRIMENT; 
                     break;
                 case 3:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Lazer Emitters(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Lazer Emitters(s) and a "
                         + round + " power Lazer Sword item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -96,7 +110,7 @@ public class LevelSurvival : Level
                     sword.swordLength *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 4:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Random Turner(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Random Turner(s) and a "
                         + round + " power Homing Missiles item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -104,10 +118,10 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     HomingMissiles homing = (HomingMissiles)createObject("HomingMissilesPF");
-                    
+                    homing.missileDamge *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 5:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Mine Layer(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Mine Layer(s) and a "
                         + round + " power Gravity Well Controller item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -118,7 +132,7 @@ public class LevelSurvival : Level
                     well.maxGravity *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 6:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Rotating Lazer Sentry(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Rotating Lazer Sentry(s) and a "
                         + round + " power Lazer Beam item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -126,10 +140,10 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     LazerBeam beam = (LazerBeam)createObject("LazerBeamPF");
-                    beam.beamDamge *= round * ITEM_POWER_INCRIMENT;
+                    beam.beamDamge = (beam.beamDamge - 1) * round * ITEM_POWER_INCRIMENT + 1;
                     break;
                 case 7:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Green Blob(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Green Blob(s) and a "
                         + round + " power Rapid Shots item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -140,7 +154,7 @@ public class LevelSurvival : Level
                     rapid.shotSpeed *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 8:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Red Blob(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Red Blob(s) and a "
                         + round + " power Armor item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -148,9 +162,10 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     Armor armor = (Armor)createObject("ArmorPF");
+                    armor.armorGain *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 9:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Blue Blob(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Blue Blob(s) and a "
                         + round + " power Charged Shot item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -158,9 +173,10 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     ChargedShots charged = (ChargedShots)createObject("ChargedShotPF");
+                    charged.shotMaxDamage *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 10:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Slow Turner(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Slow Turner(s) and a "
                         + round + " power Homing Mines item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -168,9 +184,11 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     HomingMines mines = (HomingMines)createObject("HomingMinesPF");
+                    mines.maxMines = (int)(round * ITEM_POWER_INCRIMENT * mines.maxMines);
+                    mines.layTimeSecs *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 11:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " Rammer(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Rammer(s) and a "
                         + round + " power Accelerant item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -178,9 +196,10 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     Accelerant accelerant = (Accelerant)createObject("AccelerantFP");
+                    accelerant.accelerationPerSecGain *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 12:
-                    IngameInterface.displayMessage("Wave " + (type * round + type) + ", " + round + " LazerShooter(s) and a "
+                    IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " LazerShooter(s) and a "
                         + round + " power Shield item.", WAVE_MESSAGE_TIME);
                     for (int i = 0; i < round; i++)
                     {
@@ -188,6 +207,7 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     Shield shield = (Shield)createObject("ShieldPF");
+                    shield.shieldWidth *= round * ITEM_POWER_INCRIMENT / 2.0f;
                     break;
                 default:
                     if (type > 12)
@@ -206,18 +226,13 @@ public class LevelSurvival : Level
 
     }
 
-    /*
     public override string progress
     {
         get
         {
-            //return a string representing the progress though the level here
-            //default is stating how many enemies are remaining in the level
-
-            return "";
+            return base.progress + " Next wave in " + (int)(waveTimer * secsPerUpdate) + " seconds.";
         }
     }
-    */
     
     protected override bool won()
     {

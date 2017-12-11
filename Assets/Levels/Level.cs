@@ -219,7 +219,7 @@ public abstract class Level : MonoBehaviour
     public Vector2 getRandomVelocity(int maxSpeed)
     {
         float angle = getRandomAngle() * Mathf.Deg2Rad;
-        float speed = random.Next(maxSpeed);
+        float speed = random.Next((int)(maxSpeed * PRECISION));
 
         return new Vector2(random.Next((int)(speed * PRECISION)) / PRECISION * Mathf.Cos(angle * Mathf.Deg2Rad),
             random.Next((int)(speed * PRECISION)) / PRECISION) * Mathf.Sin(angle * Mathf.Deg2Rad);
@@ -1247,6 +1247,9 @@ public abstract class Level : MonoBehaviour
         {
             switch (levelNum)
             {
+                case 0:
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "LevelSurvivalPF")) as GameObject;
+                    break;
                 case 1:
                     obj = Instantiate(Resources.Load(LEVEL_PATH + "Level1PF")) as GameObject;
                     break;

@@ -98,7 +98,7 @@ public class Login : MonoBehaviour, IErrorPanel
     /// </summary>
     public void PlayDemo() //sets gamestate to the main menu and variable that signifies demo version use to true
     {
-        User.user.isTrial = true;
+        User.user.isTrial = false;
         gameState = GameState.Main;
     }
 

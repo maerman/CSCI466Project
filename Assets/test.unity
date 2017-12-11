@@ -569,7 +569,7 @@ Prefab:
     - target: {fileID: 224231148945804396, guid: ac898c570d4883c4da8b4fcba6902c3f,
         type: 2}
       propertyPath: m_RootOrder
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 224231148945804396, guid: ac898c570d4883c4da8b4fcba6902c3f,
         type: 2}
@@ -1375,6 +1375,10 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: 'Build Date: 12/10/2017'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1910578302462646, guid: f6551ab98e779ec42a823b7050768ff2, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f6551ab98e779ec42a823b7050768ff2, type: 2}
@@ -3042,7 +3046,17 @@ Prefab:
       objectReference: {fileID: 925036044}
     - target: {fileID: 1201054074583062, guid: e246f1fcb9d20624b843dfcde9881594, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114160184282016222, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: m_FontData.m_FontSize
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 114160184282016222, guid: e246f1fcb9d20624b843dfcde9881594,
+        type: 2}
+      propertyPath: m_FontData.m_MaxSize
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e246f1fcb9d20624b843dfcde9881594, type: 2}
