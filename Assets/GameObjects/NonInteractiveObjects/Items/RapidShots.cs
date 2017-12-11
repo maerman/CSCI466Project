@@ -37,6 +37,7 @@ public class RapidShots : Item
         else if (use)
         {
             LazerShot shot = (LazerShot)level.createObject("LazerShotPF", holder.position + offset.rotate(holder.angle), holder.angle);
+            shot.maxSpeed = shotSpeed + holder.velocity.magnitude;
             shot.velocity = holder.velocity;
             shot.moveForward(shotSpeed);
             shot.damage = shotDamage;
