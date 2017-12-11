@@ -451,7 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ab45c437f0a6264babe0a2ce3d19808, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  replayNameInputField: {fileID: 114936454118944666}
+  replayName: {fileID: 114936454118944666}
   errorPanel: {fileID: 0}
   canvasGroup: {fileID: 0}
   errorText: {fileID: 0}

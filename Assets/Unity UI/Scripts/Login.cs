@@ -51,7 +51,7 @@ public class Login : MonoBehaviour, IErrorPanel
                 return;
             }
             Debug.Assert(user.username != null, "Player is not logged in!"); //player should be logged in here
-        gameState = GameState.NewGame;
+        gameState = GameState.Main;
     }
 
     //User attempts to login to an existing account
@@ -98,7 +98,7 @@ public class Login : MonoBehaviour, IErrorPanel
     /// </summary>
     public void PlayDemo() //sets gamestate to the main menu and variable that signifies demo version use to true
     {
-        User.user.isTrial = false;
+        User.user.isTrial = true;
         gameState = GameState.Main;
     }
 

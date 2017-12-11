@@ -108,14 +108,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 15
+  maxAngularSpeed: 360
   team: 0
   health: 100
   armor: 1
   playerNum: 0
-  acceleration: 0.4
+  accelerationPerSec: 20
   turnSpeed: 100
   shootTimeSecs: 0.5
-  shotSpeed: 15
+  shotSpeed: 20
 --- !u!212 &212502499608731378
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -151,7 +151,7 @@ public class LevelSurvival : Level
                         current.velocity = getRandomVelocity((int)current.maxSpeed);
                     }
                     RapidShots rapid = (RapidShots)createObject("RapidShotsPF");
-                    rapid.shotSpeed *= round * ITEM_POWER_INCRIMENT;
+                    rapid.shotDamage *= round * ITEM_POWER_INCRIMENT;
                     break;
                 case 8:
                     IngameInterface.displayMessage("Wave " + (type * (round - 1) + type) + ", " + round + " Red Blob(s) and a "

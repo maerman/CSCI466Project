@@ -220,10 +220,6 @@ Prefab:
       propertyPath: errorText
       value: 
       objectReference: {fileID: 925036044}
-    - target: {fileID: 1038593016085784, guid: 6a51f48af20d65b4d920141e122472dc, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6a51f48af20d65b4d920141e122472dc, type: 2}
   m_IsPrefabParent: 0
@@ -349,10 +345,6 @@ Prefab:
       propertyPath: errorText
       value: 
       objectReference: {fileID: 925036044}
-    - target: {fileID: 1248280923476106, guid: daaa5038696b88343b60960d625c0718, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: daaa5038696b88343b60960d625c0718, type: 2}
   m_IsPrefabParent: 0
@@ -569,7 +561,7 @@ Prefab:
     - target: {fileID: 224231148945804396, guid: ac898c570d4883c4da8b4fcba6902c3f,
         type: 2}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 224231148945804396, guid: ac898c570d4883c4da8b4fcba6902c3f,
         type: 2}
@@ -790,6 +782,21 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114212357707179134, guid: 3f6495c68ce24e24fa306130edb2b9cb,
+        type: 2}
+      propertyPath: errorPanel
+      value: 
+      objectReference: {fileID: 1837886611}
+    - target: {fileID: 114212357707179134, guid: 3f6495c68ce24e24fa306130edb2b9cb,
+        type: 2}
+      propertyPath: canvasGroup
+      value: 
+      objectReference: {fileID: 1755837075}
+    - target: {fileID: 114212357707179134, guid: 3f6495c68ce24e24fa306130edb2b9cb,
+        type: 2}
+      propertyPath: errorText
+      value: 
+      objectReference: {fileID: 925036044}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3f6495c68ce24e24fa306130edb2b9cb, type: 2}
   m_IsPrefabParent: 0
@@ -1141,10 +1148,6 @@ Prefab:
       propertyPath: errorText
       value: 
       objectReference: {fileID: 925036044}
-    - target: {fileID: 1811567038221728, guid: d1a6904a30f176c4c831364280498e01, type: 2}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d1a6904a30f176c4c831364280498e01, type: 2}
   m_IsPrefabParent: 0
@@ -1940,6 +1943,21 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114396632971435912, guid: 8e31c7f729e919642bca9dcc4851bcbf,
+        type: 2}
+      propertyPath: errorPanel
+      value: 
+      objectReference: {fileID: 1837886611}
+    - target: {fileID: 114396632971435912, guid: 8e31c7f729e919642bca9dcc4851bcbf,
+        type: 2}
+      propertyPath: canvasGroup
+      value: 
+      objectReference: {fileID: 1755837075}
+    - target: {fileID: 114396632971435912, guid: 8e31c7f729e919642bca9dcc4851bcbf,
+        type: 2}
+      propertyPath: errorText
+      value: 
+      objectReference: {fileID: 925036044}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8e31c7f729e919642bca9dcc4851bcbf, type: 2}
   m_IsPrefabParent: 0

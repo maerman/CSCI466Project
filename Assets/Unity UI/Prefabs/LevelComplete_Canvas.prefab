@@ -542,7 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   saveNameInputField: {fileID: 114873967202114190}
-  replayNameInputField: {fileID: 114219589385184092}
+  replayName: {fileID: 114219589385184092}
   errorPanel: {fileID: 0}
   canvasGroup: {fileID: 0}
   errorText: {fileID: 0}

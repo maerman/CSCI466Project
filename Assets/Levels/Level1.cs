@@ -16,7 +16,7 @@ public class Level1 : Level
     {
         get
         {
-            return 2;
+            return 1;
         }
     }
 
@@ -24,7 +24,7 @@ public class Level1 : Level
     {
         get
         {
-            return "Two";
+            return "One";
         }
     }
 
