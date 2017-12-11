@@ -209,6 +209,7 @@ public class Blob : DestructableObject
                     //give each new Blob an equal portion of the old Blob's healh, mass and behaviors
                     current.mass = mass / pieces;
                     current.health = health / pieces;
+                    current.maxHealth = maxHealth / pieces;
                     foreach (BlobBehaviour item in behaviors)
                     {
                         BlobBehaviour temp = item.clone();

@@ -47,12 +47,12 @@ public class SpaceDust : NonInteractiveObject
     protected override void updateNonInteractiveObject()
     {
         //changes the size of this if the Level's bounds changed, to keep it twice the size of the Level
-        if (size.x != level.gameBounds.width / 2f)
+        if (size.x > level.gameBounds.width / 2f)
         {
             float toScale = level.gameBounds.width / 2f / spriteSize.x;
             scale = new Vector2(toScale, toScale);
         }
-        if (size.y != level.gameBounds.height / 2f)
+        if (size.y > level.gameBounds.height / 2f)
         {
             float toScale = level.gameBounds.height / 2f / spriteSize.y;
             scale = new Vector2(toScale, toScale);

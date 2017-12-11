@@ -52,7 +52,7 @@ public class PullOthers : BlobBehaviour
 
 public class BlueBlob : Blob
 {
-    public float pullSpeed = 0.01f;
+    public float pullSpeed = 0.05f;
 
     protected override void startBlob()
     {
