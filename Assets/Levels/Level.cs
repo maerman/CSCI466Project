@@ -529,6 +529,8 @@ public abstract class Level : MonoBehaviour
     /// </summary>
     protected abstract void createLevel();
 
+
+    private bool created = false;
     /// <summary>
     /// Method called to create this Level with the given settings. Sets Level.current to this Level.
     /// </summary>
@@ -590,6 +592,8 @@ public abstract class Level : MonoBehaviour
         //Let derived class do things at Level creation
         createLevel();
 
+        updateObjectLists();
+
         //set the scale of the background so that it covers this entire Level
         backgroundPosition = gameBounds.center;
         transform.localScale = Vector3.one;
@@ -604,6 +608,8 @@ public abstract class Level : MonoBehaviour
             float scale = gameBounds.height / background.bounds.size.y;
             transform.localScale = new Vector3(scale, scale, 1);
         }
+
+        created = true;
     }
 
     /// <summary>
@@ -618,6 +624,9 @@ public abstract class Level : MonoBehaviour
     /// </summary>
     public void FixedUpdate()
     {
+        if (!created)
+            return;
+
         //If this Level is being update but it is not the current Level, it should not exist
         //so destroy it.
         if (current != this)
@@ -630,6 +639,7 @@ public abstract class Level : MonoBehaviour
         theDuration += UnityEngine.Time.fixedDeltaTime;
 
         //Let derived class do things at Level update
+        updateObjectLists();
         updateLevel();
 
         //set the volumes depending on the user controlled volume and code controlled volume.
@@ -1263,6 +1273,9 @@ public abstract class Level : MonoBehaviour
                     break;
                 case 9:
                     obj = Instantiate(Resources.Load(LEVEL_PATH + "Level9PF")) as GameObject;
+                    break;
+                case 10:
+                    obj = Instantiate(Resources.Load(LEVEL_PATH + "Level10PF")) as GameObject;
                     break;
                 default:
                     try
