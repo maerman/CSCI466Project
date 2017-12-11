@@ -97,7 +97,7 @@ MonoBehaviour:
   damageMultiplier: 6
   mergeCooldownSecs: 0.25
   maxSize: 1.5
-  pullSpeed: 0.25
+  pullSpeed: 0.5
 --- !u!212 &212847022306893140
 SpriteRenderer:
   m_ObjectHideFlags: 1
