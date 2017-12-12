@@ -218,13 +218,13 @@ public abstract class Level : MonoBehaviour
     /// </summary>
     /// <param name="maxSpeed">Maximum magnitude of velocity</param>
     /// <returns>A random velocity.</returns>
-    public Vector2 getRandomVelocity(int maxSpeed)
+    public Vector2 getRandomVelocity(float maxSpeed)
     {
         float angle = getRandomAngle() * Mathf.Deg2Rad;
         float speed = random.Next((int)(maxSpeed * PRECISION));
 
-        return new Vector2(random.Next((int)(speed * PRECISION)) / PRECISION * Mathf.Cos(angle * Mathf.Deg2Rad),
-            random.Next((int)(speed * PRECISION)) / PRECISION) * Mathf.Sin(angle * Mathf.Deg2Rad);
+        return new Vector2((speed / PRECISION) * Mathf.Cos(angle),
+            (speed / PRECISION) * Mathf.Sin(angle));
     }
 
     /// <summary>

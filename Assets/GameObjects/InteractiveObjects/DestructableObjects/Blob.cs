@@ -174,6 +174,7 @@ public class Blob : DestructableObject
         }
     }
 
+    
     /// <summary>
     /// If the damage gets past Blob's armor, then the Blob is broken up into pices 
     /// baised on the damage dealt to it (minus the armor)
@@ -184,7 +185,7 @@ public class Blob : DestructableObject
         damage -= armor;
         if (damage > health)
         {
-            damageThis(damage + armor);
+            base.damageThis(damage + armor);
         }
         else if (damage > 0)
         {
@@ -232,4 +233,5 @@ public class Blob : DestructableObject
             }
         }
     }
+    
 }

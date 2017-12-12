@@ -36,101 +36,66 @@ public class Level9 : Level
         
         createObject("SpaceDustPF", gameBounds.center, 0);
 
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 8; i++)
         {
-            //Asteroid current = (Asteroid)createObject("AsteroidPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(20), random.Next(100));
+            HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle());
         }
 
         for (int i = 0; i < 2; i++)
         {
-            HomingMine current = (HomingMine)createObject("HomingMinePF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
-        }
-
-        for (int i = 0; i < 2; i++)
-        {
-            //Blob current = (Blob)createObject("BlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
-        }
-
-        for (int i = 0; i < 2; i++)
-        {
-            //GravityWell current = (GravityWell)createObject("GravityWellPF", getRandomPosition(), getRandomAngle());
-        }
-
-        for (int i = 0; i < 1; i++)
-        {
-            Rammer current = (Rammer)createObject("RammerPF", getRandomPosition(), getRandomAngle());
-        }
-
-        for (int i = 0; i < 1; i++)
-        {
-            //SlowTurner current = (SlowTurner)createObject("SlowTurnerPF", getRandomPosition(), getRandomAngle());
+            SlowTurner current = (SlowTurner)createObject("SlowTurnerPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
         }
 
         for (int i = 0; i < 2; i++)
         {
             LazerShooter current = (LazerShooter)createObject("LazerShooterPF", getRandomPosition(), getRandomAngle());
-        }
-
-        for (int i = 0; i < 2; i++)
-        {
-            RandomTurner current = (RandomTurner)createObject("RandomTurnerPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
         }
 
         for (int i = 0; i < 1; i++)
         {
             MineLayer current = (MineLayer)createObject("MineLayerPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
         }
 
         for (int i = 0; i < 1; i++)
         {
-            //RubberyDebris current = (RubberyDebris)createObject("RubberyDebrisPF", getRandomPosition(), getRandomAngle(), 20);
+            RotatingLazerSentry current = (RotatingLazerSentry)createObject("RotatingLazerSentryPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
         }
 
         for (int i = 0; i < 2; i++)
         {
-            //SputteringDebris current = (SputteringDebris)createObject("SputteringDebrisPF", getRandomPosition(), getRandomAngle());
-        }
-
-        for (int i = 0; i < 1; i++)
-        {
-            //RotatingLazerSentry current = (RotatingLazerSentry)createObject("RotatingLazerSentryPF", getRandomPosition(), getRandomAngle());
-        }
-
-        for (int i = 0; i < 1; i++)
-        {
             LazerEmitter current = (LazerEmitter)createObject("LazerEmitterPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
         }
 
         for (int i = 0; i < 4; i++)
         {
-            IndestructableDebris current = (IndestructableDebris)createObject("IndestructableDebrisPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(15), random.Next(10));
+            IndestructableDebris current = (IndestructableDebris)createObject("IndestructableDebrisPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
         }
 
         for (int i = 0; i < 1; i++)
         {
-            //RedBlob current = (RedBlob)createObject("RedBlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
-        }
-        for (int i = 0; i < 1; i++)
-        {
-            //GreenBlob current = (GreenBlob)createObject("GreenBlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
-        }
-        for (int i = 0; i < 1; i++)
-        {
-            //BlueBlob current = (BlueBlob)createObject("BlueBlobPF", getRandomPosition(), getRandomAngle(), getRandomVelocity(10), random.Next(100));
+            RedBlob current = (RedBlob)createObject("RedBlobPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
         }
 
-        LazerSword sword = (LazerSword)createObject("LazerSwordPF");
-        MultiShots multiShot = (MultiShots)createObject("MultiShotPF");
-        HomingMissiles homing = (HomingMissiles)createObject("HomingMissilesPF");
-        HomingMines mines = (HomingMines)createObject("HomingMinesPF");
-        //GravityWellController well = (GravityWellController)createObject("GravityWellControllerPF");
-        ChargedShots charged = (ChargedShots)createObject("ChargedShotPF");
-        RapidShots rapid = (RapidShots)createObject("RapidShotsPF");
-        LazerBeam beam = (LazerBeam)createObject("LazerBeamPF");
+        for (int i = 0; i < 1; i++)
+        {
+            GreenBlob current = (GreenBlob)createObject("GreenBlobPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
+        }
+
+        for (int i = 0; i < 1; i++)
+        {
+            BlueBlob current = (BlueBlob)createObject("BlueBlobPF", getRandomPosition(), getRandomAngle());
+            current.velocity = getRandomVelocity(current.maxSpeed);
+        }
+
         Armor armor = (Armor)createObject("ArmorPF");
-        Accelerant accelerant = (Accelerant)createObject("AccelerantFP");
-        Heal heal = (Heal)createObject("HealPF");
-        Shield shield = (Shield)createObject("ShieldPF");
     }
 
     protected override void updateLevel()

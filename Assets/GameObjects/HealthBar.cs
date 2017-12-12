@@ -42,6 +42,12 @@ public class HealthBar : MonoBehaviour
         {
             //update the scale of front image baised on the owner's health
             Vector3 scale = healthFront.transform.localScale;
+            if (owner.maxHealth <= 0)
+            {
+                owner.destroyThis();
+                Destroy(this.gameObject);
+                return;
+            }
             scale.x = owner.health / owner.maxHealth;
             healthFront.transform.localScale = scale;
 

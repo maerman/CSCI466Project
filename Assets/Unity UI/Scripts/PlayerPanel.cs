@@ -53,7 +53,8 @@ public class PlayerPanel : MonoBehaviour
             //update the scale of the front and back of the healthbar baised on 
             //the portion of the Player's health is remaining and lost
             Vector3 scale = healthBar.transform.localScale;
-            scale.x = player.health / player.maxHealth;
+            if (player.maxHealth > 0)
+                scale.x = player.health / player.maxHealth;
             healthBar.transform.localScale = scale;
             scale.x = 1 - scale.x;
             backHealthBar.transform.localScale = scale;
