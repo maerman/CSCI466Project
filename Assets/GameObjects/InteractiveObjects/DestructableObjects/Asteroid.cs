@@ -50,6 +50,8 @@ public class Asteroid :DestructableObject
         
     }
 
+    private bool broken = false;
+
     /// <summary>
     /// If the damage gets past thie Asteroid's armor and this Asteroid is not too small
     /// then it will be broken up into smaller pieces baised on the damage.
@@ -67,7 +69,7 @@ public class Asteroid :DestructableObject
             {
                 base.damageThis(damage);
             }
-            else
+            else if (!broken)
             {
                 int pieces = (int)(damage * 8 / health) + 1;
 
@@ -101,6 +103,8 @@ public class Asteroid :DestructableObject
                         current.team = team;
                         current.color = color;
                     }
+
+                    broken = true;
 
                     //Destroy the old Asteroid, since it is no longer needed
                     destroyThis();

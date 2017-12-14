@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using static User;
 using static UserData;
 using static JSONObject;
@@ -84,7 +83,8 @@ public class CRUD : MonoBehaviour {
                         Debug.Log("Is Trial?:"  + user.isTrial);
                         gameState = GameState.Main; //change the game state to Main
                         login = LoginErrors.LoginSuccess;
-                        
+
+                        user.isTrial = false;
                     }
                     catch (Exception e)
                     {
@@ -101,6 +101,7 @@ public class CRUD : MonoBehaviour {
             {
                 login = LoginErrors.LoginError;
             }
+
             Debug.Log("Calling Login Delegate");
             loginActionComplete(); //fire the delegate!          
             return;

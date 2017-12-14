@@ -101,7 +101,7 @@ public class OptionsAudVid : MonoBehaviour
     public void FullScreen()
     {
         options.fullScreen = fullscreen.isOn;
-        refresh();
+        //refresh();
     }
 
     /// <summary>

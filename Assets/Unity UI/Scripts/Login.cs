@@ -58,7 +58,13 @@ public class Login : MonoBehaviour, IErrorPanel
     public void UserLogin()
     {
         gameState = GameState.LoggingIn;
-        if (HasError()) {
+
+        if (userName == null || password == null)
+        {
+            throw new Exception("Username or password InputField set to null when trying to login.");
+        }
+        if (userName.text == "" || password.text == "")
+        {
             showErrorMenu("Error! You must have a valid username and password to sign in!");
             return;
         };
@@ -98,7 +104,7 @@ public class Login : MonoBehaviour, IErrorPanel
     /// </summary>
     public void PlayDemo() //sets gamestate to the main menu and variable that signifies demo version use to true
     {
-        User.user.isTrial = false;
+        User.user.isTrial = true;
         gameState = GameState.Main;
     }
 

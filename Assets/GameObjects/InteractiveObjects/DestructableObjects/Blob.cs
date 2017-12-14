@@ -187,7 +187,7 @@ public class Blob : DestructableObject
         {
             base.damageThis(damage + armor);
         }
-        else if (damage > 0)
+        else if (damage > 0 && mergeTimer > -1)
         {
             int pieces = (int)(damage / 8f) + 2;
 
